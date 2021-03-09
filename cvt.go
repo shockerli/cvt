@@ -77,3 +77,16 @@ func Uint(v interface{}, def ...uint) uint {
 
 	return 0
 }
+
+// Int64 convert an interface to a int64 type, with default value
+func Int64(v interface{}, def ...int64) int64 {
+	if v, err := Int64E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}

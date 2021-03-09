@@ -586,3 +586,96 @@ func TestUint_BaseLine(t *testing.T) {
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
+
+func TestInt64_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    int64
+		expect int64
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8},
+		{float64(8.31), 1, 8},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8},
+		{int(-8), 1, -8},
+		{int8(-8), 1, -8},
+		{int16(-8), 1, -8},
+		{int32(-8), 1, -8},
+		{int64(-8), 1, -8},
+		{float32(-8.31), 1, -8},
+		{float64(-8.31), 1, -8},
+		{"-8", 1, -8},
+		{"-8.01", 1, -8},
+		{true, 2, 1},
+		{false, 2, 0},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8},
+		{&aliasTypeString_8d15, 2, 8},
+		{aliasTypeString_8d15_minus, 1, -8},
+		{&aliasTypeString_8d15_minus, 1, -8},
+
+		// unsupported value, def == expect
+		{"10a", 1, 1},
+		{"a10a", 1, 1},
+		{"8.01a", 1, 1},
+		{"8.01 ", 1, 1},
+		{"hello", 1, 1},
+		{testing.T{}, 1, 1},
+		{&testing.T{}, 1, 1},
+		{[]int{}, 1, 1},
+		{[]string{}, 1, 1},
+		{[...]string{}, 1, 1},
+		{map[int]string{}, 1, 1},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Int64(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestInt64_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int64
+	}{
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+		{"4873546382743564386435354655456575456754356765546554643456", 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Int64(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}

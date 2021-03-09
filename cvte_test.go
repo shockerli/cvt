@@ -10,8 +10,16 @@ import (
 	"github.com/shockerli/cvt"
 )
 
+// alias type: bool
+type AliasTypeBool bool
+
 // alias type: int
 type AliasTypeInt int
+
+var (
+	aliasTypeBool_true  AliasTypeBool = true
+	aliasTypeBool_false AliasTypeBool = false
+)
 
 var (
 	aliasTypeInt_0 AliasTypeInt = 0
@@ -36,7 +44,7 @@ func TestBoolE(t *testing.T) {
 		expect bool
 		isErr  bool
 	}{
-		// true/scale
+		// false/scale
 		{0, false, false},
 		{float64(0.00), false, false},
 		{int(0.00), false, false},
@@ -45,16 +53,17 @@ func TestBoolE(t *testing.T) {
 		{uint64(0.00), false, false},
 		{uint8(0.00), false, false},
 		{nil, false, false},
+		{false, false, false},
 		{"false", false, false},
 		{"FALSE", false, false},
 		{"False", false, false},
 		{"f", false, false},
 		{"F", false, false},
-		{false, false, false},
 		{"off", false, false},
 		{"Off", false, false},
 		{"0", false, false},
 		{"0.00", false, false},
+		{[]byte("false"), false, false},
 		{[]byte("Off"), false, false},
 		{aliasTypeInt_0, false, false},
 		{&aliasTypeInt_0, false, false},
@@ -62,6 +71,8 @@ func TestBoolE(t *testing.T) {
 		{&aliasTypeString_0, false, false},
 		{aliasTypeString_off, false, false},
 		{&aliasTypeString_off, false, false},
+		{aliasTypeBool_false, false, false},
+		{&aliasTypeBool_false, false, false},
 
 		// false/slice/array/map
 		{[]int{}, false, false},
@@ -71,24 +82,27 @@ func TestBoolE(t *testing.T) {
 		{map[string]string{}, false, false},
 
 		// true/scale
+		{true, true, false},
 		{"true", true, false},
 		{"TRUE", true, false},
 		{"True", true, false},
 		{"t", true, false},
 		{"T", true, false},
 		{1, true, false},
-		{true, true, false},
 		{-1, true, false},
 		{"on", true, false},
 		{"On", true, false},
 		{0.01, true, false},
 		{"0.01", true, false},
+		{[]byte("true"), true, false},
 		{aliasTypeInt_1, true, false},
 		{&aliasTypeInt_1, true, false},
 		{aliasTypeString_1, true, false},
 		{&aliasTypeString_1, true, false},
 		{aliasTypeString_on, true, false},
 		{&aliasTypeString_on, true, false},
+		{aliasTypeBool_true, true, false},
+		{&aliasTypeBool_true, true, false},
 
 		// true/slice/array/map
 		{[]int{1, 2, 3}, true, false},
@@ -149,6 +163,9 @@ func TestUint64E(t *testing.T) {
 		{"8", 8, false},
 		{"8.00", 8, false},
 		{"8.01", 8, false},
+		{[]byte("8"), 8, false},
+		{[]byte("8.00"), 8, false},
+		{[]byte("8.01"), 8, false},
 		{nil, 0, false},
 		{aliasTypeInt_0, 0, false},
 		{&aliasTypeInt_0, 0, false},
@@ -160,6 +177,10 @@ func TestUint64E(t *testing.T) {
 		{&aliasTypeString_1, 1, false},
 		{aliasTypeString_8d15, 8, false},
 		{&aliasTypeString_8d15, 8, false},
+		{aliasTypeBool_true, 1, false},
+		{&aliasTypeBool_true, 1, false},
+		{aliasTypeBool_false, 0, false},
+		{&aliasTypeBool_false, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -539,6 +560,97 @@ func TestUintE(t *testing.T) {
 
 		// Non-E test with no default value:
 		v = cvt.Uint(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestInt64E(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int64
+		isErr  bool
+	}{
+		{int(8), 8, false},
+		{int8(8), 8, false},
+		{int16(8), 8, false},
+		{int32(8), 8, false},
+		{int64(8), 8, false},
+		{uint(8), 8, false},
+		{uint8(8), 8, false},
+		{uint16(8), 8, false},
+		{uint32(8), 8, false},
+		{uint64(8), 8, false},
+		{float32(8.31), 8, false},
+		{float64(8.31), 8, false},
+		{true, 1, false},
+		{false, 0, false},
+		{int(-8), -8, false},
+		{int8(-8), -8, false},
+		{int16(-8), -8, false},
+		{int32(-8), -8, false},
+		{int64(-8), -8, false},
+		{float32(-8.31), -8, false},
+		{float64(-8.31), -8, false},
+		{"-8", -8, false},
+		{"-8.01", -8, false},
+		{"8", 8, false},
+		{"8.00", 8, false},
+		{"8.01", 8, false},
+		{[]byte("-8"), -8, false},
+		{[]byte("-8.01"), -8, false},
+		{[]byte("8"), 8, false},
+		{[]byte("8.00"), 8, false},
+		{[]byte("8.01"), 8, false},
+		{uint32(math.MaxUint32), int64(math.MaxUint32), false},
+		{nil, 0, false},
+		{aliasTypeInt_0, 0, false},
+		{&aliasTypeInt_0, 0, false},
+		{aliasTypeInt_1, 1, false},
+		{&aliasTypeInt_1, 1, false},
+		{aliasTypeString_0, 0, false},
+		{&aliasTypeString_0, 0, false},
+		{aliasTypeString_1, 1, false},
+		{&aliasTypeString_1, 1, false},
+		{aliasTypeString_8d15, 8, false},
+		{&aliasTypeString_8d15, 8, false},
+		{aliasTypeString_8d15_minus, -8, false},
+		{&aliasTypeString_8d15_minus, -8, false},
+		{aliasTypeBool_true, 1, false},
+		{&aliasTypeBool_true, 1, false},
+		{aliasTypeBool_false, 0, false},
+		{&aliasTypeBool_false, 0, false},
+
+		// errors
+		{"10a", 0, true},
+		{"a10a", 0, true},
+		{"8.01a", 0, true},
+		{"8.01 ", 0, true},
+		{"4873546382743564386435354655456575456754356765546554643456", 0, true},
+		{float64(4873546382743564386435354655456575456754356765546554643456), 0, true},
+		{uint64(math.MaxUint64), 0, true},
+		{"hello", 0, true},
+		{testing.T{}, 0, true},
+		{&testing.T{}, 0, true},
+		{[]int{}, 0, true},
+		{[]string{}, 0, true},
+		{[...]string{}, 0, true},
+		{map[int]string{}, 0, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.Int64E(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+
+		// Non-E test with no default value:
+		v = cvt.Int64(tt.input)
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
