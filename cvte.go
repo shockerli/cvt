@@ -10,7 +10,8 @@ import (
 )
 
 var convErr = errors.New("convert failed")
-var formatOutOfLimit = "%w, out of max limit value(%d)"
+var formatOutOfLimitInt = "%w, out of max limit value(%d)"
+var formatOutOfLimitFloat = "%w, out of max limit value(%f)"
 var formatExtend = "%v, %w"
 
 // BoolE convert an interface to a bool type
@@ -78,7 +79,7 @@ func Uint32E(val interface{}) (uint32, error) {
 		return 0, e
 	}
 	if v > math.MaxUint32 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "uint32"), uint32(math.MaxUint32))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "uint32"), uint32(math.MaxUint32))
 	}
 
 	return uint32(v), nil
@@ -91,7 +92,7 @@ func Uint16E(val interface{}) (uint16, error) {
 		return 0, e
 	}
 	if v > math.MaxUint16 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "uint16"), uint16(math.MaxUint16))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "uint16"), uint16(math.MaxUint16))
 	}
 
 	return uint16(v), nil
@@ -104,7 +105,7 @@ func Uint8E(val interface{}) (uint8, error) {
 		return 0, e
 	}
 	if v > math.MaxUint8 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "uint8"), uint8(math.MaxUint8))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "uint8"), uint8(math.MaxUint8))
 	}
 
 	return uint8(v), nil
@@ -117,7 +118,7 @@ func UintE(val interface{}) (uint, error) {
 		return 0, e
 	}
 	if v > uint64(^uint(0)) {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "uint"), ^uint(0))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "uint"), ^uint(0))
 	}
 
 	return uint(v), nil
@@ -176,7 +177,7 @@ func Int32E(val interface{}) (int32, error) {
 		return 0, e
 	}
 	if v > math.MaxInt32 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int32"), int32(math.MaxInt32))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "int32"), int32(math.MaxInt32))
 	}
 
 	return int32(v), nil
@@ -189,7 +190,7 @@ func Int16E(val interface{}) (int16, error) {
 		return 0, e
 	}
 	if v > math.MaxInt16 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int16"), int16(math.MaxInt16))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "int16"), int16(math.MaxInt16))
 	}
 
 	return int16(v), nil
@@ -202,7 +203,7 @@ func Int8E(val interface{}) (int8, error) {
 		return 0, e
 	}
 	if v > math.MaxInt8 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int8"), int8(math.MaxInt8))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "int8"), int8(math.MaxInt8))
 	}
 
 	return int8(v), nil
@@ -215,7 +216,7 @@ func IntE(val interface{}) (int, error) {
 		return 0, e
 	}
 	if strconv.IntSize == 32 && v > math.MaxInt32 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int"), int32(math.MaxInt32))
+		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "int"), int32(math.MaxInt32))
 	}
 
 	return int(v), nil
@@ -255,6 +256,59 @@ func convInt64(val interface{}) (int64, error) {
 	}
 
 	return 0, convErr
+}
+
+// Float64E convert an interface to a float64 type
+func Float64E(val interface{}) (float64, error) {
+	v, _, rv := Indirect(val)
+
+	switch vv := v.(type) {
+	case nil:
+		return 0, nil
+	case bool:
+		if vv {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		vvv, err := strconv.ParseFloat(vv, 64)
+		if err == nil {
+			return vvv, nil
+		}
+	case []byte:
+		vvv, err := strconv.ParseFloat(string(vv), 64)
+		if err == nil {
+			return vvv, nil
+		}
+	case uint, uint8, uint16, uint32, uint64, uintptr:
+		return float64(rv.Uint()), nil
+	case int, int8, int16, int32, int64:
+		return float64(rv.Int()), nil
+	case float32:
+		// use fmt to fix float32 -> float64 precision loss
+		// eg: cvt.Float64E(float32(8.31))
+		vvv, err := strconv.ParseFloat(fmt.Sprintf("%f", vv), 64)
+		if err == nil {
+			return vvv, nil
+		}
+	case float64:
+		return vv, nil
+	}
+
+	return 0, convErr
+}
+
+// Float32E convert an interface to a float32 type
+func Float32E(val interface{}) (float32, error) {
+	v, e := Float64E(val)
+	if e := catch("float32", val, e); e != nil {
+		return 0, e
+	}
+	if v > math.MaxFloat32 {
+		return 0, fmt.Errorf(formatOutOfLimitFloat, newErr(val, "float32"), float32(math.MaxFloat32))
+	}
+
+	return float32(v), nil
 }
 
 // Indirect returns the value with base type
@@ -318,6 +372,7 @@ func newErr(val interface{}, t string) error {
 	return fmt.Errorf("unable to convert %#v of type %T to %s", val, val, t)
 }
 
+// catching an error and return a new
 func catch(t string, val interface{}, e error) error {
 	if e != nil {
 		if errors.Is(e, convErr) {

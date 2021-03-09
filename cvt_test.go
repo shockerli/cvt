@@ -2,6 +2,7 @@ package cvt_test
 
 import (
 	"fmt"
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -1048,6 +1049,195 @@ func TestInt_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Int(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestFloat64_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    float64
+		expect float64
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8.31},
+		{float64(8.31), 1, 8.31},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8.01},
+		{int(-8), 1, -8},
+		{int8(-8), 1, -8},
+		{int16(-8), 1, -8},
+		{int32(-8), 1, -8},
+		{int64(-8), 1, -8},
+		{float32(-8.31), 1, -8.31},
+		{float64(-8.31), 1, -8.31},
+		{int64(math.MaxInt64), 1, float64(math.MaxInt64)},
+		{uint64(math.MaxUint64), 1, float64(math.MaxUint64)},
+		{"-8", 1, -8},
+		{"-8.01", 1, -8.01},
+		{true, 2, 1},
+		{false, 2, 0},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8.15},
+		{&aliasTypeString_8d15, 2, 8.15},
+		{aliasTypeString_8d15_minus, 1, -8.15},
+		{&aliasTypeString_8d15_minus, 1, -8.15},
+
+		// unsupported value, def == expect
+		{"10a", 1.11, 1.11},
+		{"a10a", 1.11, 1.11},
+		{"8.01a", 1.11, 1.11},
+		{"8.01 ", 1.11, 1.11},
+		{"hello", 1.11, 1.11},
+		{testing.T{}, 1.11, 1.11},
+		{&testing.T{}, 1.11, 1.11},
+		{[]int{}, 1.11, 1.11},
+		{[]string{}, 1.11, 1.11},
+		{[...]string{}, 1.11, 1.11},
+		{map[int]string{}, 1.11, 1.11},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Float64(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestFloat64_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect float64
+	}{
+		{"8.01a", 0},
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Float64(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestFloat32_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    float32
+		expect float32
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8.31},
+		{float64(8.31), 1, 8.31},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8.01},
+		{int(-8), 1, -8},
+		{int8(-8), 1, -8},
+		{int16(-8), 1, -8},
+		{int32(-8), 1, -8},
+		{int64(-8), 1, -8},
+		{float32(-8.31), 1, -8.31},
+		{float64(-8.31), 1, -8.31},
+		{int(math.MaxInt32), 1, float32(math.MaxInt32)},
+		{"-8", 1, -8},
+		{"-8.01", 1, -8.01},
+		{true, 2, 1},
+		{false, 2, 0},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8.15},
+		{&aliasTypeString_8d15, 2, 8.15},
+		{aliasTypeString_8d15_minus, 1, -8.15},
+		{&aliasTypeString_8d15_minus, 1, -8.15},
+
+		// unsupported value, def == expect
+		{"10a", 1.11, 1.11},
+		{"a10a", 1.11, 1.11},
+		{"8.01a", 1.11, 1.11},
+		{"8.01 ", 1.11, 1.11},
+		{"hello", 1.11, 1.11},
+		{testing.T{}, 1.11, 1.11},
+		{&testing.T{}, 1.11, 1.11},
+		{[]int{}, 1.11, 1.11},
+		{[]string{}, 1.11, 1.11},
+		{[...]string{}, 1.11, 1.11},
+		{map[int]string{}, 1.11, 1.11},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Float32(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestFloat32_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect float32
+	}{
+		{"8.01a", 0},
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Float32(tt.input)
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }

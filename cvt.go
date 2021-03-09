@@ -142,3 +142,29 @@ func Int(v interface{}, def ...int) int {
 
 	return 0
 }
+
+// Float64 convert an interface to a float64 type, with default value
+func Float64(v interface{}, def ...float64) float64 {
+	if v, err := Float64E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}
+
+// Float32 convert an interface to a float32 type, with default value
+func Float32(v interface{}, def ...float32) float32 {
+	if v, err := Float32E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}
