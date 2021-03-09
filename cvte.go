@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-var convErr = errors.New("convert failed")
+var errConvFail = errors.New("convert failed")
 var formatOutOfLimitInt = "%w, out of max limit value(%d)"
 var formatOutOfLimitFloat = "%w, out of max limit value(%f)"
 var formatExtend = "%v, %w"
@@ -157,7 +157,7 @@ func convUint64(val interface{}) (uint64, error) {
 		}
 	}
 
-	return 0, convErr
+	return 0, errConvFail
 }
 
 // Int64E convert an interface to a int64 type
@@ -255,7 +255,7 @@ func convInt64(val interface{}) (int64, error) {
 		}
 	}
 
-	return 0, convErr
+	return 0, errConvFail
 }
 
 // Float64E convert an interface to a float64 type
@@ -295,7 +295,7 @@ func Float64E(val interface{}) (float64, error) {
 		return vv, nil
 	}
 
-	return 0, convErr
+	return 0, errConvFail
 }
 
 // Float32E convert an interface to a float32 type
@@ -375,7 +375,7 @@ func newErr(val interface{}, t string) error {
 // catching an error and return a new
 func catch(t string, val interface{}, e error) error {
 	if e != nil {
-		if errors.Is(e, convErr) {
+		if errors.Is(e, errConvFail) {
 			return newErr(val, t)
 		}
 		return fmt.Errorf(formatExtend, newErr(val, t), e)
