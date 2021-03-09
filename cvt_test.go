@@ -111,3 +111,478 @@ func TestBool_BaseLine(t *testing.T) {
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
+
+func TestUint64_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    uint64
+		expect uint64
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8},
+		{float64(8.31), 1, 8},
+		{true, 2, 1},
+		{false, 2, 0},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8},
+		{&aliasTypeString_8d15, 2, 8},
+
+		// unsupported value, def == expect
+		{int(-8), 1, 1},
+		{int8(-8), 1, 1},
+		{int16(-8), 1, 1},
+		{int32(-8), 1, 1},
+		{int64(-8), 1, 1},
+		{float32(-8.31), 1, 1},
+		{float64(-8.31), 1, 1},
+		{"-8", 1, 1},
+		{"-8.01", 1, 1},
+		{"10a", 1, 1},
+		{"a10a", 1, 1},
+		{"8.01a", 1, 1},
+		{"8.01 ", 1, 1},
+		{"hello", 1, 1},
+		{testing.T{}, 1, 1},
+		{&testing.T{}, 1, 1},
+		{[]int{}, 1, 1},
+		{[]string{}, 1, 1},
+		{[...]string{}, 1, 1},
+		{map[int]string{}, 1, 1},
+		{aliasTypeString_8d15_minus, 1, 1},
+		{&aliasTypeString_8d15_minus, 1, 1},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Uint64(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint64_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint64
+	}{
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+		{aliasTypeString_8d15_minus, 0},
+		{&aliasTypeString_8d15_minus, 0},
+		{"4873546382743564386435354655456575456754356765546554643456", 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint64(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint32_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    uint32
+		expect uint32
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8},
+		{float64(8.31), 1, 8},
+		{true, 2, 1},
+		{false, 2, 0},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8},
+		{&aliasTypeString_8d15, 2, 8},
+
+		// unsupported value, def == expect
+		{int(-8), 1, 1},
+		{int8(-8), 1, 1},
+		{int16(-8), 1, 1},
+		{int32(-8), 1, 1},
+		{int64(-8), 1, 1},
+		{float32(-8.31), 1, 1},
+		{float64(-8.31), 1, 1},
+		{"-8", 1, 1},
+		{"-8.01", 1, 1},
+		{"10a", 1, 1},
+		{"a10a", 1, 1},
+		{"8.01a", 1, 1},
+		{"8.01 ", 1, 1},
+		{"hello", 1, 1},
+		{testing.T{}, 1, 1},
+		{&testing.T{}, 1, 1},
+		{[]int{}, 1, 1},
+		{[]string{}, 1, 1},
+		{[...]string{}, 1, 1},
+		{map[int]string{}, 1, 1},
+		{aliasTypeString_8d15_minus, 1, 1},
+		{&aliasTypeString_8d15_minus, 1, 1},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Uint32(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint32_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint32
+	}{
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+		{aliasTypeString_8d15_minus, 0},
+		{&aliasTypeString_8d15_minus, 0},
+		{"4873546382743564386435354655456575456754356765546554643456", 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint32(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint16_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    uint16
+		expect uint16
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8},
+		{float64(8.31), 1, 8},
+		{true, 2, 1},
+		{false, 2, 0},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8},
+		{&aliasTypeString_8d15, 2, 8},
+
+		// unsupported value, def == expect
+		{int(-8), 1, 1},
+		{int8(-8), 1, 1},
+		{int16(-8), 1, 1},
+		{int32(-8), 1, 1},
+		{int64(-8), 1, 1},
+		{float32(-8.31), 1, 1},
+		{float64(-8.31), 1, 1},
+		{"-8", 1, 1},
+		{"-8.01", 1, 1},
+		{"10a", 1, 1},
+		{"a10a", 1, 1},
+		{"8.01a", 1, 1},
+		{"8.01 ", 1, 1},
+		{"hello", 1, 1},
+		{testing.T{}, 1, 1},
+		{&testing.T{}, 1, 1},
+		{[]int{}, 1, 1},
+		{[]string{}, 1, 1},
+		{[...]string{}, 1, 1},
+		{map[int]string{}, 1, 1},
+		{aliasTypeString_8d15_minus, 1, 1},
+		{&aliasTypeString_8d15_minus, 1, 1},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Uint16(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint16_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint16
+	}{
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+		{aliasTypeString_8d15_minus, 0},
+		{&aliasTypeString_8d15_minus, 0},
+		{"4873546382743564386435354655456575456754356765546554643456", 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint16(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint8_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    uint8
+		expect uint8
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8},
+		{float64(8.31), 1, 8},
+		{true, 2, 1},
+		{false, 2, 0},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8},
+		{&aliasTypeString_8d15, 2, 8},
+
+		// unsupported value, def == expect
+		{int(-8), 1, 1},
+		{int8(-8), 1, 1},
+		{int16(-8), 1, 1},
+		{int32(-8), 1, 1},
+		{int64(-8), 1, 1},
+		{float32(-8.31), 1, 1},
+		{float64(-8.31), 1, 1},
+		{"-8", 1, 1},
+		{"-8.01", 1, 1},
+		{"10a", 1, 1},
+		{"a10a", 1, 1},
+		{"8.01a", 1, 1},
+		{"8.01 ", 1, 1},
+		{"hello", 1, 1},
+		{testing.T{}, 1, 1},
+		{&testing.T{}, 1, 1},
+		{[]int{}, 1, 1},
+		{[]string{}, 1, 1},
+		{[...]string{}, 1, 1},
+		{map[int]string{}, 1, 1},
+		{aliasTypeString_8d15_minus, 1, 1},
+		{&aliasTypeString_8d15_minus, 1, 1},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Uint8(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint8_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint8
+	}{
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+		{aliasTypeString_8d15_minus, 0},
+		{&aliasTypeString_8d15_minus, 0},
+		{"4873546382743564386435354655456575456754356765546554643456", 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint8(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    uint
+		expect uint
+	}{
+		// supported value, def is not used, def != expect
+		{int(8), 1, 8},
+		{int8(8), 1, 8},
+		{int16(8), 1, 8},
+		{int32(8), 1, 8},
+		{int64(8), 1, 8},
+		{uint(8), 1, 8},
+		{uint8(8), 1, 8},
+		{uint16(8), 1, 8},
+		{uint32(8), 1, 8},
+		{uint64(8), 1, 8},
+		{float32(8.31), 1, 8},
+		{float64(8.31), 1, 8},
+		{true, 2, 1},
+		{false, 2, 0},
+		{"8", 2, 8},
+		{"8.00", 2, 8},
+		{"8.01", 2, 8},
+		{nil, 2, 0},
+		{aliasTypeInt_0, 2, 0},
+		{&aliasTypeInt_0, 2, 0},
+		{aliasTypeInt_1, 2, 1},
+		{&aliasTypeInt_1, 2, 1},
+		{aliasTypeString_0, 2, 0},
+		{&aliasTypeString_0, 2, 0},
+		{aliasTypeString_1, 2, 1},
+		{&aliasTypeString_1, 2, 1},
+		{aliasTypeString_8d15, 2, 8},
+		{&aliasTypeString_8d15, 2, 8},
+
+		// unsupported value, def == expect
+		{int(-8), 1, 1},
+		{int8(-8), 1, 1},
+		{int16(-8), 1, 1},
+		{int32(-8), 1, 1},
+		{int64(-8), 1, 1},
+		{float32(-8.31), 1, 1},
+		{float64(-8.31), 1, 1},
+		{"-8", 1, 1},
+		{"-8.01", 1, 1},
+		{"10a", 1, 1},
+		{"a10a", 1, 1},
+		{"8.01a", 1, 1},
+		{"8.01 ", 1, 1},
+		{"hello", 1, 1},
+		{testing.T{}, 1, 1},
+		{&testing.T{}, 1, 1},
+		{[]int{}, 1, 1},
+		{[]string{}, 1, 1},
+		{[...]string{}, 1, 1},
+		{map[int]string{}, 1, 1},
+		{aliasTypeString_8d15_minus, 1, 1},
+		{&aliasTypeString_8d15_minus, 1, 1},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Uint(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestUint_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint
+	}{
+		{testing.T{}, 0},
+		{&testing.T{}, 0},
+		{[]int{}, 0},
+		{[]int{1, 2, 3}, 0},
+		{[]string{}, 0},
+		{[]string{"a", "b", "c"}, 0},
+		{[...]string{}, 0},
+		{map[int]string{}, 0},
+		{aliasTypeString_8d15_minus, 0},
+		{&aliasTypeString_8d15_minus, 0},
+		{"4873546382743564386435354655456575456754356765546554643456", 0},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}

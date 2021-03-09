@@ -2,6 +2,7 @@ package cvt
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 	"strconv"
 	"strings"
@@ -53,6 +54,91 @@ func str2bool(str string) (bool, error) {
 	default:
 		return false, err(str, "bool")
 	}
+}
+
+// Uint64E convert an interface to a uint64 type
+func Uint64E(val interface{}) (uint64, error) {
+	e := err(val, "uint64")
+	v, _, rv := Indirect(val)
+
+	switch vv := v.(type) {
+	case nil:
+		return 0, nil
+	case bool:
+		if vv {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		vvv, err := strconv.ParseFloat(vv, 64)
+		if err == nil && vvv >= 0 && vvv <= math.MaxUint64 {
+			return uint64(math.Floor(vvv)), nil
+		}
+	case uint, uint8, uint16, uint32, uint64:
+		return rv.Uint(), nil
+	case int, int8, int16, int32, int64:
+		if rv.Int() >= 0 {
+			return uint64(rv.Int()), nil
+		}
+	case float32, float64:
+		if rv.Float() >= 0 && rv.Float() <= math.MaxUint64 {
+			return uint64(math.Floor(rv.Float())), nil
+		}
+	}
+
+	return 0, e
+}
+
+// Uint32E convert an interface to a uint32 type
+func Uint32E(val interface{}) (uint32, error) {
+	v, e := Uint64E(val)
+	if e != nil {
+		return 0, err(val, "uint32")
+	}
+	if v > math.MaxUint32 {
+		return 0, fmt.Errorf("%w, out of max limit value(%d)", err(val, "uint32"), math.MaxUint32)
+	}
+
+	return uint32(v), nil
+}
+
+// Uint16E convert an interface to a uint16 type
+func Uint16E(val interface{}) (uint16, error) {
+	v, e := Uint64E(val)
+	if e != nil {
+		return 0, err(val, "uint16")
+	}
+	if v > math.MaxUint16 {
+		return 0, fmt.Errorf("%w, out of max limit value(%d)", err(val, "uint16"), math.MaxUint16)
+	}
+
+	return uint16(v), nil
+}
+
+// Uint8E convert an interface to a uint8 type
+func Uint8E(val interface{}) (uint8, error) {
+	v, e := Uint64E(val)
+	if e != nil {
+		return 0, err(val, "uint8")
+	}
+	if v > math.MaxUint8 {
+		return 0, fmt.Errorf("%w, out of max limit value(%d)", err(val, "uint8"), math.MaxUint8)
+	}
+
+	return uint8(v), nil
+}
+
+// UintE convert an interface to a uint type
+func UintE(val interface{}) (uint, error) {
+	v, e := Uint64E(val)
+	if e != nil {
+		return 0, err(val, "uint")
+	}
+	if v > uint64(^uint(0)) {
+		return 0, fmt.Errorf("%w, out of max limit value(%d)", err(val, "uint"), ^uint(0))
+	}
+
+	return uint(v), nil
 }
 
 // Indirect returns the value with base type
