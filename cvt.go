@@ -90,3 +90,55 @@ func Int64(v interface{}, def ...int64) int64 {
 
 	return 0
 }
+
+// Int32 convert an interface to a int32 type, with default value
+func Int32(v interface{}, def ...int32) int32 {
+	if v, err := Int32E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}
+
+// Int16 convert an interface to a int16 type, with default value
+func Int16(v interface{}, def ...int16) int16 {
+	if v, err := Int16E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}
+
+// Int8 convert an interface to a int8 type, with default value
+func Int8(v interface{}, def ...int8) int8 {
+	if v, err := Int8E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}
+
+// Int convert an interface to a int type, with default value
+func Int(v interface{}, def ...int) int {
+	if v, err := IntE(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return 0
+}

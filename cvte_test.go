@@ -654,3 +654,378 @@ func TestInt64E(t *testing.T) {
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
+
+func TestInt32E(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int32
+		isErr  bool
+	}{
+		{int(8), 8, false},
+		{int8(8), 8, false},
+		{int16(8), 8, false},
+		{int32(8), 8, false},
+		{int64(8), 8, false},
+		{uint(8), 8, false},
+		{uint8(8), 8, false},
+		{uint16(8), 8, false},
+		{uint32(8), 8, false},
+		{uint64(8), 8, false},
+		{float32(8.31), 8, false},
+		{float64(8.31), 8, false},
+		{true, 1, false},
+		{false, 0, false},
+		{int(-8), -8, false},
+		{int8(-8), -8, false},
+		{int16(-8), -8, false},
+		{int32(-8), -8, false},
+		{int64(-8), -8, false},
+		{float32(-8.31), -8, false},
+		{float64(-8.31), -8, false},
+		{"-8", -8, false},
+		{"-8.01", -8, false},
+		{"8", 8, false},
+		{"8.00", 8, false},
+		{"8.01", 8, false},
+		{[]byte("-8"), -8, false},
+		{[]byte("-8.01"), -8, false},
+		{[]byte("8"), 8, false},
+		{[]byte("8.00"), 8, false},
+		{[]byte("8.01"), 8, false},
+		{math.MaxInt32, int32(math.MaxInt32), false},
+		{nil, 0, false},
+		{aliasTypeInt_0, 0, false},
+		{&aliasTypeInt_0, 0, false},
+		{aliasTypeInt_1, 1, false},
+		{&aliasTypeInt_1, 1, false},
+		{aliasTypeString_0, 0, false},
+		{&aliasTypeString_0, 0, false},
+		{aliasTypeString_1, 1, false},
+		{&aliasTypeString_1, 1, false},
+		{aliasTypeString_8d15, 8, false},
+		{&aliasTypeString_8d15, 8, false},
+		{aliasTypeString_8d15_minus, -8, false},
+		{&aliasTypeString_8d15_minus, -8, false},
+		{aliasTypeBool_true, 1, false},
+		{&aliasTypeBool_true, 1, false},
+		{aliasTypeBool_false, 0, false},
+		{&aliasTypeBool_false, 0, false},
+
+		// errors
+		{"10a", 0, true},
+		{"a10a", 0, true},
+		{"8.01a", 0, true},
+		{"8.01 ", 0, true},
+		{"4873546382743564386435354655456575456754356765546554643456", 0, true},
+		{float64(4873546382743564386435354655456575456754356765546554643456), 0, true},
+		{uint64(math.MaxUint64), 0, true},
+		{int64(math.MaxInt64), 0, true},
+		{uint32(math.MaxUint32), 0, true},
+		{"hello", 0, true},
+		{testing.T{}, 0, true},
+		{&testing.T{}, 0, true},
+		{[]int{}, 0, true},
+		{[]string{}, 0, true},
+		{[...]string{}, 0, true},
+		{map[int]string{}, 0, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.Int32E(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+
+		// Non-E test with no default value:
+		v = cvt.Int32(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestInt16E(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int16
+		isErr  bool
+	}{
+		{int(8), 8, false},
+		{int8(8), 8, false},
+		{int16(8), 8, false},
+		{int32(8), 8, false},
+		{int64(8), 8, false},
+		{uint(8), 8, false},
+		{uint8(8), 8, false},
+		{uint16(8), 8, false},
+		{uint32(8), 8, false},
+		{uint64(8), 8, false},
+		{float32(8.31), 8, false},
+		{float64(8.31), 8, false},
+		{true, 1, false},
+		{false, 0, false},
+		{int(-8), -8, false},
+		{int8(-8), -8, false},
+		{int16(-8), -8, false},
+		{int32(-8), -8, false},
+		{int64(-8), -8, false},
+		{float32(-8.31), -8, false},
+		{float64(-8.31), -8, false},
+		{"-8", -8, false},
+		{"-8.01", -8, false},
+		{"8", 8, false},
+		{"8.00", 8, false},
+		{"8.01", 8, false},
+		{[]byte("-8"), -8, false},
+		{[]byte("-8.01"), -8, false},
+		{[]byte("8"), 8, false},
+		{[]byte("8.00"), 8, false},
+		{[]byte("8.01"), 8, false},
+		{math.MaxInt16, int16(math.MaxInt16), false},
+		{nil, 0, false},
+		{aliasTypeInt_0, 0, false},
+		{&aliasTypeInt_0, 0, false},
+		{aliasTypeInt_1, 1, false},
+		{&aliasTypeInt_1, 1, false},
+		{aliasTypeString_0, 0, false},
+		{&aliasTypeString_0, 0, false},
+		{aliasTypeString_1, 1, false},
+		{&aliasTypeString_1, 1, false},
+		{aliasTypeString_8d15, 8, false},
+		{&aliasTypeString_8d15, 8, false},
+		{aliasTypeString_8d15_minus, -8, false},
+		{&aliasTypeString_8d15_minus, -8, false},
+		{aliasTypeBool_true, 1, false},
+		{&aliasTypeBool_true, 1, false},
+		{aliasTypeBool_false, 0, false},
+		{&aliasTypeBool_false, 0, false},
+
+		// errors
+		{"10a", 0, true},
+		{"a10a", 0, true},
+		{"8.01a", 0, true},
+		{"8.01 ", 0, true},
+		{"4873546382743564386435354655456575456754356765546554643456", 0, true},
+		{float64(4873546382743564386435354655456575456754356765546554643456), 0, true},
+		{uint64(math.MaxUint64), 0, true},
+		{uint32(math.MaxUint32), 0, true},
+		{int64(math.MaxInt64), 0, true},
+		{int32(math.MaxInt32), 0, true},
+		{uint16(math.MaxUint16), 0, true},
+		{"hello", 0, true},
+		{testing.T{}, 0, true},
+		{&testing.T{}, 0, true},
+		{[]int{}, 0, true},
+		{[]string{}, 0, true},
+		{[...]string{}, 0, true},
+		{map[int]string{}, 0, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.Int16E(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+
+		// Non-E test with no default value:
+		v = cvt.Int16(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestInt8E(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int8
+		isErr  bool
+	}{
+		{int(8), 8, false},
+		{int8(8), 8, false},
+		{int16(8), 8, false},
+		{int32(8), 8, false},
+		{int64(8), 8, false},
+		{uint(8), 8, false},
+		{uint8(8), 8, false},
+		{uint16(8), 8, false},
+		{uint32(8), 8, false},
+		{uint64(8), 8, false},
+		{float32(8.31), 8, false},
+		{float64(8.31), 8, false},
+		{true, 1, false},
+		{false, 0, false},
+		{int(-8), -8, false},
+		{int8(-8), -8, false},
+		{int16(-8), -8, false},
+		{int32(-8), -8, false},
+		{int64(-8), -8, false},
+		{float32(-8.31), -8, false},
+		{float64(-8.31), -8, false},
+		{"-8", -8, false},
+		{"-8.01", -8, false},
+		{"8", 8, false},
+		{"8.00", 8, false},
+		{"8.01", 8, false},
+		{[]byte("-8"), -8, false},
+		{[]byte("-8.01"), -8, false},
+		{[]byte("8"), 8, false},
+		{[]byte("8.00"), 8, false},
+		{[]byte("8.01"), 8, false},
+		{int8(math.MaxInt8), math.MaxInt8, false},
+		{nil, 0, false},
+		{aliasTypeInt_0, 0, false},
+		{&aliasTypeInt_0, 0, false},
+		{aliasTypeInt_1, 1, false},
+		{&aliasTypeInt_1, 1, false},
+		{aliasTypeString_0, 0, false},
+		{&aliasTypeString_0, 0, false},
+		{aliasTypeString_1, 1, false},
+		{&aliasTypeString_1, 1, false},
+		{aliasTypeString_8d15, 8, false},
+		{&aliasTypeString_8d15, 8, false},
+		{aliasTypeString_8d15_minus, -8, false},
+		{&aliasTypeString_8d15_minus, -8, false},
+		{aliasTypeBool_true, 1, false},
+		{&aliasTypeBool_true, 1, false},
+		{aliasTypeBool_false, 0, false},
+		{&aliasTypeBool_false, 0, false},
+
+		// errors
+		{"10a", 0, true},
+		{"a10a", 0, true},
+		{"8.01a", 0, true},
+		{"8.01 ", 0, true},
+		{"4873546382743564386435354655456575456754356765546554643456", 0, true},
+		{float64(4873546382743564386435354655456575456754356765546554643456), 0, true},
+		{uint64(math.MaxUint64), 0, true},
+		{uint32(math.MaxUint32), 0, true},
+		{int64(math.MaxInt64), 0, true},
+		{int32(math.MaxInt32), 0, true},
+		{int16(math.MaxInt16), 0, true},
+		{uint8(math.MaxUint8), 0, true},
+		{"hello", 0, true},
+		{testing.T{}, 0, true},
+		{&testing.T{}, 0, true},
+		{[]int{}, 0, true},
+		{[]string{}, 0, true},
+		{[...]string{}, 0, true},
+		{map[int]string{}, 0, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.Int8E(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+
+		// Non-E test with no default value:
+		v = cvt.Int8(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestIntE(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int
+		isErr  bool
+	}{
+		{int(8), 8, false},
+		{int8(8), 8, false},
+		{int16(8), 8, false},
+		{int32(8), 8, false},
+		{int64(8), 8, false},
+		{uint(8), 8, false},
+		{uint8(8), 8, false},
+		{uint16(8), 8, false},
+		{uint32(8), 8, false},
+		{uint64(8), 8, false},
+		{float32(8.31), 8, false},
+		{float64(8.31), 8, false},
+		{true, 1, false},
+		{false, 0, false},
+		{int(-8), -8, false},
+		{int8(-8), -8, false},
+		{int16(-8), -8, false},
+		{int32(-8), -8, false},
+		{int64(-8), -8, false},
+		{float32(-8.31), -8, false},
+		{float64(-8.31), -8, false},
+		{"-8", -8, false},
+		{"-8.01", -8, false},
+		{"8", 8, false},
+		{"8.00", 8, false},
+		{"8.01", 8, false},
+		{[]byte("-8"), -8, false},
+		{[]byte("-8.01"), -8, false},
+		{[]byte("8"), 8, false},
+		{[]byte("8.00"), 8, false},
+		{[]byte("8.01"), 8, false},
+		{int(math.MaxInt32), int(math.MaxInt32), false},
+		{nil, 0, false},
+		{aliasTypeInt_0, 0, false},
+		{&aliasTypeInt_0, 0, false},
+		{aliasTypeInt_1, 1, false},
+		{&aliasTypeInt_1, 1, false},
+		{aliasTypeString_0, 0, false},
+		{&aliasTypeString_0, 0, false},
+		{aliasTypeString_1, 1, false},
+		{&aliasTypeString_1, 1, false},
+		{aliasTypeString_8d15, 8, false},
+		{&aliasTypeString_8d15, 8, false},
+		{aliasTypeString_8d15_minus, -8, false},
+		{&aliasTypeString_8d15_minus, -8, false},
+		{aliasTypeBool_true, 1, false},
+		{&aliasTypeBool_true, 1, false},
+		{aliasTypeBool_false, 0, false},
+		{&aliasTypeBool_false, 0, false},
+
+		// errors
+		{"10a", 0, true},
+		{"a10a", 0, true},
+		{"8.01a", 0, true},
+		{"8.01 ", 0, true},
+		{"4873546382743564386435354655456575456754356765546554643456", 0, true},
+		{float64(4873546382743564386435354655456575456754356765546554643456), 0, true},
+		{uint64(math.MaxUint64), 0, true},
+		{"hello", 0, true},
+		{testing.T{}, 0, true},
+		{&testing.T{}, 0, true},
+		{[]int{}, 0, true},
+		{[]string{}, 0, true},
+		{[...]string{}, 0, true},
+		{map[int]string{}, 0, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.IntE(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+
+		// Non-E test with no default value:
+		v = cvt.Int(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}

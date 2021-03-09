@@ -67,9 +67,6 @@ func Uint64E(val interface{}) (uint64, error) {
 	if e := catch("uint64", val, e); e != nil {
 		return 0, e
 	}
-	if v > math.MaxUint64 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "uint64"), uint64(math.MaxUint64))
-	}
 
 	return v, nil
 }
@@ -168,13 +165,60 @@ func Int64E(val interface{}) (int64, error) {
 	if e := catch("int64", val, e); e != nil {
 		return 0, e
 	}
-	if strconv.IntSize == 64 && v > math.MaxInt64 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int64"), math.MaxInt64)
-	} else if strconv.IntSize == 32 && v > math.MaxInt32 {
-		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int64"), math.MaxInt32)
-	}
 
 	return v, nil
+}
+
+// Int32E convert an interface to a int32 type
+func Int32E(val interface{}) (int32, error) {
+	v, e := convInt64(val)
+	if e := catch("int32", val, e); e != nil {
+		return 0, e
+	}
+	if v > math.MaxInt32 {
+		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int32"), int32(math.MaxInt32))
+	}
+
+	return int32(v), nil
+}
+
+// Int16E convert an interface to a int16 type
+func Int16E(val interface{}) (int16, error) {
+	v, e := convInt64(val)
+	if e := catch("int16", val, e); e != nil {
+		return 0, e
+	}
+	if v > math.MaxInt16 {
+		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int16"), int16(math.MaxInt16))
+	}
+
+	return int16(v), nil
+}
+
+// Int8E convert an interface to a int8 type
+func Int8E(val interface{}) (int8, error) {
+	v, e := convInt64(val)
+	if e := catch("int8", val, e); e != nil {
+		return 0, e
+	}
+	if v > math.MaxInt8 {
+		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int8"), int8(math.MaxInt8))
+	}
+
+	return int8(v), nil
+}
+
+// IntE convert an interface to a int type
+func IntE(val interface{}) (int, error) {
+	v, e := convInt64(val)
+	if e := catch("int", val, e); e != nil {
+		return 0, e
+	}
+	if strconv.IntSize == 32 && v > math.MaxInt32 {
+		return 0, fmt.Errorf(formatOutOfLimit, newErr(val, "int"), int32(math.MaxInt32))
+	}
+
+	return int(v), nil
 }
 
 func convInt64(val interface{}) (int64, error) {
