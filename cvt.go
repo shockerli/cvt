@@ -168,3 +168,16 @@ func Float32(v interface{}, def ...float32) float32 {
 
 	return 0
 }
+
+// String convert an interface to a string type, with default value
+func String(v interface{}, def ...string) string {
+	if v, err := StringE(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return ""
+}

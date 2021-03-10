@@ -1,9 +1,12 @@
 package cvt_test
 
 import (
+	"errors"
 	"fmt"
 	"math"
+	"math/big"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -1238,6 +1241,68 @@ func TestFloat32_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Float32(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestString_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    string
+		expect string
+	}{
+		// supported value, def is not used, def != expect
+		{uint64(8), "xxx", "8"},
+		{float32(8.31), "xxx", "8.31"},
+		{float64(-8.31), "xxx", "-8.31"},
+		{true, "xxx", "true"},
+		{int64(-8), "xxx", "-8"},
+		{[]byte("8.01"), "xxx", "8.01"},
+		{[]rune("我❤️中国"), "xxx", "我❤️中国"},
+		{nil, "xxx", ""},
+		{aliasTypeInt_0, "xxx", "0"},
+		{&aliasTypeString_8d15_minus, "xxx", "-8.15"},
+		{aliasTypeBool_true, "xxx", "true"},
+		{errors.New("errors"), "xxx", "errors"},
+		{time.Friday, "xxx", "Friday"},
+		{big.NewInt(123), "xxx", "123"},
+		{TestMarshalJSON{}, "xxx", "MarshalJSON"},
+		{&TestMarshalJSON{}, "xxx", "MarshalJSON"},
+
+		// unsupported value, def == expect
+		{testing.T{}, "xxx", "xxx"},
+		{&testing.T{}, "xxx", "xxx"},
+		{[]int{}, "xxx", "xxx"},
+		{[]string{}, "xxx", "xxx"},
+		{[...]string{}, "xxx", "xxx"},
+		{map[int]string{}, "xxx", "xxx"},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.String(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestString_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect string
+	}{
+		{testing.T{}, ""},
+		{&testing.T{}, ""},
+		{[]int{}, ""},
+		{[]string{}, ""},
+		{[...]string{}, ""},
+		{map[int]string{}, ""},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.String(tt.input)
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }

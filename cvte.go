@@ -1,6 +1,7 @@
 package cvt
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"math"
@@ -309,6 +310,48 @@ func Float32E(val interface{}) (float32, error) {
 	}
 
 	return float32(v), nil
+}
+
+// StringE convert an interface to a string type
+func StringE(val interface{}) (string, error) {
+	v, _, rv := Indirect(val)
+
+	// interface implements
+	switch vv := val.(type) {
+	case fmt.Stringer:
+		return vv.String(), nil
+	case error:
+		return vv.Error(), nil
+	case json.Marshaler:
+		vvv, e := vv.MarshalJSON()
+		if e == nil {
+			return string(vvv), nil
+		}
+	}
+
+	// source type
+	switch vv := v.(type) {
+	case nil:
+		return "", nil
+	case bool:
+		return strconv.FormatBool(vv), nil
+	case string:
+		return vv, nil
+	case []byte:
+		return string(vv), nil
+	case []rune:
+		return string(vv), nil
+	case uint, uint8, uint16, uint32, uint64, uintptr:
+		return strconv.FormatUint(rv.Uint(), 10), nil
+	case int, int8, int16, int32, int64:
+		return strconv.FormatInt(rv.Int(), 10), nil
+	case float64:
+		return strconv.FormatFloat(vv, 'f', -1, 64), nil
+	case float32:
+		return strconv.FormatFloat(float64(vv), 'f', -1, 32), nil
+	}
+
+	return "", newErr(val, "string")
 }
 
 // Indirect returns the value with base type
