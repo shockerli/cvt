@@ -1306,3 +1306,45 @@ func TestString_BaseLine(t *testing.T) {
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
+
+func TestSlice_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    []interface{}
+		expect []interface{}
+	}{
+		// supported value, def is not used, def != expect
+		{[]int{1, 2, 3}, []interface{}{"a", "b"}, []interface{}{1, 2, 3}},
+		{testing.T{}, []interface{}{1, 2, 3}, nil},
+
+		// unsupported value, def == expect
+		{int(123), []interface{}{"hello"}, []interface{}{"hello"}},
+		{uint16(123), nil, nil},
+		{func() {}, []interface{}{}, []interface{}{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Slice(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestSlice_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []interface{}
+	}{
+		{int(123), nil},
+		{uint16(123), nil},
+		{func() {}, nil},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Slice(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}

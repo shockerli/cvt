@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -36,7 +37,7 @@ func BoolE(val interface{}) (bool, error) {
 		return false, nil
 	}
 
-	switch rk {
+	switch rk.Kind() {
 	// by elem length
 	case reflect.Array, reflect.Slice, reflect.Map:
 		return rv.Len() > 0, nil
@@ -354,58 +355,105 @@ func StringE(val interface{}) (string, error) {
 	return "", newErr(val, "string")
 }
 
+// SliceE convert an interface to a []interface{} type
+func SliceE(val interface{}) (sl []interface{}, err error) {
+	if val == nil {
+		return
+	}
+
+	_, rt, rv := Indirect(val)
+
+	switch rt.Kind() {
+	case reflect.String:
+		for _, vvv := range rv.String() {
+			sl = append(sl, vvv)
+		}
+		return
+	case reflect.Slice, reflect.Array:
+		for j := 0; j < rv.Len(); j++ {
+			sl = append(sl, rv.Index(j).Interface())
+		}
+		return
+	case reflect.Map:
+		var keys = rv.MapKeys()
+		// sorted by keys
+		sort.Slice(keys, func(i, j int) bool {
+			return strings.Compare(String(keys[i].Interface()), String(keys[j].Interface())) < 0
+		})
+		for _, key := range keys {
+			sl = append(sl, rv.MapIndex(key).Interface())
+		}
+		return
+	case reflect.Struct:
+		sl = deepStructValues(rt, rv)
+		return
+	}
+
+	return nil, newErr(val, "slice")
+}
+
+func deepStructValues(rt reflect.Type, rv reflect.Value) (sl []interface{}) {
+	for j := 0; j < rv.NumField(); j++ {
+		if rt.Field(j).Anonymous {
+			sl = append(sl, deepStructValues(rt.Field(j).Type, rv.Field(j))...)
+		} else if rv.Field(j).CanInterface() {
+			sl = append(sl, rv.Field(j).Interface())
+		}
+	}
+	return
+}
+
 // Indirect returns the value with base type
-func Indirect(a interface{}) (val interface{}, k reflect.Kind, v reflect.Value) {
+func Indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value) {
 	if a == nil {
 		return
 	}
 
-	t := reflect.TypeOf(a)
-	v = reflect.ValueOf(a)
-	k = t.Kind()
+	rt = reflect.TypeOf(a)
+	rv = reflect.ValueOf(a)
 
-	switch t.Kind() {
-	case reflect.Ptr:
-		for v.Kind() == reflect.Ptr && !v.IsNil() {
-			v = v.Elem()
+	switch rt.Kind() {
+	case reflect.Ptr: // indirect the base type, if is be referenced many times
+		for rv.Kind() == reflect.Ptr && !rv.IsNil() {
+			rv = rv.Elem()
 		}
-		return Indirect(v.Interface())
+		return Indirect(rv.Interface())
 	case reflect.Bool:
-		val = v.Bool()
+		val = rv.Bool()
 	case reflect.Int:
-		val = int(v.Int())
+		val = int(rv.Int())
 	case reflect.Int8:
-		val = int8(v.Int())
+		val = int8(rv.Int())
 	case reflect.Int16:
-		val = int16(v.Int())
+		val = int16(rv.Int())
 	case reflect.Int32:
-		val = int32(v.Int())
+		val = int32(rv.Int())
 	case reflect.Int64:
-		val = v.Int()
+		val = rv.Int()
 	case reflect.Uint:
-		val = uint(v.Uint())
+		val = uint(rv.Uint())
 	case reflect.Uint8:
-		val = uint8(v.Uint())
+		val = uint8(rv.Uint())
 	case reflect.Uint16:
-		val = uint16(v.Uint())
+		val = uint16(rv.Uint())
 	case reflect.Uint32:
-		val = uint32(v.Uint())
+		val = uint32(rv.Uint())
 	case reflect.Uint64:
-		val = v.Uint()
+		val = rv.Uint()
 	case reflect.Uintptr:
-		val = uintptr(v.Uint())
+		val = uintptr(rv.Uint())
 	case reflect.Float32:
-		val = float32(v.Float())
+		val = float32(rv.Float())
 	case reflect.Float64:
-		val = v.Float()
+		val = rv.Float()
 	case reflect.Complex64:
-		val = complex64(v.Complex())
+		val = complex64(rv.Complex())
 	case reflect.Complex128:
-		val = v.Complex()
+		val = rv.Complex()
 	case reflect.String:
-		val = v.String()
+		val = rv.String()
 	default:
-		val = v.Interface()
+		val = rv.Interface()
 	}
 
 	return

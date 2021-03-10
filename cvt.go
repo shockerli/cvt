@@ -181,3 +181,16 @@ func String(v interface{}, def ...string) string {
 
 	return ""
 }
+
+// Slice convert an interface to a []interface{} type, with default value
+func Slice(v interface{}, def ...[]interface{}) []interface{} {
+	if v, err := SliceE(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return nil
+}

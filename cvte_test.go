@@ -48,6 +48,31 @@ func (TestMarshalJSON) MarshalJSON() ([]byte, error) {
 	return []byte("MarshalJSON"), nil
 }
 
+type TestStructA struct {
+	A1 int
+	TestStructB
+	A2 string
+	DD TestStructD
+}
+
+type TestStructB struct {
+	TestStructC
+	B1 int
+}
+
+type TestStructC struct {
+	C1 string
+}
+
+type TestStructD struct {
+	D1 int
+}
+
+type TestStructE struct {
+	D1 int
+	DD *TestStructD
+}
+
 func TestBoolE(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -1299,6 +1324,68 @@ func TestStringE(t *testing.T) {
 
 		// Non-E test with no default value:
 		v = cvt.String(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestSliceE(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []interface{}
+		isErr  bool
+	}{
+		{"hello", []interface{}{'h', 'e', 'l', 'l', 'o'}, false},
+		{[]byte("hey"), []interface{}{byte('h'), byte('e'), byte('y')}, false},
+		{[]rune("我爱中国"), []interface{}{'我', '爱', '中', '国'}, false},
+		{[]int{}, nil, false},
+		{[]int{1, 2, 3}, []interface{}{1, 2, 3}, false},
+		{[]string{}, nil, false},
+		{[]string{"a", "b", "c"}, []interface{}{"a", "b", "c"}, false},
+		{[]interface{}{1, "a", -1, nil}, []interface{}{1, "a", -1, nil}, false},
+		{[...]string{}, nil, false},
+		{[...]string{"a", "b", "c"}, []interface{}{"a", "b", "c"}, false},
+		{map[int]string{}, nil, false},
+		{map[int]string{1: "111", 2: "222"}, []interface{}{"111", "222"}, false},
+		{map[int]TestStructC{}, nil, false},
+		{map[int]TestStructC{1: {"c1"}, 2: {"c2"}}, []interface{}{TestStructC{"c1"}, TestStructC{"c2"}}, false},
+		// map key convert to string, and sorted by key asc
+		{map[interface{}]string{
+			"k":  "k",
+			1:    "1",
+			0:    "0",
+			"b":  "b",
+			-1:   "-1",
+			"3c": "3c",
+			-0.1: "-0.1",
+		}, []interface{}{"-0.1", "-1", "0", "1", "3c", "b", "k"}, false},
+
+		{testing.T{}, nil, false},
+		{&testing.T{}, nil, false},
+		{TestStructA{}, []interface{}{0, "", 0, "", TestStructD{0}}, false},
+		{&TestStructB{}, []interface{}{"", 0}, false},
+		{&TestStructE{}, []interface{}{0, (*TestStructD)(nil)}, false},
+
+		// errors
+		{int(123), nil, true},
+		{uint16(123), nil, true},
+		{float64(12.3), nil, true},
+		{func() {}, nil, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.SliceE(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+
+		// Non-E test with no default value:
+		v = cvt.Slice(tt.input)
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
