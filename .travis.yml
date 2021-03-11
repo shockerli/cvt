@@ -8,20 +8,11 @@ os:
 jobs:
   include:
     - go: "1.13.x"
-      env: GO111MODULE=off
-    - go: "1.13.x"
       env: GO111MODULE=on
-    - go: "1.14.x"
-      env: GO111MODULE=off
     - go: "1.14.x"
       env: GO111MODULE=on
     - go: master
       env: GO111MODULE=on
-    - go: master
-      env: GO111MODULE=off
-
-matrix:
-  fast_finish: true
 
 script:
   - make check
