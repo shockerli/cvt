@@ -1,15 +1,27 @@
 language: go
-env:
-  - GO111MODULE=on
-sudo: required
-go:
-  - "1.11.x"
-  - tip
+
 os:
   - linux
+  - osx
+  - windows
+
+jobs:
+  include:
+    - go: "1.13.x"
+      env: GO111MODULE=off
+    - go: "1.13.x"
+      env: GO111MODULE=on
+    - go: "1.14.x"
+      env: GO111MODULE=off
+    - go: "1.14.x"
+      env: GO111MODULE=on
+    - go: master
+      env: GO111MODULE=on
+    - go: master
+      env: GO111MODULE=off
+
 matrix:
-  allow_failures:
-    - go: tip
   fast_finish: true
+
 script:
   - make check
