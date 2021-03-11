@@ -12,6 +12,7 @@ import (
 )
 
 var errConvFail = errors.New("convert failed")
+var errFieldNotFound = errors.New("field not found")
 var formatOutOfLimitInt = "%w, out of max limit value(%d)"
 var formatOutOfLimitFloat = "%w, out of max limit value(%f)"
 var formatExtend = "%v, %w"
@@ -392,6 +393,7 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 	return nil, newErr(val, "slice")
 }
 
+// return the values of struct fields, and deep find the embedded fields
 func deepStructValues(rt reflect.Type, rv reflect.Value) (sl []interface{}) {
 	for j := 0; j < rv.NumField(); j++ {
 		if rt.Field(j).Anonymous {
@@ -401,6 +403,28 @@ func deepStructValues(rt reflect.Type, rv reflect.Value) (sl []interface{}) {
 		}
 	}
 	return
+}
+
+// FieldE return the field value from map/struct, ignore the filed type
+func FieldE(val interface{}, field interface{}) (interface{}, error) {
+	sf := String(field) // match with the String of field, so field can be any type
+	_, rt, rv := Indirect(val)
+
+	switch rt.Kind() {
+	case reflect.Map: // key of map
+		for _, key := range rv.MapKeys() {
+			if String(key.Interface()) == sf {
+				return rv.MapIndex(key).Interface(), nil
+			}
+		}
+	case reflect.Struct: // field of struct
+		vv := rv.FieldByName(sf)
+		if vv.IsValid() {
+			return vv.Interface(), nil
+		}
+	}
+
+	return nil, fmt.Errorf("%w(%s)", errFieldNotFound, sf)
 }
 
 // Indirect returns the value with base type
