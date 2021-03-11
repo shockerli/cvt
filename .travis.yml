@@ -2,8 +2,6 @@ language: go
 
 os:
   - linux
-  - osx
-  - windows
 
 jobs:
   include:
