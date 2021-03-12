@@ -1378,6 +1378,7 @@ func TestSliceE(t *testing.T) {
 		{uint16(123), nil, true},
 		{float64(12.3), nil, true},
 		{func() {}, nil, true},
+		{nil, nil, true},
 	}
 
 	for i, tt := range tests {
@@ -1420,6 +1421,7 @@ func TestFieldE(t *testing.T) {
 		{uint16(123), "Name", nil, true},
 		{float64(12.3), "Name", nil, true},
 		{func() {}, "Name", nil, true},
+		{nil, "Name", nil, true},
 	}
 
 	for i, tt := range tests {
@@ -1429,6 +1431,56 @@ func TestFieldE(t *testing.T) {
 		)
 
 		v, err := cvt.FieldE(tt.input, tt.field)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestColumnsE(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		field  interface{}
+		expect interface{}
+		isErr  bool
+	}{
+		{[]interface{}{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}}, "D1", []interface{}{1}, false},
+		{[]TestStructE{{D1: 1}, {D1: 2}}, "D1", []interface{}{1, 2}, false},
+		{[]TestStructE{{DD: &TestStructD{}}, {D1: 2}}, "DD", []interface{}{&TestStructD{}, (*TestStructD)(nil)}, false},
+		{[]interface{}{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}}, "DD", []interface{}{&TestStructD{D1: 2}}, false},
+		{[]map[string]interface{}{{"1": 111, "DDD": "D1"}, {"2": 222, "DDD": "D2"}, {"DDD": nil}}, "DDD", []interface{}{"D1", "D2", nil}, false},
+		{map[int]map[string]interface{}{1: {"1": 111, "DDD": "D1"}, 2: {"2": 222, "DDD": "D2"}, 3: {"DDD": nil}}, "DDD", []interface{}{"D1", "D2", nil}, false},
+		{map[int]TestStructD{1: {11}, 2: {22}}, "D1", []interface{}{11, 22}, false},
+
+		// errors
+		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "", nil, true},
+		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "Age", nil, true},
+		{int(123), "Name", nil, true},
+		{uint16(123), "Name", nil, true},
+		{float64(12.3), "Name", nil, true},
+		{"Name", "Name", nil, true},
+		{func() {}, "Name", nil, true},
+		{nil, "Name", nil, true},
+		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "D1", nil, true},
+		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "DD", nil, true},
+		{TestStructB{B1: 1, TestStructC: TestStructC{C1: "c1"}}, "C1", nil, true},
+		{map[int]interface{}{123: "112233"}, "123", nil, true},
+		{map[int]interface{}{123: "112233"}, 123, nil, true},
+		{map[string]interface{}{"123": "112233"}, 123, nil, true},
+		{map[string]interface{}{"c": "ccc"}, TestStructC{C1: "c"}, nil, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf(
+			"i = %d, input[%+v], field[%s], expect[%+v], isErr[%v]",
+			i, tt.input, tt.field, tt.expect, tt.isErr,
+		)
+
+		v, err := cvt.ColumnsE(tt.input, tt.field)
 		if tt.isErr {
 			assert.Error(t, err, msg)
 			continue

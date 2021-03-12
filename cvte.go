@@ -13,6 +13,7 @@ import (
 
 var errConvFail = errors.New("convert failed")
 var errFieldNotFound = errors.New("field not found")
+var errUnsupportedTypeNil = errors.New("unsupported type: nil")
 var formatOutOfLimitInt = "%w, out of max limit value(%d)"
 var formatOutOfLimitFloat = "%w, out of max limit value(%f)"
 var formatExtend = "%v, %w"
@@ -359,7 +360,7 @@ func StringE(val interface{}) (string, error) {
 // SliceE convert an interface to a []interface{} type
 func SliceE(val interface{}) (sl []interface{}, err error) {
 	if val == nil {
-		return
+		return nil, errUnsupportedTypeNil
 	}
 
 	_, rt, rv := Indirect(val)
@@ -376,12 +377,7 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 		}
 		return
 	case reflect.Map:
-		var keys = rv.MapKeys()
-		// sorted by keys
-		sort.Slice(keys, func(i, j int) bool {
-			return strings.Compare(String(keys[i].Interface()), String(keys[j].Interface())) < 0
-		})
-		for _, key := range keys {
+		for _, key := range sortedMapKeys(rv) {
 			sl = append(sl, rv.MapIndex(key).Interface())
 		}
 		return
@@ -405,8 +401,21 @@ func deepStructValues(rt reflect.Type, rv reflect.Value) (sl []interface{}) {
 	return
 }
 
+// return the map keys, which sorted by asc
+func sortedMapKeys(v reflect.Value) (s []reflect.Value) {
+	s = v.MapKeys()
+	sort.Slice(s, func(i, j int) bool {
+		return strings.Compare(String(s[i].Interface()), String(s[j].Interface())) < 0
+	})
+	return
+}
+
 // FieldE return the field value from map/struct, ignore the filed type
 func FieldE(val interface{}, field interface{}) (interface{}, error) {
+	if val == nil {
+		return nil, errUnsupportedTypeNil
+	}
+
 	sf := String(field) // match with the String of field, so field can be any type
 	_, rt, rv := Indirect(val)
 
@@ -425,6 +434,39 @@ func FieldE(val interface{}, field interface{}) (interface{}, error) {
 	}
 
 	return nil, fmt.Errorf("%w(%s)", errFieldNotFound, sf)
+}
+
+// ColumnsE return the values from a single column in the input array/slice/map of struct/map
+func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) {
+	if val == nil {
+		return nil, errUnsupportedTypeNil
+	}
+
+	_, rt, rv := Indirect(val)
+
+	switch rt.Kind() {
+	case reflect.Slice, reflect.Array:
+		for j := 0; j < rv.Len(); j++ {
+			vv, e := FieldE(rv.Index(j).Interface(), field)
+			if e == nil {
+				sl = append(sl, vv)
+			}
+		}
+	case reflect.Map:
+		for _, key := range sortedMapKeys(rv) {
+			vv, e := FieldE(rv.MapIndex(key).Interface(), field)
+			if e == nil {
+				sl = append(sl, vv)
+			}
+		}
+	}
+
+	// non valid field value, means error
+	if len(sl) > 0 {
+		return
+	}
+
+	return nil, fmt.Errorf("unsupported type: %s", rt.Kind())
 }
 
 // Indirect returns the value with base type
