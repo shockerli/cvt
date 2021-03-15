@@ -2,21 +2,21 @@
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/shockerli/cvt)](https://pkg.go.dev/github.com/shockerli/cvt) [![Go Report Card](https://goreportcard.com/badge/github.com/shockerli/cvt)](https://goreportcard.com/report/github.com/shockerli/cvt) [![Build Status](https://travis-ci.com/shockerli/cvt.svg?branch=master)](https://travis-ci.com/shockerli/cvt)
 
-> Simple, safe conversion of any type, including custom types
+> 简单、安全的转换任意类型值，包括自定义类型
 
-## Install
+## 安装
 
 ```go
 go get -u github.com/shockerli/cvt
 ```
 
-## Usage
+## 使用
 
-[中文文档](README_ZH.md)
+[English](README.md)
 
-### with `error`
+### 支持 `error`
 
-> Method `__E()`: expect handle error, while unable to convert
+> 以 `E` 结尾的方法 `__E()`: 当转换失败时会返回错误
 
 ```go
 cvt.IntE("12")          // 12, nil
@@ -25,9 +25,9 @@ cvt.StringE(12.34)      // "12.34", nil
 cvt.BoolE("false")      // false, nil
 ```
 
-### custom type and pointers
+### 自定义类型、指针类型
 
-> dereferencing pointer and reach the base type
+> 自动解引用，并找到基本类型，完全支持自定义类型的转换
 
 ```go
 type Name string
@@ -38,28 +38,28 @@ cvt.StringE(name)       // jioby, nil
 cvt.StringE(&name)      // jioby, nil
 ```
 
-### ignore `error`
+### 忽略 `error`
 
-> Method `__()`: ignore error, while convert failed, will return the zero value of type
+> 名称不以 `E` 结尾的方法，如果转换失败，不会返回错误，会返回零值
 
 ```go
 cvt.Int("12")           // 12(success)
 cvt.Int(struct{}{})     // 0(failed)
 ```
 
-### with default
+### 默认值
 
-> return the default value, while convert failed
+> 如果转换失败，返回默认值
 
 ```go
-cvt.Int(struct{}{}, 12)     // 12
-cvt.Float("hello", 12.34)   // 12.34
+cvt.Int(struct{}{}, 12)         // 12
+cvt.Float("hello", 12.34)       // 12.34
 ```
 
 ### more
 
-> For more examples, see tests [cvt_test.go](cvt_test.go) and [cvte_test.go](cvte_test.go)
+> 所有示例，可通过单元测试了解：[cvt_test.go](cvt_test.go)、 [cvte_test.go](cvte_test.go)
 
-## License
+## 开源协议
 
-This project is licensed under the terms of the [MIT](LICENSE) license.
+基于 [MIT](LICENSE) 开发源代码
