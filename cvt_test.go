@@ -1348,3 +1348,42 @@ func TestSlice_BaseLine(t *testing.T) {
 		assert.Equal(t, tt.expect, v, msg)
 	}
 }
+
+func TestTime_HasDefault(t *testing.T) {
+	loc := time.UTC
+	tests := []struct {
+		input  interface{}
+		def    time.Time
+		expect time.Time
+	}{
+		// supported value, def is not used, def != expect
+		{"2018-10-21T23:21:29+0200", time.Date(2010, 4, 23, 11, 11, 11, 0, loc), time.Date(2018, 10, 21, 21, 21, 29, 0, loc)},
+
+		// unsupported value, def == expect
+		{"hello world", time.Date(2010, 4, 23, 11, 11, 11, 0, loc), time.Date(2010, 4, 23, 11, 11, 11, 0, loc)},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Time(tt.input, tt.def)
+		assert.Equal(t, tt.expect, v.UTC(), msg)
+	}
+}
+
+func TestTime_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect time.Time
+	}{
+		{"hello world", time.Time{}},
+		{testing.T{}, time.Time{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Time(tt.input)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}

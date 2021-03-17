@@ -1,5 +1,7 @@
 package cvt
 
+import "time"
+
 // Bool convert an interface to a bool type, with default value
 func Bool(v interface{}, def ...bool) bool {
 	if v, err := BoolE(v); err == nil {
@@ -193,4 +195,17 @@ func Slice(v interface{}, def ...[]interface{}) []interface{} {
 	}
 
 	return nil
+}
+
+// Time convert an interface to a time.Time type, with default value
+func Time(v interface{}, def ...time.Time) time.Time {
+	if v, err := TimeE(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return time.Time{}
 }
