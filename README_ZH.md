@@ -60,6 +60,45 @@ cvt.Float("hello", 12.34)       // 12.34
 
 > 所有示例，可通过单元测试了解：[cvt_test.go](cvt_test.go)、 [cvte_test.go](cvte_test.go)
 
+
+## API
+
+- Bool
+- BoolE
+- ColumnsE
+- FieldE
+- Float32
+- Float32E
+- Float64
+- Float64E
+- Int
+- Int16
+- Int16E
+- Int32
+- Int32E
+- Int64
+- Int64E
+- Int8
+- Int8E
+- IntE
+- Slice
+- SliceE
+- String
+- StringE
+- Time
+- TimeE
+- Uint
+- Uint16
+- Uint16E
+- Uint32
+- Uint32E
+- Uint64
+- Uint64E
+- Uint8
+- Uint8E
+- UintE
+
+
 ## 开源协议
 
-基于 [MIT](LICENSE) 开发源代码
+本项目基于 [MIT](LICENSE) 协议开放源代码。

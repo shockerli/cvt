@@ -21,7 +21,7 @@ var formatExtend = "%v, %w"
 
 // BoolE convert an interface to a bool type
 func BoolE(val interface{}) (bool, error) {
-	v, rk, rv := Indirect(val)
+	v, rk, rv := indirect(val)
 
 	switch vv := v.(type) {
 	case bool:
@@ -130,7 +130,7 @@ func UintE(val interface{}) (uint, error) {
 }
 
 func convUint64(val interface{}) (uint64, error) {
-	v, _, rv := Indirect(val)
+	v, _, rv := indirect(val)
 
 	switch vv := v.(type) {
 	case nil:
@@ -228,7 +228,7 @@ func IntE(val interface{}) (int, error) {
 }
 
 func convInt64(val interface{}) (int64, error) {
-	v, _, rv := Indirect(val)
+	v, _, rv := indirect(val)
 
 	switch vv := v.(type) {
 	case nil:
@@ -265,7 +265,7 @@ func convInt64(val interface{}) (int64, error) {
 
 // Float64E convert an interface to a float64 type
 func Float64E(val interface{}) (float64, error) {
-	v, _, rv := Indirect(val)
+	v, _, rv := indirect(val)
 
 	switch vv := v.(type) {
 	case nil:
@@ -318,7 +318,7 @@ func Float32E(val interface{}) (float32, error) {
 
 // StringE convert an interface to a string type
 func StringE(val interface{}) (string, error) {
-	v, _, rv := Indirect(val)
+	v, _, rv := indirect(val)
 
 	// interface implements
 	switch vv := val.(type) {
@@ -360,7 +360,7 @@ func StringE(val interface{}) (string, error) {
 
 // TimeE convert an interface to a time.Time type
 func TimeE(val interface{}) (t time.Time, err error) {
-	v, _, _ := Indirect(val)
+	v, _, _ := indirect(val)
 
 	// source type
 	switch vv := v.(type) {
@@ -431,7 +431,7 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rt, rv := Indirect(val)
+	_, rt, rv := indirect(val)
 
 	switch rt.Kind() {
 	case reflect.String:
@@ -485,7 +485,7 @@ func FieldE(val interface{}, field interface{}) (interface{}, error) {
 	}
 
 	sf := String(field) // match with the String of field, so field can be any type
-	_, rt, rv := Indirect(val)
+	_, rt, rv := indirect(val)
 
 	switch rt.Kind() {
 	case reflect.Map: // key of map
@@ -510,7 +510,7 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rt, rv := Indirect(val)
+	_, rt, rv := indirect(val)
 
 	switch rt.Kind() {
 	case reflect.Slice, reflect.Array:
@@ -537,8 +537,8 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 	return nil, fmt.Errorf("unsupported type: %s", rt.Kind())
 }
 
-// Indirect returns the value with base type
-func Indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value) {
+// returns the value with base type
+func indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value) {
 	if a == nil {
 		return
 	}
@@ -551,7 +551,7 @@ func Indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value
 		for rv.Kind() == reflect.Ptr && !rv.IsNil() {
 			rv = rv.Elem()
 		}
-		return Indirect(rv.Interface())
+		return indirect(rv.Interface())
 	case reflect.Bool:
 		val = rv.Bool()
 	case reflect.Int:

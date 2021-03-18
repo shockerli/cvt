@@ -2,7 +2,9 @@
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/shockerli/cvt)](https://pkg.go.dev/github.com/shockerli/cvt) [![Go Report Card](https://goreportcard.com/badge/github.com/shockerli/cvt)](https://goreportcard.com/report/github.com/shockerli/cvt) [![Build Status](https://travis-ci.com/shockerli/cvt.svg?branch=master)](https://travis-ci.com/shockerli/cvt)
 
-> Simple, safe conversion of any type, including custom types
+> Simple, safe conversion of any type, including custom types.
+>
+> Inspired by [cast](https://github.com/spf13/cast)
 
 ## Install
 
@@ -59,6 +61,44 @@ cvt.Float("hello", 12.34)   // 12.34
 ### more
 
 > For more examples, see tests [cvt_test.go](cvt_test.go) and [cvte_test.go](cvte_test.go)
+
+## API
+
+- Bool
+- BoolE
+- ColumnsE
+- FieldE
+- Float32
+- Float32E
+- Float64
+- Float64E
+- Int
+- Int16
+- Int16E
+- Int32
+- Int32E
+- Int64
+- Int64E
+- Int8
+- Int8E
+- IntE
+- Slice
+- SliceE
+- String
+- StringE
+- Time
+- TimeE
+- Uint
+- Uint16
+- Uint16E
+- Uint32
+- Uint32E
+- Uint64
+- Uint64E
+- Uint8
+- Uint8E
+- UintE
+
 
 ## License
 
