@@ -537,6 +537,74 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 	return nil, fmt.Errorf("unsupported type: %s", rt.Kind())
 }
 
+func ColumnsIntE(val interface{}, field interface{}) (sl []int, err error) {
+	list, err := ColumnsE(val, field)
+	if err != nil {
+		return
+	}
+
+	for _, v := range list {
+		vv, err := IntE(v)
+		if err != nil {
+			return nil, err
+		}
+		sl = append(sl, vv)
+	}
+
+	return
+}
+
+func ColumnsInt64E(val interface{}, field interface{}) (sl []int64, err error) {
+	list, err := ColumnsE(val, field)
+	if err != nil {
+		return
+	}
+
+	for _, v := range list {
+		vv, err := Int64E(v)
+		if err != nil {
+			return nil, err
+		}
+		sl = append(sl, vv)
+	}
+
+	return
+}
+
+func ColumnsFloat64E(val interface{}, field interface{}) (sl []float64, err error) {
+	list, err := ColumnsE(val, field)
+	if err != nil {
+		return
+	}
+
+	for _, v := range list {
+		vv, err := Float64E(v)
+		if err != nil {
+			return nil, err
+		}
+		sl = append(sl, vv)
+	}
+
+	return
+}
+
+func ColumnsStringE(val interface{}, field interface{}) (sl []string, err error) {
+	list, err := ColumnsE(val, field)
+	if err != nil {
+		return
+	}
+
+	for _, v := range list {
+		vv, err := StringE(v)
+		if err != nil {
+			return nil, err
+		}
+		sl = append(sl, vv)
+	}
+
+	return
+}
+
 // returns the value with base type
 func indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value) {
 	if a == nil {
