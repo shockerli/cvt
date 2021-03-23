@@ -66,6 +66,10 @@ cvt.Float("hello", 12.34)       // 12.34
 - Bool
 - BoolE
 - ColumnsE
+- ColumnsFloat64E
+- ColumnsInt64E
+- ColumnsIntE
+- ColumnsStringE
 - FieldE
 - Float32
 - Float32E
