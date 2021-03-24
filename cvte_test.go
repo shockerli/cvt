@@ -1471,6 +1471,7 @@ func TestSliceInt64E(t *testing.T) {
 	}{
 		{[]int{}, nil, false},
 		{[]int{1, 2, 3}, []int64{1, 2, 3}, false},
+		{[]float64{1, 2, 3.3, 4.8}, []int64{1, 2, 3, 4}, false},
 		{[]string{}, nil, false},
 		{[]interface{}{1, "-1", -1, nil}, []int64{1, -1, -1, 0}, false},
 		{[...]string{}, nil, false},
@@ -1503,6 +1504,58 @@ func TestSliceInt64E(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
 
 		v, err := cvt.SliceInt64E(tt.input)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestSliceFloat64E(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []float64
+		isErr  bool
+	}{
+		{[]int{}, nil, false},
+		{[]int{1, 2, 3}, []float64{1, 2, 3}, false},
+		{[]float64{1, 2, 3}, []float64{1, 2, 3}, false},
+		{[]float64{1.1, 2.2, 3}, []float64{1.1, 2.2, 3}, false},
+		{[]string{}, nil, false},
+		{[]interface{}{1, "-1.1", -1.7, nil}, []float64{1, -1.1, -1.7, 0}, false},
+		{[...]string{}, nil, false},
+		{[...]string{"1.01", "2.22", "3.30", "-1"}, []float64{1.01, 2.22, 3.3, -1}, false},
+
+		// sorted by key asc
+		{map[int]string{}, nil, false},
+		{map[int]string{2: "222", 1: "11.1"}, []float64{11.1, 222}, false},
+		{map[int]TestStructC{}, nil, false},
+		{map[interface{}]string{
+			1:    "1",
+			0.9:  "0.9",
+			-1:   "-1",
+			-0.1: "-0.1",
+		}, []float64{-0.1, -1, 0.9, 1}, false},
+
+		{testing.T{}, nil, false},
+		{&testing.T{}, nil, false},
+
+		// errors
+		{int(123), nil, true},
+		{uint16(123), nil, true},
+		{float64(12.3), nil, true},
+		{func() {}, nil, true},
+		{nil, nil, true},
+		{[]string{"a", "b", "c"}, nil, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v], isErr[%v]", i, tt.input, tt.expect, tt.isErr)
+
+		v, err := cvt.SliceFloat64E(tt.input)
 		if tt.isErr {
 			assert.Error(t, err, msg)
 			continue
