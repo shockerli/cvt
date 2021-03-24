@@ -511,6 +511,24 @@ func SliceFloat64E(val interface{}) (sl []float64, err error) {
 	return
 }
 
+// SliceStringE convert an interface to a []string type
+func SliceStringE(val interface{}) (sl []string, err error) {
+	list, err := SliceE(val)
+	if err != nil {
+		return
+	}
+
+	for _, v := range list {
+		vv, err := StringE(v)
+		if err != nil {
+			return nil, err
+		}
+		sl = append(sl, vv)
+	}
+
+	return
+}
+
 // return the values of struct fields, and deep find the embedded fields
 func deepStructValues(rt reflect.Type, rv reflect.Value) (sl []interface{}) {
 	for j := 0; j < rv.NumField(); j++ {
