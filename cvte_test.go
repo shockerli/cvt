@@ -79,6 +79,20 @@ type TestStructE struct {
 	DD *TestStructD
 }
 
+type TestTimeStringer struct {
+	time time.Time
+}
+
+func (t TestTimeStringer) String() string {
+	return t.time.String()
+}
+
+func Benchmark(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		cvt.Bool(aliasTypeString_0, true)
+	}
+}
+
 // [function tests]
 
 func TestBoolE(t *testing.T) {
@@ -1538,6 +1552,7 @@ func TestTimeE(t *testing.T) {
 		{uint64(1234567890), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{uint32(1234567890), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{time.Date(2009, 2, 13, 23, 31, 30, 0, loc), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{TestTimeStringer{time.Date(2010, 3, 7, 0, 0, 0, 0, loc)}, time.Date(2010, 3, 7, 0, 0, 0, 0, loc), false},
 
 		// errors
 		{"2006", time.Time{}, true},
@@ -1709,6 +1724,40 @@ func TestColumnsFloat64E(t *testing.T) {
 		)
 
 		v, err := cvt.ColumnsFloat64E(tt.input, tt.field)
+		if tt.isErr {
+			assert.Error(t, err, msg)
+			continue
+		}
+
+		assert.NoError(t, err, msg)
+		assert.Equal(t, tt.expect, v, msg)
+	}
+}
+
+func TestKeysE(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []interface{}
+		isErr  bool
+	}{
+		{map[int]map[string]interface{}{1: {"1": 111, "DDD": 12.3}, 2: {"2": 222, "DDD": "321"}, 3: {"DDD": nil}}, []interface{}{1, 2, 3}, false},
+		{map[string]interface{}{"A": 1, "2": 2}, []interface{}{"2", "A"}, false},
+		{map[float64]TestStructD{1: {11}, 2: {22}}, []interface{}{float64(1), float64(2)}, false},
+		{map[interface{}]interface{}{1: 1, 2.2: 2.22, "A": "A"}, []interface{}{1, 2.2, "A"}, false},
+
+		// errors
+		{nil, nil, true},
+		{"Name", nil, true},
+		{testing.T{}, nil, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf(
+			"i = %d, input[%+v], expect[%+v], isErr[%v]",
+			i, tt.input, tt.expect, tt.isErr,
+		)
+
+		v, err := cvt.KeysE(tt.input)
 		if tt.isErr {
 			assert.Error(t, err, msg)
 			continue

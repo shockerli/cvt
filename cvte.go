@@ -534,7 +534,7 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 		return
 	}
 
-	return nil, fmt.Errorf("unsupported type: %s", rt.Kind())
+	return nil, fmt.Errorf("unsupported type: %s", rt.Name())
 }
 
 func ColumnsIntE(val interface{}, field interface{}) (sl []int, err error) {
@@ -605,6 +605,25 @@ func ColumnsStringE(val interface{}, field interface{}) (sl []string, err error)
 	return
 }
 
+// KeysE return the keys of map, sorted by asc
+func KeysE(val interface{}) (sl []interface{}, err error) {
+	if val == nil {
+		return nil, errUnsupportedTypeNil
+	}
+
+	_, rt, rv := indirect(val)
+
+	switch rt.Kind() {
+	case reflect.Map:
+		for _, key := range sortedMapKeys(rv) {
+			sl = append(sl, key.Interface())
+		}
+		return
+	}
+
+	return nil, fmt.Errorf("unsupported type: %s", rt.Name())
+}
+
 // returns the value with base type
 func indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value) {
 	if a == nil {
@@ -668,7 +687,7 @@ func newErr(val interface{}, t string) error {
 // catching an error and return a new
 func catch(t string, val interface{}, e error) error {
 	if e != nil {
-		if errors.Is(e, errConvFail) {
+		if errors.Is(e, errConvFail) || errors.Is(e, errFieldNotFound) || errors.Is(e, errUnsupportedTypeNil) {
 			return newErr(val, t)
 		}
 		return fmt.Errorf(formatExtend, newErr(val, t), e)
