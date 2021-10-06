@@ -70,6 +70,7 @@ func indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value
 
 	rt = reflect.TypeOf(a)
 	rv = reflect.ValueOf(a)
+	val = rv.Interface()
 
 	switch rt.Kind() {
 	case reflect.Ptr: // indirect the base type, if is be referenced many times
@@ -99,20 +100,17 @@ func indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value
 		val = uint32(rv.Uint())
 	case reflect.Uint64:
 		val = rv.Uint()
-	case reflect.Uintptr:
-		val = uintptr(rv.Uint())
 	case reflect.Float32:
 		val = float32(rv.Float())
 	case reflect.Float64:
 		val = rv.Float()
-	case reflect.Complex64:
-		val = complex64(rv.Complex())
-	case reflect.Complex128:
-		val = rv.Complex()
 	case reflect.String:
 		val = rv.String()
-	default:
-		val = rv.Interface()
+	case reflect.Slice:
+		// []byte
+		if rv.Type().Elem().Kind() == reflect.Uint8 {
+			val = rv.Bytes()
+		}
 	}
 
 	return
