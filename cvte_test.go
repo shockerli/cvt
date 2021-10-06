@@ -12,11 +12,24 @@ import (
 
 // [test data]
 
-// alias type: bool
-type AliasTypeBool bool
-
-// alias type: int
-type AliasTypeInt int
+// indirect type
+type (
+	AliasTypeBool    bool
+	AliasTypeInt     int
+	AliasTypeInt8    int8
+	AliasTypeInt16   int16
+	AliasTypeInt32   int32
+	AliasTypeInt64   int64
+	AliasTypeUint    uint
+	AliasTypeUint8   uint8
+	AliasTypeUint16  uint16
+	AliasTypeUint32  uint32
+	AliasTypeUint64  uint64
+	AliasTypeFloat32 float32
+	AliasTypeFloat64 float64
+	AliasTypeString  string
+	AliasTypeBytes   []byte
+)
 
 var (
 	aliasTypeBool_true  AliasTypeBool = true
@@ -26,12 +39,10 @@ var (
 var (
 	aliasTypeInt_0 AliasTypeInt = 0
 	aliasTypeInt_1 AliasTypeInt = 1
-)
 
-// alias type: string
-type AliasTypeString string
+	aliasTypeUint_0 AliasTypeUint = 0
+	aliasTypeUint_1 AliasTypeUint = 1
 
-var (
 	aliasTypeString_0          AliasTypeString = "0"
 	aliasTypeString_1          AliasTypeString = "1"
 	aliasTypeString_8d15       AliasTypeString = "8.15"
@@ -40,6 +51,7 @@ var (
 	aliasTypeString_off        AliasTypeString = "off"
 )
 
+// custom type
 type TestMarshalJSON struct{}
 
 func (TestMarshalJSON) MarshalJSON() ([]byte, error) {

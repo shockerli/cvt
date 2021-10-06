@@ -253,6 +253,7 @@ func IntE(val interface{}) (int, error) {
 	if e := catch("int", val, e); e != nil {
 		return 0, e
 	}
+	// 32bit system
 	if strconv.IntSize == 32 && v > math.MaxInt32 {
 		return 0, fmt.Errorf(formatOutOfLimitInt, newErr(val, "int"), int32(math.MaxInt32))
 	}
@@ -299,11 +300,65 @@ func convUint64(val interface{}) (uint64, error) {
 
 // convert any value to int64
 func convInt64(val interface{}) (int64, error) {
-	v, _, rv := indirect(val)
-
-	switch vv := v.(type) {
+	// direct type(for improve performance)
+	switch vv := val.(type) {
+	case int:
+		return int64(vv), nil
+	case int64:
+		return vv, nil
+	case int32:
+		return int64(vv), nil
+	case int16:
+		return int64(vv), nil
+	case int8:
+		return int64(vv), nil
+	case uint:
+		if strconv.IntSize == 64 && vv > math.MaxInt64 {
+			return 0, errConvFail
+		}
+		return int64(vv), nil
+	case uint64:
+		if vv > math.MaxInt64 {
+			return 0, errConvFail
+		}
+		return int64(vv), nil
+	case uint32:
+		return int64(vv), nil
+	case uint16:
+		return int64(vv), nil
+	case uint8:
+		return int64(vv), nil
+	case float64:
+		if vv > math.MaxInt64 {
+			return 0, errConvFail
+		}
+		return int64(math.Trunc(vv)), nil
+	case float32:
+		return int64(vv), nil
 	case nil:
 		return 0, nil
+	case bool:
+		if vv {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		vvv, err := strconv.ParseFloat(vv, 64)
+		if err == nil && vvv <= math.MaxInt64 {
+			return int64(math.Trunc(vvv)), nil
+		}
+		return 0, errConvFail
+	case []byte:
+		vvv, err := strconv.ParseFloat(string(vv), 64)
+		if err == nil && vvv <= math.MaxInt64 {
+			return int64(math.Trunc(vvv)), nil
+		}
+		return 0, errConvFail
+	}
+
+	// indirect type
+	v, _, rv := indirect(val)
+	switch vv := v.(type) {
 	case bool:
 		if vv {
 			return 1, nil
