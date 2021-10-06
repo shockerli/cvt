@@ -1,6 +1,7 @@
 package cvt_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"testing"
@@ -1455,6 +1456,7 @@ func TestInt64E(t *testing.T) {
 		{&aliasTypeBool_true, 1, false},
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
+		{json.Number("1"), 1, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1473,6 +1475,7 @@ func TestInt64E(t *testing.T) {
 		{[]string{}, 0, true},
 		{[...]string{}, 0, true},
 		{map[int]string{}, 0, true},
+		{json.Number("hello"), 0, true},
 	}
 
 	for i, tt := range tests {
@@ -1570,6 +1573,7 @@ func TestInt32E(t *testing.T) {
 		{&aliasTypeBool_true, 1, false},
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
+		{json.Number("1"), 1, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1589,6 +1593,7 @@ func TestInt32E(t *testing.T) {
 		{[]string{}, 0, true},
 		{[...]string{}, 0, true},
 		{map[int]string{}, 0, true},
+		{json.Number("hello"), 0, true},
 	}
 
 	for i, tt := range tests {
@@ -1686,6 +1691,7 @@ func TestInt16E(t *testing.T) {
 		{&aliasTypeBool_true, 1, false},
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
+		{json.Number("1"), 1, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1707,6 +1713,7 @@ func TestInt16E(t *testing.T) {
 		{[]string{}, 0, true},
 		{[...]string{}, 0, true},
 		{map[int]string{}, 0, true},
+		{json.Number("hello"), 0, true},
 	}
 
 	for i, tt := range tests {
@@ -1804,6 +1811,7 @@ func TestInt8E(t *testing.T) {
 		{&aliasTypeBool_true, 1, false},
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
+		{json.Number("1"), 1, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1820,6 +1828,7 @@ func TestInt8E(t *testing.T) {
 		{uint8(math.MaxUint8), 0, true},
 		{"hello", 0, true},
 		{[]byte("hello"), 0, true},
+		{json.Number("hello"), 0, true},
 		{testing.T{}, 0, true},
 		{&testing.T{}, 0, true},
 		{[]int{}, 0, true},
@@ -1923,6 +1932,7 @@ func TestIntE(t *testing.T) {
 		{&aliasTypeBool_true, 1, false},
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
+		{json.Number("1"), 1, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1934,6 +1944,7 @@ func TestIntE(t *testing.T) {
 		{uint64(math.MaxUint64), 0, true},
 		{"hello", 0, true},
 		{[]byte("hello"), 0, true},
+		{json.Number("hello"), 0, true},
 		{testing.T{}, 0, true},
 		{&testing.T{}, 0, true},
 		{[]int{}, 0, true},
