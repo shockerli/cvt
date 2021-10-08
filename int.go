@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-// Uint64 convert an interface to a uint64 type, with default value
+// Uint64 convert an interface to an uint64 type, with default value
 func Uint64(v interface{}, def ...uint64) uint64 {
 	if v, err := Uint64E(v); err == nil {
 		return v
@@ -19,7 +19,7 @@ func Uint64(v interface{}, def ...uint64) uint64 {
 	return 0
 }
 
-// Uint64E convert an interface to a uint64 type
+// Uint64E convert an interface to an uint64 type
 func Uint64E(val interface{}) (uint64, error) {
 	v, e := convUint64(val)
 	if e := catch("uint64", val, e); e != nil {
@@ -29,7 +29,7 @@ func Uint64E(val interface{}) (uint64, error) {
 	return v, nil
 }
 
-// Uint32 convert an interface to a uint32 type, with default value
+// Uint32 convert an interface to an uint32 type, with default value
 func Uint32(v interface{}, def ...uint32) uint32 {
 	if v, err := Uint32E(v); err == nil {
 		return v
@@ -42,7 +42,7 @@ func Uint32(v interface{}, def ...uint32) uint32 {
 	return 0
 }
 
-// Uint32E convert an interface to a uint32 type
+// Uint32E convert an interface to an uint32 type
 func Uint32E(val interface{}) (uint32, error) {
 	v, e := convUint64(val)
 	if e := catch("uint32", val, e); e != nil {
@@ -55,7 +55,7 @@ func Uint32E(val interface{}) (uint32, error) {
 	return uint32(v), nil
 }
 
-// Uint16 convert an interface to a uint16 type, with default value
+// Uint16 convert an interface to an uint16 type, with default value
 func Uint16(v interface{}, def ...uint16) uint16 {
 	if v, err := Uint16E(v); err == nil {
 		return v
@@ -68,7 +68,7 @@ func Uint16(v interface{}, def ...uint16) uint16 {
 	return 0
 }
 
-// Uint16E convert an interface to a uint16 type
+// Uint16E convert an interface to an uint16 type
 func Uint16E(val interface{}) (uint16, error) {
 	v, e := convUint64(val)
 	if e := catch("uint16", val, e); e != nil {
@@ -81,7 +81,7 @@ func Uint16E(val interface{}) (uint16, error) {
 	return uint16(v), nil
 }
 
-// Uint8 convert an interface to a uint8 type, with default value
+// Uint8 convert an interface to an uint8 type, with default value
 func Uint8(v interface{}, def ...uint8) uint8 {
 	if v, err := Uint8E(v); err == nil {
 		return v
@@ -94,7 +94,7 @@ func Uint8(v interface{}, def ...uint8) uint8 {
 	return 0
 }
 
-// Uint8E convert an interface to a uint8 type
+// Uint8E convert an interface to an uint8 type
 func Uint8E(val interface{}) (uint8, error) {
 	v, e := convUint64(val)
 	if e := catch("uint8", val, e); e != nil {
@@ -107,7 +107,7 @@ func Uint8E(val interface{}) (uint8, error) {
 	return uint8(v), nil
 }
 
-// Uint convert an interface to a uint type, with default value
+// Uint convert an interface to an uint type, with default value
 func Uint(v interface{}, def ...uint) uint {
 	if v, err := UintE(v); err == nil {
 		return v
@@ -120,7 +120,7 @@ func Uint(v interface{}, def ...uint) uint {
 	return 0
 }
 
-// UintE convert an interface to a uint type
+// UintE convert an interface to an uint type
 func UintE(val interface{}) (uint, error) {
 	v, e := convUint64(val)
 	if e := catch("uint", val, e); e != nil {
@@ -133,7 +133,7 @@ func UintE(val interface{}) (uint, error) {
 	return uint(v), nil
 }
 
-// Int64 convert an interface to a int64 type, with default value
+// Int64 convert an interface to an int64 type, with default value
 func Int64(v interface{}, def ...int64) int64 {
 	if v, err := Int64E(v); err == nil {
 		return v
@@ -146,7 +146,7 @@ func Int64(v interface{}, def ...int64) int64 {
 	return 0
 }
 
-// Int64E convert an interface to a int64 type
+// Int64E convert an interface to an int64 type
 func Int64E(val interface{}) (int64, error) {
 	v, e := convInt64(val)
 	if e := catch("int64", val, e); e != nil {
@@ -156,7 +156,7 @@ func Int64E(val interface{}) (int64, error) {
 	return v, nil
 }
 
-// Int32 convert an interface to a int32 type, with default value
+// Int32 convert an interface to an int32 type, with default value
 func Int32(v interface{}, def ...int32) int32 {
 	if v, err := Int32E(v); err == nil {
 		return v
@@ -169,7 +169,7 @@ func Int32(v interface{}, def ...int32) int32 {
 	return 0
 }
 
-// Int32E convert an interface to a int32 type
+// Int32E convert an interface to an int32 type
 func Int32E(val interface{}) (int32, error) {
 	v, e := convInt64(val)
 	if e := catch("int32", val, e); e != nil {
@@ -182,7 +182,7 @@ func Int32E(val interface{}) (int32, error) {
 	return int32(v), nil
 }
 
-// Int16 convert an interface to a int16 type, with default value
+// Int16 convert an interface to an int16 type, with default value
 func Int16(v interface{}, def ...int16) int16 {
 	if v, err := Int16E(v); err == nil {
 		return v
@@ -195,7 +195,7 @@ func Int16(v interface{}, def ...int16) int16 {
 	return 0
 }
 
-// Int16E convert an interface to a int16 type
+// Int16E convert an interface to an int16 type
 func Int16E(val interface{}) (int16, error) {
 	v, e := convInt64(val)
 	if e := catch("int16", val, e); e != nil {
@@ -208,7 +208,7 @@ func Int16E(val interface{}) (int16, error) {
 	return int16(v), nil
 }
 
-// Int8 convert an interface to a int8 type, with default value
+// Int8 convert an interface to an int8 type, with default value
 func Int8(v interface{}, def ...int8) int8 {
 	if v, err := Int8E(v); err == nil {
 		return v
@@ -221,7 +221,7 @@ func Int8(v interface{}, def ...int8) int8 {
 	return 0
 }
 
-// Int8E convert an interface to a int8 type
+// Int8E convert an interface to an int8 type
 func Int8E(val interface{}) (int8, error) {
 	v, e := convInt64(val)
 	if e := catch("int8", val, e); e != nil {
@@ -234,7 +234,7 @@ func Int8E(val interface{}) (int8, error) {
 	return int8(v), nil
 }
 
-// Int convert an interface to a int type, with default value
+// Int convert an interface to an int type, with default value
 func Int(v interface{}, def ...int) int {
 	if v, err := IntE(v); err == nil {
 		return v
@@ -247,7 +247,7 @@ func Int(v interface{}, def ...int) int {
 	return 0
 }
 
-// IntE convert an interface to a int type
+// IntE convert an interface to an int type
 func IntE(val interface{}) (int, error) {
 	v, e := convInt64(val)
 	if e := catch("int", val, e); e != nil {
