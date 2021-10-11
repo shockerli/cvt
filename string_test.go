@@ -1,6 +1,7 @@
 package cvt_test
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -19,6 +20,7 @@ func TestString_HasDefault(t *testing.T) {
 		expect string
 	}{
 		// supported value, def is not used, def != expect
+		{"hello", "world", "hello"},
 		{uint64(8), "xxx", "8"},
 		{float32(8.31), "xxx", "8.31"},
 		{float64(-8.31), "xxx", "-8.31"},
@@ -101,6 +103,7 @@ func TestStringE(t *testing.T) {
 		{int64(-8), "-8", false},
 		{float32(-8.31), "-8.31", false},
 		{float64(-8.31), "-8.31", false},
+		{"hello world!", "hello world!", false},
 		{[]byte("-8"), "-8", false},
 		{[]byte("-8.01"), "-8.01", false},
 		{[]byte("8"), "8", false},
@@ -108,6 +111,9 @@ func TestStringE(t *testing.T) {
 		{[]byte("8.01"), "8.01", false},
 		{[]rune("我❤️中国"), "我❤️中国", false},
 		{nil, "", false},
+		{pointerInterNil, "", false},
+		{AliasTypeBytes_nil, "", false},
+		{&AliasTypeBytes_nil, "", false},
 		{aliasTypeInt_0, "0", false},
 		{&aliasTypeInt_0, "0", false},
 		{aliasTypeInt_1, "1", false},
@@ -124,12 +130,28 @@ func TestStringE(t *testing.T) {
 		{&aliasTypeBool_true, "true", false},
 		{aliasTypeBool_false, "false", false},
 		{&aliasTypeBool_false, "false", false},
+		{AliasTypeBytes("hello"), "hello", false},
+		{&pointerRunes, "中国", false},
+		{AliasTypeUint(12), "12", false},
+		{AliasTypeUint8(12), "12", false},
+		{AliasTypeUint16(12), "12", false},
+		{AliasTypeUint32(12), "12", false},
+		{AliasTypeUint64(12), "12", false},
+		{AliasTypeInt(-12), "-12", false},
+		{AliasTypeInt8(-12), "-12", false},
+		{AliasTypeInt16(-12), "-12", false},
+		{AliasTypeInt32(-12), "-12", false},
+		{AliasTypeInt64(-12), "-12", false},
+		{AliasTypeFloat32(-12.34), "-12.34", false},
+		{AliasTypeFloat64(12.34), "12.34", false},
 		{errors.New("errors"), "errors", false},
 		{time.Friday, "Friday", false},
 		{big.NewInt(123), "123", false},
 		{TestMarshalJSON{}, "MarshalJSON", false},
 		{&TestMarshalJSON{}, "MarshalJSON", false},
-		{template.URL("http://host.foo"), "http://host.foo", false},
+		{template.URL("https://host.foo"), "https://host.foo", false},
+		{template.HTML("<html></html>"), "<html></html>", false},
+		{json.Number("12.34"), "12.34", false},
 
 		// errors
 		{testing.T{}, "", true},

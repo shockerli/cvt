@@ -21,8 +21,6 @@ func String(v interface{}, def ...string) string {
 
 // StringE convert an interface to a string type
 func StringE(val interface{}) (string, error) {
-	v, _, rv := indirect(val)
-
 	// interface implements
 	switch vv := val.(type) {
 	case fmt.Stringer:
@@ -36,7 +34,30 @@ func StringE(val interface{}) (string, error) {
 		}
 	}
 
-	// source type
+	// direct type
+	switch vv := val.(type) {
+	case nil:
+		return "", nil
+	case bool:
+		return strconv.FormatBool(vv), nil
+	case string:
+		return vv, nil
+	case []byte:
+		return string(vv), nil
+	case []rune:
+		return string(vv), nil
+	case uint, uint8, uint16, uint32, uint64, uintptr:
+		return strconv.FormatUint(Uint64(vv), 10), nil
+	case int, int8, int16, int32, int64:
+		return strconv.FormatInt(Int64(vv), 10), nil
+	case float64:
+		return strconv.FormatFloat(vv, 'f', -1, 64), nil
+	case float32:
+		return strconv.FormatFloat(float64(vv), 'f', -1, 32), nil
+	}
+
+	// indirect type
+	v, _, rv := indirect(val)
 	switch vv := v.(type) {
 	case nil:
 		return "", nil
