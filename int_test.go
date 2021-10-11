@@ -1017,6 +1017,7 @@ func TestUint64E(t *testing.T) {
 		{AliasTypeBytes("0"), 0, false},
 		{AliasTypeBytes("10.98"), 10, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -1129,6 +1130,7 @@ func TestUint32E(t *testing.T) {
 		{AliasTypeBytes("0"), 0, false},
 		{AliasTypeBytes("10.98"), 10, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -1242,6 +1244,7 @@ func TestUint16E(t *testing.T) {
 		{AliasTypeBytes("0"), 0, false},
 		{AliasTypeBytes("10.98"), 10, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -1357,6 +1360,7 @@ func TestUint8E(t *testing.T) {
 		{AliasTypeBytes("0"), 0, false},
 		{AliasTypeBytes("10.98"), 10, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -1474,6 +1478,7 @@ func TestUintE(t *testing.T) {
 		{AliasTypeBytes("0"), 0, false},
 		{AliasTypeBytes("10.98"), 10, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -1607,6 +1612,7 @@ func TestInt64E(t *testing.T) {
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1724,6 +1730,7 @@ func TestInt32E(t *testing.T) {
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1842,6 +1849,7 @@ func TestInt16E(t *testing.T) {
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{"10a", 0, true},
@@ -1962,6 +1970,7 @@ func TestInt8E(t *testing.T) {
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{"10a", 0, true},
@@ -2083,6 +2092,7 @@ func TestIntE(t *testing.T) {
 		{aliasTypeBool_false, 0, false},
 		{&aliasTypeBool_false, 0, false},
 		{json.Number("1"), 1, false},
+		{pointerInterNil, 0, false},
 
 		// errors
 		{"10a", 0, true},

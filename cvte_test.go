@@ -14,29 +14,28 @@ import (
 
 // indirect type
 type (
-	AliasTypeBool    bool
-	AliasTypeInt     int
-	AliasTypeInt8    int8
-	AliasTypeInt16   int16
-	AliasTypeInt32   int32
-	AliasTypeInt64   int64
-	AliasTypeUint    uint
-	AliasTypeUint8   uint8
-	AliasTypeUint16  uint16
-	AliasTypeUint32  uint32
-	AliasTypeUint64  uint64
-	AliasTypeFloat32 float32
-	AliasTypeFloat64 float64
-	AliasTypeString  string
-	AliasTypeBytes   []byte
+	AliasTypeBool      bool
+	AliasTypeInt       int
+	AliasTypeInt8      int8
+	AliasTypeInt16     int16
+	AliasTypeInt32     int32
+	AliasTypeInt64     int64
+	AliasTypeUint      uint
+	AliasTypeUint8     uint8
+	AliasTypeUint16    uint16
+	AliasTypeUint32    uint32
+	AliasTypeUint64    uint64
+	AliasTypeFloat32   float32
+	AliasTypeFloat64   float64
+	AliasTypeString    string
+	AliasTypeBytes     []byte
+	AliasTypeInterface interface{}
 )
 
 var (
 	aliasTypeBool_true  AliasTypeBool = true
 	aliasTypeBool_false AliasTypeBool = false
-)
 
-var (
 	aliasTypeInt_0 AliasTypeInt = 0
 	aliasTypeInt_1 AliasTypeInt = 1
 
@@ -49,6 +48,10 @@ var (
 	aliasTypeString_8d15_minus AliasTypeString = "-8.15"
 	aliasTypeString_on         AliasTypeString = "on"
 	aliasTypeString_off        AliasTypeString = "off"
+
+	pointerRunes       = []rune("中国")
+	pointerInterNil    *AliasTypeInterface
+	AliasTypeBytes_nil AliasTypeBytes
 )
 
 // custom type
