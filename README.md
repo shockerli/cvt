@@ -14,7 +14,7 @@ go get -u github.com/shockerli/cvt
 
 ## Usage
 
-[中文文档](README_ZH.md)
+[中文说明](README_ZH.md)
 
 ### with `error`
 
@@ -60,48 +60,62 @@ cvt.Float("hello", 12.34)   // 12.34
 
 ### more
 
-> For more examples, see `*_test.go`
+> 1000+ unit test cases, for more examples, see `*_test.go`
+
 
 ## API
 
+### bool
 - Bool
 - BoolE
-- ColumnsE
-- FieldE
-- Float32
-- Float32E
-- Float64
-- Float64E
+
+### int
 - Int
+- IntE
+- Int8
+- Int8E
 - Int16
 - Int16E
 - Int32
 - Int32E
 - Int64
 - Int64E
-- Int8
-- Int8E
-- IntE
-- Slice
-- SliceE
-- SliceIntE
-- SliceInt64E
-- SliceFloat64E
-- SliceStringE
-- String
-- StringE
-- Time
-- TimeE
 - Uint
+- UintE
+- Uint8
+- Uint8E
 - Uint16
 - Uint16E
 - Uint32
 - Uint32E
 - Uint64
 - Uint64E
-- Uint8
-- Uint8E
-- UintE
+
+### string
+- String
+- StringE
+
+### float
+- Float32
+- Float32E
+- Float64
+- Float64E
+
+### time
+- Time
+- TimeE
+
+### slice
+- `ColumnsE`: the values from a single column in the input array/slice/map of struct/map, `[]interface{}`
+- `FieldE`: the field value from map/struct, `interface{}`
+- `KeysE`: the keys of map, `[]interface{}`
+- `Slice`
+- `SliceE`: convert an interface to a `[]interface{}` type
+- `SliceIntE`: convert an interface to a `[]int` type
+- `SliceInt64E`: convert an interface to a `[]int64` type
+- `SliceFloat64E`: convert an interface to a `[]float64` type
+- `SliceStringE`: convert an interface to a `[]string` type
+
 
 ## License
 

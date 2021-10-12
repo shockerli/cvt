@@ -1,5 +1,3 @@
-# A Self-Documenting Makefile: http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
-
 .PHONY: check fmt lint test test-race vet test-cover-html help
 .DEFAULT_GOAL := help
 

@@ -56,51 +56,64 @@ cvt.Int(struct{}{}, 12)         // 12
 cvt.Float("hello", 12.34)       // 12.34
 ```
 
-### more
+### 更多示例
 
-> 所有示例，可通过单元测试了解：`*_test.go`
+> 上千个单元测试用例，覆盖率近100%，所有示例可通过单元测试了解：`*_test.go`
 
 
 ## API
 
+### bool
 - Bool
 - BoolE
-- ColumnsE
-- FieldE
-- Float32
-- Float32E
-- Float64
-- Float64E
+
+### int
 - Int
+- IntE
+- Int8
+- Int8E
 - Int16
 - Int16E
 - Int32
 - Int32E
 - Int64
 - Int64E
-- Int8
-- Int8E
-- IntE
-- Slice
-- SliceE
-- SliceIntE
-- SliceInt64E
-- SliceFloat64E
-- SliceStringE
-- String
-- StringE
-- Time
-- TimeE
 - Uint
+- UintE
+- Uint8
+- Uint8E
 - Uint16
 - Uint16E
 - Uint32
 - Uint32E
 - Uint64
 - Uint64E
-- Uint8
-- Uint8E
-- UintE
+
+### string
+- String
+- StringE
+
+### float
+- Float32
+- Float32E
+- Float64
+- Float64E
+
+### time
+- Time
+- TimeE
+
+### slice
+- `ColumnsE`: 类似于 PHP 中的 `array_column`，`FieldE` 函数的切片版本，返回 `[]interface{}`
+- `FieldE`: 取 `map` 或 `struct` 的字段值，返回 `interface{}`
+- `KeysE`: 取 `map` 的键名，返回 `[]interface{}`
+- `Slice`
+- `SliceE`: 转换成 `[]interface{}`
+- `SliceIntE`: 转换成 `[]int`
+- `SliceInt64E`: 转换成 `[]int64`
+- `SliceFloat64E`: 转换成 `[]float64`
+- `SliceStringE`: 转换成 `[]string`
+
 
 ## 开源协议
 
