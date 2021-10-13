@@ -379,7 +379,7 @@ func convInt64(val interface{}) (int64, error) {
 	case int8:
 		return int64(vv), nil
 	case uint:
-		if strconv.IntSize == 64 && vv > math.MaxInt64 {
+		if strconv.IntSize == 32 && vv > math.MaxInt32 {
 			return 0, errConvFail
 		}
 		return int64(vv), nil

@@ -33,25 +33,25 @@ type (
 )
 
 var (
-	aliasTypeBool_true  AliasTypeBool = true
-	aliasTypeBool_false AliasTypeBool = false
+	aliasTypeBool4True  AliasTypeBool = true
+	aliasTypeBool4False AliasTypeBool = false
 
-	aliasTypeInt_0 AliasTypeInt = 0
-	aliasTypeInt_1 AliasTypeInt = 1
+	aliasTypeInt0 AliasTypeInt = 0
+	aliasTypeInt1 AliasTypeInt = 1
 
-	aliasTypeUint_0 AliasTypeUint = 0
-	aliasTypeUint_1 AliasTypeUint = 1
+	aliasTypeUint0 AliasTypeUint = 0
+	aliasTypeUint1 AliasTypeUint = 1
 
-	aliasTypeString_0          AliasTypeString = "0"
-	aliasTypeString_1          AliasTypeString = "1"
-	aliasTypeString_8d15       AliasTypeString = "8.15"
-	aliasTypeString_8d15_minus AliasTypeString = "-8.15"
-	aliasTypeString_on         AliasTypeString = "on"
-	aliasTypeString_off        AliasTypeString = "off"
+	aliasTypeString0         AliasTypeString = "0"
+	aliasTypeString1         AliasTypeString = "1"
+	aliasTypeString8d15      AliasTypeString = "8.15"
+	aliasTypeString8d15Minus AliasTypeString = "-8.15"
+	aliasTypeStringOn        AliasTypeString = "on"
+	aliasTypeStringOff       AliasTypeString = "off"
 
-	pointerRunes       = []rune("中国")
-	pointerInterNil    *AliasTypeInterface
-	AliasTypeBytes_nil AliasTypeBytes
+	pointerRunes      = []rune("中国")
+	pointerInterNil   *AliasTypeInterface
+	AliasTypeBytesNil AliasTypeBytes
 )
 
 // custom type
@@ -100,7 +100,7 @@ func (t TestTimeStringer) String() string {
 
 func Benchmark(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		cvt.Bool(aliasTypeString_0, true)
+		cvt.Bool(aliasTypeString0, true)
 	}
 }
 
