@@ -7,7 +7,6 @@ import (
 	"testing"
 
 	"github.com/shockerli/cvt"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestUint64_HasDefault(t *testing.T) {
@@ -75,7 +74,7 @@ func TestUint64_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Uint64(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -101,7 +100,7 @@ func TestUint64_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Uint64(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -170,7 +169,7 @@ func TestUint32_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Uint32(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -196,7 +195,7 @@ func TestUint32_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Uint32(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -265,7 +264,7 @@ func TestUint16_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Uint16(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -291,7 +290,7 @@ func TestUint16_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Uint16(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -360,7 +359,7 @@ func TestUint8_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Uint8(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -386,7 +385,7 @@ func TestUint8_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Uint8(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -455,7 +454,7 @@ func TestUint_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Uint(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -481,7 +480,7 @@ func TestUint_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Uint(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -550,7 +549,7 @@ func TestInt64_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Int64(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -574,7 +573,7 @@ func TestInt64_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Int64(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -643,7 +642,7 @@ func TestInt32_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Int32(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -667,7 +666,7 @@ func TestInt32_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Int32(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -736,7 +735,7 @@ func TestInt16_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Int16(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -760,7 +759,7 @@ func TestInt16_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Int16(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -829,7 +828,7 @@ func TestInt8_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Int8(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -853,7 +852,7 @@ func TestInt8_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Int8(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -922,7 +921,7 @@ func TestInt_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Int(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -946,7 +945,7 @@ func TestInt_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Int(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1060,16 +1059,16 @@ func TestUint64E(t *testing.T) {
 
 		v, err := cvt.Uint64E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Uint64(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1176,16 +1175,16 @@ func TestUint32E(t *testing.T) {
 
 		v, err := cvt.Uint32E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Uint32(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1292,16 +1291,16 @@ func TestUint16E(t *testing.T) {
 
 		v, err := cvt.Uint16E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Uint16(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1408,16 +1407,16 @@ func TestUint8E(t *testing.T) {
 
 		v, err := cvt.Uint8E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Uint8(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1521,16 +1520,16 @@ func TestUintE(t *testing.T) {
 
 		v, err := cvt.UintE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Uint(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1639,16 +1638,16 @@ func TestInt64E(t *testing.T) {
 
 		v, err := cvt.Int64E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Int64(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1758,16 +1757,16 @@ func TestInt32E(t *testing.T) {
 
 		v, err := cvt.Int32E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Int32(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -1879,16 +1878,16 @@ func TestInt16E(t *testing.T) {
 
 		v, err := cvt.Int16E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Int16(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -2001,16 +2000,16 @@ func TestInt8E(t *testing.T) {
 
 		v, err := cvt.Int8E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Int8(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -2118,15 +2117,15 @@ func TestIntE(t *testing.T) {
 
 		v, err := cvt.IntE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Int(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }

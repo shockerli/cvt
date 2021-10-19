@@ -1,11 +1,13 @@
 package cvt_test
 
 import (
+	"bytes"
+	"errors"
 	"fmt"
+	"reflect"
+	"strings"
 	"testing"
 	"time"
-
-	"github.com/stretchr/testify/assert"
 
 	"github.com/shockerli/cvt"
 )
@@ -139,11 +141,119 @@ func TestFieldE(t *testing.T) {
 
 		v, err := cvt.FieldE(tt.input, tt.field)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+// [testing assert functions]
+
+// assert error
+func assertError(t *testing.T, err error, msgAndArgs ...interface{}) {
+	if err == nil {
+		fail(t, "An error is expected but got nil", msgAndArgs...)
+		return
+	}
+	return
+}
+
+// assert no error
+func assertNoError(t *testing.T, err error, msgAndArgs ...interface{}) {
+	if err != nil {
+		fail(t, fmt.Sprintf("Received unexpected error:\n\t\t\t\t%+v", err), msgAndArgs...)
+		return
+	}
+	return
+}
+
+// assert equal
+func assertEqual(t *testing.T, expected, actual interface{}, msgAndArgs ...interface{}) {
+	if err := validateEqualArgs(expected, actual); err != nil {
+		fail(t, fmt.Sprintf("Invalid operation: %#v == %#v (%s)",
+			expected, actual, err), msgAndArgs...)
+		return
+	}
+
+	if !objectsAreEqual(expected, actual) {
+		fail(t, fmt.Sprintf("Not equal: \n"+
+			"expected: %s\n"+
+			"actual  : %s", expected, actual), msgAndArgs...)
+		return
+	}
+	return
+}
+
+func fail(t *testing.T, failureMessage string, msgAndArgs ...interface{}) {
+	t.Errorf(`
+Error: 		%s
+Test:  		%s
+Messages: 	%s`, failureMessage, t.Name(), messageFromMsgAndArgs(msgAndArgs...))
+}
+
+func validateEqualArgs(expected, actual interface{}) error {
+	if expected == nil && actual == nil {
+		return nil
+	}
+
+	if isFunction(expected) || isFunction(actual) {
+		return errors.New("cannot take func type as argument")
+	}
+	return nil
+}
+
+func isFunction(arg interface{}) bool {
+	if arg == nil {
+		return false
+	}
+	return reflect.TypeOf(arg).Kind() == reflect.Func
+}
+
+func objectsAreEqual(expected, actual interface{}) bool {
+	if expected == nil || actual == nil {
+		return expected == actual
+	}
+
+	exp, ok := expected.([]byte)
+	if !ok {
+		return reflect.DeepEqual(expected, actual)
+	}
+
+	act, ok := actual.([]byte)
+	if !ok {
+		return false
+	}
+	if exp == nil || act == nil {
+		return exp == nil && act == nil
+	}
+	return bytes.Equal(exp, act)
+}
+
+func messageFromMsgAndArgs(msgAndArgs ...interface{}) string {
+	if len(msgAndArgs) == 0 || msgAndArgs == nil {
+		return ""
+	}
+	if len(msgAndArgs) == 1 {
+		msg := msgAndArgs[0]
+		if msgAsStr, ok := msg.(string); ok {
+			return msgAsStr
+		}
+		return fmt.Sprintf("%+v", msg)
+	}
+	if len(msgAndArgs) > 1 {
+		tpl, ok := msgAndArgs[0].(string)
+		if ok {
+			return fmt.Sprintf(tpl, msgAndArgs[1:]...)
+		}
+		for v := range msgAndArgs {
+			tpl += fmt.Sprintf("%+v, ", v)
+		}
+		return strings.TrimRight(tpl, ", ")
+	}
+	return ""
 }

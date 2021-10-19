@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/shockerli/cvt"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestBool_HasDefault(t *testing.T) {
@@ -82,7 +81,7 @@ func TestBool_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Bool(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -107,7 +106,7 @@ func TestBool_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Bool(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -195,15 +194,15 @@ func TestBoolE(t *testing.T) {
 
 		v, err := cvt.BoolE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Bool(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }

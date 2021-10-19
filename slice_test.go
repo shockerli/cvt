@@ -5,7 +5,6 @@ import (
 	"testing"
 
 	"github.com/shockerli/cvt"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestSlice_HasDefault(t *testing.T) {
@@ -28,7 +27,7 @@ func TestSlice_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Slice(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -46,7 +45,7 @@ func TestSlice_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Slice(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -100,16 +99,16 @@ func TestSliceE(t *testing.T) {
 
 		v, err := cvt.SliceE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Slice(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -154,12 +153,12 @@ func TestSliceIntE(t *testing.T) {
 
 		v, err := cvt.SliceIntE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
 }
 
@@ -205,12 +204,12 @@ func TestSliceInt64E(t *testing.T) {
 
 		v, err := cvt.SliceInt64E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
 }
 
@@ -257,12 +256,12 @@ func TestSliceFloat64E(t *testing.T) {
 
 		v, err := cvt.SliceFloat64E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
 }
 
@@ -304,12 +303,12 @@ func TestSliceStringE(t *testing.T) {
 
 		v, err := cvt.SliceStringE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
 }
 
@@ -354,12 +353,12 @@ func TestColumnsE(t *testing.T) {
 
 		v, err := cvt.ColumnsE(tt.input, tt.field)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
 }
 
@@ -388,11 +387,11 @@ func TestKeysE(t *testing.T) {
 
 		v, err := cvt.KeysE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 	}
 }

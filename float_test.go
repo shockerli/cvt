@@ -6,7 +6,6 @@ import (
 	"testing"
 
 	"github.com/shockerli/cvt"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestFloat64_HasDefault(t *testing.T) {
@@ -76,7 +75,7 @@ func TestFloat64_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Float64(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -100,7 +99,7 @@ func TestFloat64_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Float64(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -170,7 +169,7 @@ func TestFloat32_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Float32(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -194,7 +193,7 @@ func TestFloat32_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Float32(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -275,16 +274,16 @@ func TestFloat64E(t *testing.T) {
 
 		v, err := cvt.Float64E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Float64(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -364,15 +363,15 @@ func TestFloat32E(t *testing.T) {
 
 		v, err := cvt.Float32E(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
 
-		// Non-E test with no default value:
+		// Non-E test
 		v = cvt.Float32(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }

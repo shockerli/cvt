@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/shockerli/cvt"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestTime_HasDefault(t *testing.T) {
@@ -27,7 +26,7 @@ func TestTime_HasDefault(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
 
 		v := cvt.Time(tt.input, tt.def)
-		assert.Equal(t, tt.expect, v.UTC(), msg)
+		assertEqual(t, tt.expect, v.UTC(), "[NonE] "+msg)
 	}
 }
 
@@ -44,7 +43,7 @@ func TestTime_BaseLine(t *testing.T) {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
 		v := cvt.Time(tt.input)
-		assert.Equal(t, tt.expect, v, msg)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -111,15 +110,15 @@ func TestTimeE(t *testing.T) {
 
 		v, err := cvt.TimeE(tt.input)
 		if tt.isErr {
-			assert.Error(t, err, msg)
+			assertError(t, err, "[HasErr] "+msg)
 			continue
 		}
 
-		assert.NoError(t, err, msg)
-		assert.Equal(t, tt.expect, v.UTC(), v, msg)
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v.UTC(), "[WithE] "+msg)
 
 		// Non-E test
 		v = cvt.Time(tt.input)
-		assert.Equal(t, tt.expect, v.UTC(), msg)
+		assertEqual(t, tt.expect, v.UTC(), "[NonE] "+msg)
 	}
 }
