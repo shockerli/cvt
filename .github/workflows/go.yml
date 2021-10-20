@@ -16,10 +16,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Go
+      - name: Setup Go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Make check
-        run: make check
+      - name: Make check and tests
+        run: |
+          make check
+          go test -race -coverprofile=coverage.txt -covermode=atomic
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        if: ${{ github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.go-version == '1.16' }}
+        with:
+          files: ./coverage.txt
