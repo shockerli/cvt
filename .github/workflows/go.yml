@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        go-version: [ 1.13, 1.16 ]
+        go-version: [ 1.13 ]
         os: [ ubuntu-latest, macos-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
@@ -25,10 +25,10 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Run tests
-        run: |
-          make test-race fmt vet
-          go test -coverprofile=coverage.txt -covermode=atomic ./...
+        run: make test-race fmt vet
 
       - name: Upload coverage to Codecov
         if: ${{ github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.go-version == '1.13' }}
-        run: bash <(curl -s https://codecov.io/bash)
+        run: |
+          go test -coverprofile=coverage.txt -covermode=atomic ./...
+          bash <(curl -s https://codecov.io/bash)
