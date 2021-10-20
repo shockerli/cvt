@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ master ]
 
+  # This enables a "Run workflow" button on the Actions tab
+  workflow_dispatch:
+
 jobs:
   build:
     strategy:
@@ -27,7 +30,5 @@ jobs:
           go test -race -coverprofile=coverage.txt -covermode=atomic
 
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
-        if: ${{ github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.go-version == '1.16' }}
-        with:
-          files: ./coverage.txt
+        if: ${{ github.event_name == 'push' && matrix.os == 'ubuntu-latest' && matrix.go-version == '1.13' }}
+        run: bash <(curl -s https://codecov.io/bash)
