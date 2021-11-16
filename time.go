@@ -20,7 +20,7 @@ func Time(v interface{}, def ...time.Time) time.Time {
 
 // TimeE convert an interface to a time.Time type
 func TimeE(val interface{}) (t time.Time, err error) {
-	v, _, _ := indirect(val)
+	v, _ := indirect(val)
 
 	// source type
 	switch vv := v.(type) {

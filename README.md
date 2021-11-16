@@ -19,7 +19,7 @@ go get -u github.com/shockerli/cvt
 
 ## Usage
 
-[中文说明](README_ZH.md)
+English | [中文](README_ZH.md)
 
 ### with `error`
 
@@ -113,9 +113,8 @@ cvt.Float("hello", 12.34)   // 12.34
 ### slice
 - `ColumnsE`: the values from a single column in the input array/slice/map of struct/map, `[]interface{}`
 - `FieldE`: the field value from map/struct, `interface{}`
-- `KeysE`: the keys of map, `[]interface{}`
-- `Slice`
-- `SliceE`: convert an interface to a `[]interface{}` type
+- `KeysE`: the keys of map, or fields of struct, `[]interface{}`
+- `Slice` / `SliceE`: convert an interface to a `[]interface{}` type
 - `SliceIntE`: convert an interface to a `[]int` type
 - `SliceInt64E`: convert an interface to a `[]int64` type
 - `SliceFloat64E`: convert an interface to a `[]float64` type

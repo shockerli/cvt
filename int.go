@@ -330,7 +330,7 @@ func convUint64(val interface{}) (uint64, error) {
 	}
 
 	// indirect type
-	v, _, rv := indirect(val)
+	v, rv := indirect(val)
 	switch vv := v.(type) {
 	case nil:
 		return 0, nil
@@ -423,7 +423,7 @@ func convInt64(val interface{}) (int64, error) {
 	}
 
 	// indirect type
-	v, _, rv := indirect(val)
+	v, rv := indirect(val)
 	switch vv := v.(type) {
 	case nil:
 		return 0, nil

@@ -24,9 +24,9 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rt, rv := indirect(val)
+	_, rv := indirect(val)
 
-	switch rt.Kind() {
+	switch rv.Kind() {
 	case reflect.String:
 		for _, vvv := range rv.String() {
 			sl = append(sl, vvv)
@@ -43,7 +43,7 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 		}
 		return
 	case reflect.Struct:
-		sl = deepStructValues(rt, rv)
+		sl = deepStructValues(rv)
 		return
 	}
 
@@ -128,9 +128,9 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rt, rv := indirect(val)
+	_, rv := indirect(val)
 
-	switch rt.Kind() {
+	switch rv.Kind() {
 	case reflect.Slice, reflect.Array:
 		for j := 0; j < rv.Len(); j++ {
 			vv, e := FieldE(rv.Index(j).Interface(), field)
@@ -152,7 +152,7 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 		return
 	}
 
-	return nil, fmt.Errorf("unsupported type: %s", rt.Name())
+	return nil, fmt.Errorf("unsupported type: %s", rv.Type().Name())
 }
 
 // KeysE return the keys of map, sorted by asc
@@ -161,15 +161,20 @@ func KeysE(val interface{}) (sl []interface{}, err error) {
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rt, rv := indirect(val)
+	_, rv := indirect(val)
 
-	switch rt.Kind() {
+	switch rv.Kind() {
 	case reflect.Map:
 		for _, key := range sortedMapKeys(rv) {
 			sl = append(sl, key.Interface())
 		}
 		return
+		// case reflect.Struct:
+		// 	for _, v := range deepStructFields(rv.Type()) {
+		// 		sl = append(sl, v)
+		// 	}
+		// 	return
 	}
 
-	return nil, fmt.Errorf("unsupported type: %s", rt.Name())
+	return nil, fmt.Errorf("unsupported type: %s", rv.Type().Name())
 }

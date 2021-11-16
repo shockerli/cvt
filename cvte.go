@@ -22,9 +22,9 @@ func FieldE(val interface{}, field interface{}) (interface{}, error) {
 	}
 
 	sf := String(field) // match with the String of field, so field can be any type
-	_, rt, rv := indirect(val)
+	_, rv := indirect(val)
 
-	switch rt.Kind() {
+	switch rv.Kind() {
 	case reflect.Map: // key of map
 		for _, key := range rv.MapKeys() {
 			if String(key.Interface()) == sf {
@@ -42,10 +42,10 @@ func FieldE(val interface{}, field interface{}) (interface{}, error) {
 }
 
 // return the values of struct fields, and deep find the embedded fields
-func deepStructValues(rt reflect.Type, rv reflect.Value) (sl []interface{}) {
+func deepStructValues(rv reflect.Value) (sl []interface{}) {
 	for j := 0; j < rv.NumField(); j++ {
-		if rt.Field(j).Anonymous {
-			sl = append(sl, deepStructValues(rt.Field(j).Type, rv.Field(j))...)
+		if rv.Type().Field(j).Anonymous {
+			sl = append(sl, deepStructValues(rv.Field(j))...)
 		} else if rv.Field(j).CanInterface() {
 			sl = append(sl, rv.Field(j).Interface())
 		}
@@ -63,16 +63,15 @@ func sortedMapKeys(v reflect.Value) (s []reflect.Value) {
 }
 
 // returns the value with base type
-func indirect(a interface{}) (val interface{}, rt reflect.Type, rv reflect.Value) {
+func indirect(a interface{}) (val interface{}, rv reflect.Value) {
 	if a == nil {
 		return
 	}
 
-	rt = reflect.TypeOf(a)
 	rv = reflect.ValueOf(a)
 	val = rv.Interface()
 
-	switch rt.Kind() {
+	switch rv.Kind() {
 	case reflect.Ptr: // indirect the base type, if is been referenced many times
 		for rv.Kind() == reflect.Ptr {
 			// stop indirect until nil, avoid stack overflow

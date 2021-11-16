@@ -7,7 +7,7 @@
 [![codecov](https://codecov.io/gh/shockerli/cvt/branch/master/graph/badge.svg)](https://codecov.io/gh/shockerli/cvt)
 ![GitHub](https://img.shields.io/github/license/shockerli/cvt)
 
-> 简单、安全的转换任意类型值，包括自定义类型
+> 一个简单、安全、高效的转换任意数据类型的 Go 语言工具包，支持自定义类型、提取结构体字段和值
 
 ## 安装
 
@@ -17,7 +17,7 @@ go get -u github.com/shockerli/cvt
 
 ## 使用
 
-[English](README.md)
+中文 | [English](README.md)
 
 ### 支持 `error`
 
@@ -111,9 +111,8 @@ cvt.Float("hello", 12.34)       // 12.34
 ### slice
 - `ColumnsE`: 类似于 PHP 中的 `array_column`，`FieldE` 函数的切片版本，返回 `[]interface{}`
 - `FieldE`: 取 `map` 或 `struct` 的字段值，返回 `interface{}`
-- `KeysE`: 取 `map` 的键名，返回 `[]interface{}`
-- `Slice`
-- `SliceE`: 转换成 `[]interface{}`
+- `KeysE`: 取 `map` 的键名，或结构体的字段名，返回 `[]interface{}`
+- `Slice` / `SliceE`: 转换成 `[]interface{}`
 - `SliceIntE`: 转换成 `[]int`
 - `SliceInt64E`: 转换成 `[]int64`
 - `SliceFloat64E`: 转换成 `[]float64`

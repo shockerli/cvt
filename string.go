@@ -57,7 +57,7 @@ func StringE(val interface{}) (string, error) {
 	}
 
 	// indirect type
-	v, _, rv := indirect(val)
+	v, rv := indirect(val)
 	switch vv := v.(type) {
 	case nil:
 		return "", nil

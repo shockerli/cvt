@@ -21,7 +21,7 @@ func Float64(v interface{}, def ...float64) float64 {
 
 // Float64E convert an interface to a float64 type
 func Float64E(val interface{}) (float64, error) {
-	v, _, rv := indirect(val)
+	v, rv := indirect(val)
 
 	switch vv := v.(type) {
 	case nil:

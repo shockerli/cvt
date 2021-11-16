@@ -21,7 +21,7 @@ func Bool(v interface{}, def ...bool) bool {
 
 // BoolE convert an interface to a bool type
 func BoolE(val interface{}) (bool, error) {
-	v, rk, rv := indirect(val)
+	v, rv := indirect(val)
 
 	switch vv := v.(type) {
 	case bool:
@@ -40,7 +40,7 @@ func BoolE(val interface{}) (bool, error) {
 		return false, nil
 	}
 
-	switch rk.Kind() {
+	switch rv.Kind() {
 	// by elem length
 	case reflect.Array, reflect.Slice, reflect.Map:
 		return rv.Len() > 0, nil
