@@ -1017,6 +1017,7 @@ func TestUint64E(t *testing.T) {
 		{AliasTypeBytes("10.98"), 10, false},
 		{json.Number("1"), 1, false},
 		{pointerInterNil, 0, false},
+		{&pointerInterNil, 0, false},
 
 		// errors
 		{int(-8), 0, true},
@@ -1613,6 +1614,11 @@ func TestInt64E(t *testing.T) {
 		{&aliasTypeBool4False, 0, false},
 		{json.Number("1"), 1, false},
 		{pointerInterNil, 0, false},
+		{&pointerInterNil, 0, false},
+		{pointerIntNil, 0, false},
+		{&pointerIntNil, 0, false},
+		{(*AliasTypeInt)(nil), 0, false},
+		{(*PointerTypeInt)(nil), 0, false},
 
 		// errors
 		{"10a", 0, true},

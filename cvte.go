@@ -53,6 +53,44 @@ func deepStructValues(rv reflect.Value) (sl []interface{}) {
 	return
 }
 
+// return the name of struct fields, and deep find the embedded fields
+func deepStructFields(rt reflect.Type) (sl []string) {
+	rt = ptrType(rt)
+
+	type fff struct {
+		level int8
+		index int
+	}
+	var exists = make(map[string]fff)
+
+	fn := func(v string, level int8) {
+		ff, ok := exists[v]
+		if ok && ff.level <= level {
+			return
+		} else if ok && ff.level > level {
+			sl = append(sl[:ff.index], sl[ff.index+1:]...)
+		}
+		sl = append(sl, v)
+		exists[v] = fff{level, len(sl) - 1}
+	}
+
+	// sort by field definition order, include embed field
+	for j := 0; j < rt.NumField(); j++ {
+		f := rt.Field(j)
+		t := ptrType(f.Type)
+		// embed struct, include pointer struct
+		if f.Anonymous && t.Kind() == reflect.Struct {
+			for _, v := range deepStructFields(t) {
+				fn(v, 1)
+			}
+		} else { // single field, include pointer field
+			fn(f.Name, 0)
+		}
+	}
+
+	return
+}
+
 // return the map keys, which sorted by asc
 func sortedMapKeys(v reflect.Value) (s []reflect.Value) {
 	s = v.MapKeys()
@@ -60,6 +98,15 @@ func sortedMapKeys(v reflect.Value) (s []reflect.Value) {
 		return strings.Compare(String(s[i].Interface()), String(s[j].Interface())) < 0
 	})
 	return
+}
+
+func ptrType(rt reflect.Type) reflect.Type {
+	if rt.Kind() == reflect.Ptr {
+		for rt.Kind() == reflect.Ptr {
+			rt = rt.Elem()
+		}
+	}
+	return rt
 }
 
 // returns the value with base type

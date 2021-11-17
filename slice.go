@@ -155,7 +155,7 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 	return nil, fmt.Errorf("unsupported type: %s", rv.Type().Name())
 }
 
-// KeysE return the keys of map, sorted by asc
+// KeysE return the keys of map, sorted by asc; or fields of struct
 func KeysE(val interface{}) (sl []interface{}, err error) {
 	if val == nil {
 		return nil, errUnsupportedTypeNil
@@ -169,11 +169,11 @@ func KeysE(val interface{}) (sl []interface{}, err error) {
 			sl = append(sl, key.Interface())
 		}
 		return
-		// case reflect.Struct:
-		// 	for _, v := range deepStructFields(rv.Type()) {
-		// 		sl = append(sl, v)
-		// 	}
-		// 	return
+	case reflect.Struct:
+		for _, v := range deepStructFields(rv.Type()) {
+			sl = append(sl, v)
+		}
+		return
 	}
 
 	return nil, fmt.Errorf("unsupported type: %s", rv.Type().Name())

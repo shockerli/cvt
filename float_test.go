@@ -254,6 +254,12 @@ func TestFloat64E(t *testing.T) {
 		{&aliasTypeBool4True, 1, false},
 		{aliasTypeBool4False, 0, false},
 		{&aliasTypeBool4False, 0, false},
+		{pointerInterNil, 0, false},
+		{&pointerInterNil, 0, false},
+		{pointerIntNil, 0, false},
+		{&pointerIntNil, 0, false},
+		{(*AliasTypeInt)(nil), 0, false},
+		{(*PointerTypeInt)(nil), 0, false},
 
 		// errors
 		{"10a", 0, true},
@@ -342,6 +348,12 @@ func TestFloat32E(t *testing.T) {
 		{&aliasTypeBool4True, 1, false},
 		{aliasTypeBool4False, 0, false},
 		{&aliasTypeBool4False, 0, false},
+		{pointerInterNil, 0, false},
+		{&pointerInterNil, 0, false},
+		{pointerIntNil, 0, false},
+		{&pointerIntNil, 0, false},
+		{(*AliasTypeInt)(nil), 0, false},
+		{(*PointerTypeInt)(nil), 0, false},
 
 		// errors
 		{"10a", 0, true},

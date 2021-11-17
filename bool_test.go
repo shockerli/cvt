@@ -175,6 +175,12 @@ func TestBoolE(t *testing.T) {
 		{&aliasTypeStringOn, true, false},
 		{aliasTypeBool4True, true, false},
 		{&aliasTypeBool4True, true, false},
+		{pointerInterNil, false, false},
+		{&pointerInterNil, false, false},
+		{pointerIntNil, false, false},
+		{&pointerIntNil, false, false},
+		{(*AliasTypeInt)(nil), false, false},
+		{(*PointerTypeInt)(nil), false, false},
 
 		// true/slice/array/map
 		{[]int{1, 2, 3}, true, false},

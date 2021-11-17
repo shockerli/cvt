@@ -151,6 +151,12 @@ func TestStringE(t *testing.T) {
 		{template.URL("https://host.foo"), "https://host.foo", false},
 		{template.HTML("<html></html>"), "<html></html>", false},
 		{json.Number("12.34"), "12.34", false},
+		{pointerInterNil, "", false},
+		{&pointerInterNil, "", false},
+		{pointerIntNil, "", false},
+		{&pointerIntNil, "", false},
+		{(*AliasTypeInt)(nil), "", false},
+		{(*PointerTypeInt)(nil), "", false},
 
 		// errors
 		{testing.T{}, "", true},

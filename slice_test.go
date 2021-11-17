@@ -368,15 +368,70 @@ func TestKeysE(t *testing.T) {
 		expect []interface{}
 		isErr  bool
 	}{
+		// map
 		{map[int]map[string]interface{}{1: {"1": 111, "DDD": 12.3}, 2: {"2": 222, "DDD": "321"}, 3: {"DDD": nil}}, []interface{}{1, 2, 3}, false},
 		{map[string]interface{}{"A": 1, "2": 2}, []interface{}{"2", "A"}, false},
 		{map[float64]TestStructD{1: {11}, 2: {22}}, []interface{}{float64(1), float64(2)}, false},
 		{map[interface{}]interface{}{1: 1, 2.2: 2.22, "A": "A"}, []interface{}{1, 2.2, "A"}, false},
 
+		// struct
+		{TestStructA{}, []interface{}{"A1", "C1", "B1", "A2", "DD"}, false},
+		{&TestStructB{}, []interface{}{"C1", "B1"}, false},
+		{struct {
+			A1 int
+			TestStructC
+			B1 int
+			C1 int
+		}{}, []interface{}{"A1", "B1", "C1"}, false},
+		{struct {
+			A1 int
+			*TestStructC
+			B1 int
+			C1 int
+		}{}, []interface{}{"A1", "B1", "C1"}, false},
+		{struct {
+			A1 int
+			C1 int
+			TestStructC
+			B1 int
+		}{}, []interface{}{"A1", "C1", "B1"}, false},
+		{struct {
+			A1 int
+			C1 int
+			*TestStructC
+			B1 int
+		}{}, []interface{}{"A1", "C1", "B1"}, false},
+		{struct {
+			a1 int
+			TestStructC
+			c2 int
+			B1 int
+		}{}, []interface{}{"a1", "C1", "c2", "B1"}, false},
+		{struct {
+			*TestStructC
+			B1 int
+		}{}, []interface{}{"C1", "B1"}, false},
+		{&struct {
+			*TestStructC
+			B1 int
+		}{}, []interface{}{"C1", "B1"}, false},
+		{&struct {
+			B1 *int
+		}{}, []interface{}{"B1"}, false},
+		{&struct {
+			AliasTypeString
+		}{}, []interface{}{"AliasTypeString"}, false},
+		{struct {
+			*AliasTypeString
+			K *int
+		}{}, []interface{}{"AliasTypeString", "K"}, false},
+
 		// errors
 		{nil, nil, true},
 		{"Name", nil, true},
-		{testing.T{}, nil, true},
+		{8, nil, true},
+		{8.88, nil, true},
+		{[]byte{'a', 'b'}, nil, true},
 	}
 
 	for i, tt := range tests {

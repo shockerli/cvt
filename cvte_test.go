@@ -18,6 +18,7 @@ import (
 type (
 	AliasTypeBool      bool
 	AliasTypeInt       int
+	PointerTypeInt     *AliasTypeInt
 	AliasTypeInt8      int8
 	AliasTypeInt16     int16
 	AliasTypeInt32     int32
@@ -53,6 +54,7 @@ var (
 
 	pointerRunes      = []rune("中国")
 	pointerInterNil   *AliasTypeInterface
+	pointerIntNil     *AliasTypeInt
 	AliasTypeBytesNil AliasTypeBytes
 )
 
@@ -118,6 +120,35 @@ func TestFieldE(t *testing.T) {
 		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "D1", 1, false},
 		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "DD", &TestStructD{D1: 2}, false},
 		{TestStructB{B1: 1, TestStructC: TestStructC{C1: "c1"}}, "C1", "c1", false},
+		{&TestStructB{B1: 1, TestStructC: TestStructC{C1: "c1"}}, "C1", "c1", false},
+		{struct {
+			*TestStructC
+		}{
+			&TestStructC{C1: "c1"},
+		}, "C1", "c1", false},
+		{&struct {
+			TestStructC
+		}{
+			TestStructC{C1: "c1"},
+		}, "C1", "c1", false},
+		{&struct {
+			*TestStructC
+		}{
+			&TestStructC{C1: "c1"},
+		}, "C1", "c1", false},
+		{&struct {
+			TestStructC
+		}{
+			TestStructC{C1: "c1"},
+		}, "TestStructC", TestStructC{C1: "c1"}, false},
+		{struct {
+			*TestStructC
+		}{
+			&TestStructC{C1: "c1"},
+		}, "TestStructC", &TestStructC{C1: "c1"}, false},
+		{struct {
+			AliasTypeInt
+		}{8}, "AliasTypeInt", AliasTypeInt(8), false},
 		{map[int]interface{}{123: "112233"}, "123", "112233", false},
 		{map[int]interface{}{123: "112233"}, 123, "112233", false},
 		{map[string]interface{}{"123": "112233"}, 123, "112233", false},
@@ -150,7 +181,7 @@ func TestFieldE(t *testing.T) {
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////////
+/* ------------------------------------------------------------------------------ */
 
 // [testing assert functions]
 
