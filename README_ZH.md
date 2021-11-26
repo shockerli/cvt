@@ -70,7 +70,37 @@ cvt.Float("hello", 12.34)       // 12.34
 
 ### bool
 - Bool
+
+```go
+cvt.Bool(0)                 // false
+cvt.Bool(nil)               // false
+cvt.Bool("0")               // false
+cvt.Bool("false")           // false
+cvt.Bool([]int{})           // false
+
+cvt.Bool(true)              // true
+cvt.Bool("true")            // true
+cvt.Bool([]int{1, 2})       // true
+cvt.Bool([]byte("true"))    // true
+```
+
 - BoolE
+
+```go
+cvt.BoolE(0)                // false,nil
+cvt.BoolE(nil)              // false,nil
+cvt.BoolE("0")              // false,nil
+cvt.BoolE("false")          // false,nil
+cvt.BoolE([]int{})          // false,nil
+
+cvt.BoolE(true)             // true,nil
+cvt.BoolE("true")           // true,nil
+cvt.BoolE([]int{1, 2})      // true,nil
+cvt.BoolE([]byte("true"))   // true,nil
+```
+
+> 更多示例: [bool_test.go](bool_test.go)
+
 
 ### int
 - Int
@@ -94,9 +124,56 @@ cvt.Float("hello", 12.34)       // 12.34
 - Uint64
 - Uint64E
 
+```go
+cvt.Int(int8(8))            // 8
+cvt.Int(int32(8))           // 8
+cvt.Int("-8.01")            // -8
+cvt.Int([]byte("8.00"))     // 8
+cvt.Int(nil)                // 0
+cvt.IntE("8a")              // 0,err
+cvt.IntE([]int{})           // 0,err
+
+// alias type
+type OrderType uint8
+cvt.Int(OrderType(3))       // 3
+
+var po OrderType = 3
+cvt.Int(&po)                // 3
+```
+
+> 更多示例: [int_test.go](int_test.go)
+
+
 ### string
 - String
 - StringE
+
+```go
+cvt.String(uint(8))             // "8"
+cvt.String(float32(8.31))       // "8.31"
+cvt.String(true)                // "true"
+cvt.String([]byte("-8.01"))     // "-8.01"
+cvt.String(nil)                 // ""
+
+cvt.String(errors.New("error info"))            // "error info"
+cvt.String(time.Friday)                         // "Friday"
+cvt.String(big.NewInt(123))                     // "123"
+cvt.String(template.URL("https://host.foo"))    // "https://host.foo"
+cvt.String(template.HTML("<html></html>"))      // "<html></html>"
+cvt.String(json.Number("12.34"))                // "12.34"
+
+// custom type
+type TestMarshalJSON struct{}
+
+func (TestMarshalJSON) MarshalJSON() ([]byte, error) {
+    return []byte("custom marshal"), nil
+}
+cvt.String(TestMarshalJSON{})   // "custom marshal"
+cvt.String(&TestMarshalJSON{})  // "custom marshal"
+```
+
+> 更多示例: [string_test.go](string_test.go)
+
 
 ### float
 - Float32
@@ -104,19 +181,143 @@ cvt.Float("hello", 12.34)       // 12.34
 - Float64
 - Float64E
 
+```go
+cvt.Float64(int32(8))       // 8
+cvt.Float64(float32(8.31))  // 8.31
+cvt.Float64("-8")           // 8
+cvt.Float64("-8.01")        // 8.01
+cvt.Float64(nil)            // 0
+cvt.Float64(true)           // 1
+cvt.Float64(false)          // 0
+
+type AliasTypeInt int
+type PointerTypeInt *AliasTypeInt
+cvt.Float64(AliasTypeInt(8))            // 8
+cvt.Float64((*AliasTypeInt)(nil))       // 0
+cvt.FLoat64((*PointerTypeInt)(nil))     // 0
+```
+
+> 更多示例: [float_test.go](float_test.go)
+
 ### time
 - Time
 - TimeE
 
+```go
+cvt.Time("2009-11-10 23:00:00 +0000 UTC")
+cvt.Time("2018-10-21T23:21:29+0200")
+cvt.Time("10 Nov 09 23:00 UTC")
+cvt.Time("2009-11-10T23:00:00Z")
+cvt.Time("11:00PM")
+cvt.Time("2006-01-02")
+cvt.Time("2016-03-06 15:28:01")
+cvt.Time(1482597504)
+cvt.Time(time.Date(2009, 2, 13, 23, 31, 30, 0, time.Local))
+```
+
+> 更多示例: [time_test.go](time_test.go)
+
 ### slice
 - `ColumnsE`: 类似于 PHP 中的 `array_column`，`FieldE` 函数的切片版本，返回 `[]interface{}`
+
+```go
+// []interface{}{"D1", "D2", nil}
+cvt.ColumnsE([]map[string]interface{}{
+	  {"1": 111, "DDD": "D1"},
+	  {"2": 222, "DDD": "D2"},
+	  {"DDD": nil},
+}, "DDD")
+
+// test type
+type TestStructD struct {
+    D1 int
+}
+type TestStructE struct {
+    D1 int
+    DD *TestStructD
+}
+
+// []interface{}{11, 22}
+cvt.ColumnsE(map[int]TestStructD{1: {11}, 2: {22}}, "D1")
+
+// []interface{}{1, 2}
+cvt.ColumnsE([]TestStructE{{D1: 1}, {D1: 2}}, "D1")
+```
+
 - `FieldE`: 取 `map` 或 `struct` 的字段值，返回 `interface{}`
+
+```go
+// map
+cvt.FieldE(map[int]interface{}{123: "112233"}, "123") // "112233"
+cvt.FieldE(map[string]interface{}{"123": "112233"}, "123") // "112233"
+
+// struct
+cvt.FieldE(struct{
+	  A string
+	  B int
+}{"Hello", 18}, "A") // "Hello"
+cvt.FieldE(struct{
+	  A string
+	  B int
+}{"Hello", 18}, "B") // 18
+```
+
 - `KeysE`: 取 `map` 的键名，或结构体的字段名，返回 `[]interface{}`
+
+```go
+cvt.KeysE()
+// key of map
+cvt.KeysE(map[float64]float64{0.1: -0.1, -1.2: 1.2}) // []interface{}{-1.2, 0.1}
+cvt.KeysE(map[string]interface{}{"A": 1, "2": 2}) // []interface{}{"2", "A"}
+cvt.KeysE(map[int]map[string]interface{}{1: {"1": 111, "DDD": 12.3}, -2: {"2": 222, "DDD": "321"}, 3: {"DDD": nil}}) // []interface{}{-2, 1, 3}
+
+// field name of struct
+cvt.KeysE(struct{
+	  A string
+	  B int
+	  C float
+}{}) // []interface{}{"A", "B", "C"}
+
+type TestStructB {
+	  B int
+}
+cvt.KeysE(struct{
+	  A string
+    TestStructB
+	  C float
+}{}) // []interface{}{"A", "B", "C"}
+```
+
 - `Slice` / `SliceE`: 转换成 `[]interface{}`
 - `SliceIntE`: 转换成 `[]int`
 - `SliceInt64E`: 转换成 `[]int64`
 - `SliceFloat64E`: 转换成 `[]float64`
 - `SliceStringE`: 转换成 `[]string`
+
+```go
+cvt.SliceE("hello")                             // []interface{}{'h', 'e', 'l', 'l', 'o'}
+cvt.SliceE([]byte("hey"))                       // []interface{}{byte('h'), byte('e'), byte('y')}
+cvt.SliceE([]int{1, 2, 3})                      // []interface{}{1, 2, 3}
+cvt.SliceE([]string{"a", "b", "c"})             // []interface{}{"a", "b", "c"}
+cvt.SliceE(map[int]string{1: "111", 2: "222"})  // []interface{}{"111", "222"}
+
+// struct values
+type TestStruct struct {
+    A int
+    B string
+}
+cvt.SliceE(TestStruct{18,"jhon"}) // []interface{}{18, "jhon"}
+
+// SliceIntE
+cvt.SliceIntE([]string{"1", "2", "3"})              // []int{1, 2, 3}
+cvt.SliceIntE(map[int]string{2: "222", 1: "111"})   // []int{111, 222}
+
+// SliceStringE
+cvt.SliceStringE([]float64{1.1, 2.2, 3.0})              // []string{"1.1", "2.2", "3"}
+cvt.SliceStringE(map[int]string{2: "222", 1: "11.1"})   // []string{"11.1", "222"}
+```
+
+> 更多示例: [slice_test.go](slice_test.go)
 
 
 ## 开源协议
