@@ -369,9 +369,10 @@ func TestKeysE(t *testing.T) {
 		isErr  bool
 	}{
 		// map
-		{map[int]map[string]interface{}{1: {"1": 111, "DDD": 12.3}, 2: {"2": 222, "DDD": "321"}, 3: {"DDD": nil}}, []interface{}{1, 2, 3}, false},
+		{map[int]map[string]interface{}{1: {"1": 111, "DDD": 12.3}, -2: {"2": 222, "DDD": "321"}, 3: {"DDD": nil}}, []interface{}{-2, 1, 3}, false},
 		{map[string]interface{}{"A": 1, "2": 2}, []interface{}{"2", "A"}, false},
-		{map[float64]TestStructD{1: {11}, 2: {22}}, []interface{}{float64(1), float64(2)}, false},
+		{map[float64]float64{0.1: -0.1, -1.2: 1.2}, []interface{}{-1.2, 0.1}, false},
+		{map[float64]TestStructD{-1: {11}, 2: {22}}, []interface{}{float64(-1), float64(2)}, false},
 		{map[interface{}]interface{}{1: 1, 2.2: 2.22, "A": "A"}, []interface{}{1, 2.2, "A"}, false},
 
 		// struct

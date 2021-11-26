@@ -57,11 +57,11 @@ func deepStructValues(rv reflect.Value) (sl []interface{}) {
 func deepStructFields(rt reflect.Type) (sl []string) {
 	rt = ptrType(rt)
 
-	type fff struct {
+	type field struct {
 		level int8
 		index int
 	}
-	var exists = make(map[string]fff)
+	var exists = make(map[string]field)
 
 	fn := func(v string, level int8) {
 		ff, ok := exists[v]
@@ -71,7 +71,7 @@ func deepStructFields(rt reflect.Type) (sl []string) {
 			sl = append(sl[:ff.index], sl[ff.index+1:]...)
 		}
 		sl = append(sl, v)
-		exists[v] = fff{level, len(sl) - 1}
+		exists[v] = field{level, len(sl) - 1}
 	}
 
 	// sort by field definition order, include embed field
