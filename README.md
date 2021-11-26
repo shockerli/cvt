@@ -8,8 +8,6 @@
 ![GitHub](https://img.shields.io/github/license/shockerli/cvt)
 
 > Simple, safe conversion of any type, including indirect/custom types.
->
-> Inspired by [cast](https://github.com/spf13/cast)
 
 ## Install
 
