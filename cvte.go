@@ -109,6 +109,15 @@ func ptrType(rt reflect.Type) reflect.Type {
 	return rt
 }
 
+func ptrValue(rv reflect.Value) reflect.Value {
+	if rv.Kind() == reflect.Ptr {
+		for rv.Kind() == reflect.Ptr {
+			rv = rv.Elem()
+		}
+	}
+	return rv
+}
+
 // returns the value with base type
 func indirect(a interface{}) (val interface{}, rv reflect.Value) {
 	if a == nil {

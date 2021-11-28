@@ -320,6 +320,30 @@ cvt.SliceStringE(map[int]string{2: "222", 1: "11.1"})   // []string{"11.1", "222
 > 更多示例: [slice_test.go](slice_test.go)
 
 
+### map
+- StringMapE
+
+```go
+// JSON
+// expect: map[string]interface{}{"name": "cvt", "age": 3.21}
+cvt.StringMapE(`{"name":"cvt","age":3.21}`)
+
+// Map
+// expect: map[string]interface{}{"111": "cvt", "222": 3.21}
+cvt.StringMapE(map[interface{}]interface{}{111: "cvt", "222": 3.21})
+
+// Struct
+// expect: map[string]interface{}{"Name": "cvt", "Age": 3}
+cvt.StringMapE(struct {
+    Name string
+    Age  int
+}{"cvt", 3})
+```
+
+> 更多示例: [map_test.go](map_test.go)
+
+
+
 ## 开源协议
 
 本项目基于 [MIT](LICENSE) 协议开放源代码。

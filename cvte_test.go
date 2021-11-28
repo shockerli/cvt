@@ -191,7 +191,6 @@ func assertError(t *testing.T, err error, msgAndArgs ...interface{}) {
 		fail(t, "An error is expected but got nil", msgAndArgs...)
 		return
 	}
-	return
 }
 
 // assert no error
@@ -200,7 +199,6 @@ func assertNoError(t *testing.T, err error, msgAndArgs ...interface{}) {
 		fail(t, fmt.Sprintf("Received unexpected error:\n\t\t\t\t%+v", err), msgAndArgs...)
 		return
 	}
-	return
 }
 
 // assert equal
@@ -217,7 +215,6 @@ func assertEqual(t *testing.T, expected, actual interface{}, msgAndArgs ...inter
 			"actual  : %s", expected, actual), msgAndArgs...)
 		return
 	}
-	return
 }
 
 func fail(t *testing.T, failureMessage string, msgAndArgs ...interface{}) {
