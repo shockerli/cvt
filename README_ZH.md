@@ -6,6 +6,7 @@
 ![GitHub top language](https://img.shields.io/github/languages/top/shockerli/cvt)
 [![codecov](https://codecov.io/gh/shockerli/cvt/branch/master/graph/badge.svg)](https://codecov.io/gh/shockerli/cvt)
 ![GitHub](https://img.shields.io/github/license/shockerli/cvt)
+[![Mentioned in Awesome Go](https://awesome.re/mentioned-badge.svg)](https://github.com/avelino/awesome-go)
 
 > 一个简单、安全、高效的转换任意数据类型的 Go 语言工具包，支持自定义类型、提取结构体字段和值
 
