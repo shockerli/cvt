@@ -12,10 +12,13 @@ func TestStringMapE(t *testing.T) {
 		expect map[string]interface{}
 		isErr  bool
 	}{
-		// JSON String
+		// JSON
 		{`{"name":"cvt","age":3.21}`, map[string]interface{}{"name": "cvt", "age": 3.21}, false},
 		{`{"name":"cvt","tag":"convert"}`, map[string]interface{}{"name": "cvt", "tag": "convert"}, false},
 		{`{"name":"cvt","build":true}`, map[string]interface{}{"name": "cvt", "build": true}, false},
+		{[]byte(`{"name":"cvt","build":true}`), map[string]interface{}{"name": "cvt", "build": true}, false},
+		{AliasTypeString(`{"name":"cvt","build":true}`), map[string]interface{}{"name": "cvt", "build": true}, false},
+		{AliasTypeBytes(`{"name":"cvt","build":true}`), map[string]interface{}{"name": "cvt", "build": true}, false},
 
 		// Map
 		{map[string]interface{}{}, map[string]interface{}{}, false},

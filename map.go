@@ -15,6 +15,19 @@ func StringMapE(val interface{}) (m map[string]interface{}, err error) {
 		return nil, errUnsupportedTypeNil
 	}
 
+	// direct type(for improve performance)
+	switch v := val.(type) {
+	case map[string]interface{}:
+		return v, nil
+	case []byte:
+		err = json.Unmarshal(v, &m)
+		return
+	case string:
+		err = json.Unmarshal([]byte(v), &m)
+		return
+	}
+
+	// indirect type
 	_, rv := indirect(val)
 	switch rv.Kind() {
 	case reflect.Map:
@@ -23,6 +36,11 @@ func StringMapE(val interface{}) (m map[string]interface{}, err error) {
 		}
 	case reflect.Struct:
 		m = struct2map(rv)
+	case reflect.Slice:
+		// []byte
+		if rv.Type().Elem().Kind() == reflect.Uint8 {
+			err = json.Unmarshal(rv.Bytes(), &m)
+		}
 	case reflect.String:
 		// JSON string of map
 		err = json.Unmarshal([]byte(rv.String()), &m)
