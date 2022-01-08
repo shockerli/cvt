@@ -347,3 +347,8 @@ cvt.StringMapE(struct {
 ## 开源协议
 
 本项目基于 [MIT](LICENSE) 协议开放源代码。
+
+## 感谢
+- [JetBrains Open Source Support](https://jb.gg/OpenSourceSupport)
+
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)

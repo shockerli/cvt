@@ -128,7 +128,7 @@ func indirect(a interface{}) (val interface{}, rv reflect.Value) {
 	val = rv.Interface()
 
 	switch rv.Kind() {
-	case reflect.Ptr: // indirect the base type, if is been referenced many times
+	case reflect.Ptr: // indirect the base type, if has been referenced many times
 		for rv.Kind() == reflect.Ptr {
 			// stop indirect until nil, avoid stack overflow
 			if rv.IsNil() {
