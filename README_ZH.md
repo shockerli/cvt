@@ -351,4 +351,4 @@ cvt.StringMapE(struct {
 ## 感谢
 - [JetBrains Open Source Support](https://jb.gg/OpenSourceSupport)
 
-![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)
