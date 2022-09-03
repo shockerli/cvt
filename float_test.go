@@ -103,6 +103,24 @@ func TestFloat64_BaseLine(t *testing.T) {
 	}
 }
 
+func TestFloat64P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect float64
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123.01},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Float64P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestFloat32_HasDefault(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -194,6 +212,24 @@ func TestFloat32_BaseLine(t *testing.T) {
 
 		v := cvt.Float32(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestFloat32P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect float32
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123.01},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Float32P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
 	}
 }
 

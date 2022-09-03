@@ -75,6 +75,24 @@ func TestString_BaseLine(t *testing.T) {
 	}
 }
 
+func TestStringP(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect string
+	}{
+		{"123", "123"},
+		{123, "123"},
+		{123.01, "123.01"},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.StringP(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestStringE(t *testing.T) {
 	tests := []struct {
 		input  interface{}

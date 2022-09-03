@@ -20,6 +20,12 @@ func Uint64(v interface{}, def ...uint64) uint64 {
 	return 0
 }
 
+// Uint64P convert and store in a new uint64 value, and returns a pointer to it
+func Uint64P(v interface{}, def ...uint64) *uint64 {
+	i := Uint64(v, def...)
+	return &i
+}
+
 // Uint64E convert an interface to an uint64 type
 func Uint64E(val interface{}) (uint64, error) {
 	v, e := convUint64(val)
@@ -41,6 +47,12 @@ func Uint32(v interface{}, def ...uint32) uint32 {
 	}
 
 	return 0
+}
+
+// Uint32P convert and store in a new uint32 value, and returns a pointer to it
+func Uint32P(v interface{}, def ...uint32) *uint32 {
+	i := Uint32(v, def...)
+	return &i
 }
 
 // Uint32E convert an interface to an uint32 type
@@ -69,6 +81,12 @@ func Uint16(v interface{}, def ...uint16) uint16 {
 	return 0
 }
 
+// Uint16P convert and store in a new uint16 value, and returns a pointer to it
+func Uint16P(v interface{}, def ...uint16) *uint16 {
+	i := Uint16(v, def...)
+	return &i
+}
+
 // Uint16E convert an interface to an uint16 type
 func Uint16E(val interface{}) (uint16, error) {
 	v, e := convUint64(val)
@@ -93,6 +111,12 @@ func Uint8(v interface{}, def ...uint8) uint8 {
 	}
 
 	return 0
+}
+
+// Uint8P convert and store in a new uint8 value, and returns a pointer to it
+func Uint8P(v interface{}, def ...uint8) *uint8 {
+	i := Uint8(v, def...)
+	return &i
 }
 
 // Uint8E convert an interface to an uint8 type
@@ -121,6 +145,12 @@ func Uint(v interface{}, def ...uint) uint {
 	return 0
 }
 
+// UintP convert and store in a new uint value, and returns a pointer to it
+func UintP(v interface{}, def ...uint) *uint {
+	i := Uint(v, def...)
+	return &i
+}
+
 // UintE convert an interface to an uint type
 func UintE(val interface{}) (uint, error) {
 	v, e := convUint64(val)
@@ -147,6 +177,12 @@ func Int64(v interface{}, def ...int64) int64 {
 	return 0
 }
 
+// Int64P convert and store in a new int64 value, and returns a pointer to it
+func Int64P(v interface{}, def ...int64) *int64 {
+	i := Int64(v, def...)
+	return &i
+}
+
 // Int64E convert an interface to an int64 type
 func Int64E(val interface{}) (int64, error) {
 	v, e := convInt64(val)
@@ -168,6 +204,12 @@ func Int32(v interface{}, def ...int32) int32 {
 	}
 
 	return 0
+}
+
+// Int32P convert and store in a new int32 value, and returns a pointer to it
+func Int32P(v interface{}, def ...int32) *int32 {
+	i := Int32(v, def...)
+	return &i
 }
 
 // Int32E convert an interface to an int32 type
@@ -196,6 +238,12 @@ func Int16(v interface{}, def ...int16) int16 {
 	return 0
 }
 
+// Int16P convert and store in a new int16 value, and returns a pointer to it
+func Int16P(v interface{}, def ...int16) *int16 {
+	i := Int16(v, def...)
+	return &i
+}
+
 // Int16E convert an interface to an int16 type
 func Int16E(val interface{}) (int16, error) {
 	v, e := convInt64(val)
@@ -222,6 +270,12 @@ func Int8(v interface{}, def ...int8) int8 {
 	return 0
 }
 
+// Int8P convert and store in a new int8 value, and returns a pointer to it
+func Int8P(v interface{}, def ...int8) *int8 {
+	i := Int8(v, def...)
+	return &i
+}
+
 // Int8E convert an interface to an int8 type
 func Int8E(val interface{}) (int8, error) {
 	v, e := convInt64(val)
@@ -246,6 +300,12 @@ func Int(v interface{}, def ...int) int {
 	}
 
 	return 0
+}
+
+// IntP convert and store in a new int value, and returns a pointer to it
+func IntP(v interface{}, def ...int) *int {
+	i := Int(v, def...)
+	return &i
 }
 
 // IntE convert an interface to an int type

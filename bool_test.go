@@ -110,6 +110,27 @@ func TestBool_BaseLine(t *testing.T) {
 	}
 }
 
+func TestBoolP(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect bool
+	}{
+		{"abc", false},
+		{123, true},
+		{0, false},
+		{false, false},
+		{"false", false},
+		{"true", true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.BoolP(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestBoolE(t *testing.T) {
 	tests := []struct {
 		input  interface{}

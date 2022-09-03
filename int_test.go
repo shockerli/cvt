@@ -104,6 +104,24 @@ func TestUint64_BaseLine(t *testing.T) {
 	}
 }
 
+func TestUint64P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint64
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint64P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestUint32_HasDefault(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -196,6 +214,24 @@ func TestUint32_BaseLine(t *testing.T) {
 
 		v := cvt.Uint32(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestUint32P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint32
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint32P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
 	}
 }
 
@@ -294,6 +330,24 @@ func TestUint16_BaseLine(t *testing.T) {
 	}
 }
 
+func TestUint16P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint16
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint16P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestUint8_HasDefault(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -386,6 +440,24 @@ func TestUint8_BaseLine(t *testing.T) {
 
 		v := cvt.Uint8(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestUint8P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint8
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Uint8P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
 	}
 }
 
@@ -484,6 +556,24 @@ func TestUint_BaseLine(t *testing.T) {
 	}
 }
 
+func TestUintP(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect uint
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.UintP(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestInt64_HasDefault(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -574,6 +664,24 @@ func TestInt64_BaseLine(t *testing.T) {
 
 		v := cvt.Int64(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestInt64P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int64
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Int64P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
 	}
 }
 
@@ -670,6 +778,24 @@ func TestInt32_BaseLine(t *testing.T) {
 	}
 }
 
+func TestInt32P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int32
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Int32P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestInt16_HasDefault(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -760,6 +886,24 @@ func TestInt16_BaseLine(t *testing.T) {
 
 		v := cvt.Int16(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestInt16P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int16
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Int16P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
 	}
 }
 
@@ -856,6 +1000,24 @@ func TestInt8_BaseLine(t *testing.T) {
 	}
 }
 
+func TestInt8P(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int8
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Int8P(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
+	}
+}
+
 func TestInt_HasDefault(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -946,6 +1108,24 @@ func TestInt_BaseLine(t *testing.T) {
 
 		v := cvt.Int(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestIntP(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect int
+	}{
+		{"123", 123},
+		{123, 123},
+		{123.01, 123},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.IntP(tt.input)
+		assertEqual(t, tt.expect, *v, "[NonE] "+msg)
 	}
 }
 

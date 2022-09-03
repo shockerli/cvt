@@ -19,6 +19,12 @@ func Float64(v interface{}, def ...float64) float64 {
 	return 0
 }
 
+// Float64P convert and store in a new float64 value, and returns a pointer to it
+func Float64P(v interface{}, def ...float64) *float64 {
+	i := Float64(v, def...)
+	return &i
+}
+
 // Float64E convert an interface to a float64 type
 func Float64E(val interface{}) (float64, error) {
 	v, rv := indirect(val)
@@ -70,6 +76,12 @@ func Float32(v interface{}, def ...float32) float32 {
 	}
 
 	return 0
+}
+
+// Float32P convert and store in a new float32 value, and returns a pointer to it
+func Float32P(v interface{}, def ...float32) *float32 {
+	i := Float32(v, def...)
+	return &i
 }
 
 // Float32E convert an interface to a float32 type

@@ -19,6 +19,12 @@ func String(v interface{}, def ...string) string {
 	return ""
 }
 
+// StringP convert and store in a new string value, and returns a pointer to it
+func StringP(v interface{}, def ...string) *string {
+	s := String(v, def...)
+	return &s
+}
+
 // StringE convert an interface to a string type
 func StringE(val interface{}) (string, error) {
 	// interface implements

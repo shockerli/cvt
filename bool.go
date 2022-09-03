@@ -19,6 +19,12 @@ func Bool(v interface{}, def ...bool) bool {
 	return false
 }
 
+// BoolP convert and store in a new bool value, and returns a pointer to it
+func BoolP(v interface{}, def ...bool) *bool {
+	i := Bool(v, def...)
+	return &i
+}
+
 // BoolE convert an interface to a bool type
 func BoolE(val interface{}) (bool, error) {
 	v, rv := indirect(val)
