@@ -45,12 +45,14 @@ var (
 	aliasTypeUint0 AliasTypeUint = 0
 	aliasTypeUint1 AliasTypeUint = 1
 
-	aliasTypeString0         AliasTypeString = "0"
-	aliasTypeString1         AliasTypeString = "1"
-	aliasTypeString8d15      AliasTypeString = "8.15"
-	aliasTypeString8d15Minus AliasTypeString = "-8.15"
-	aliasTypeStringOn        AliasTypeString = "on"
-	aliasTypeStringOff       AliasTypeString = "off"
+	aliasTypeString0                    AliasTypeString = "0"
+	aliasTypeString1                    AliasTypeString = "1"
+	aliasTypeString8d15                 AliasTypeString = "8.15"
+	aliasTypeString8d15Minus            AliasTypeString = "-8.15"
+	aliasTypeStringOn                   AliasTypeString = "on"
+	aliasTypeStringOff                  AliasTypeString = "off"
+	aliasTypeStringLosePrecisionInt64   AliasTypeString = "7138826985640367621"
+	aliasTypeStringLosePrecisionFloat64 AliasTypeString = "7138826985640367621.18"
 
 	pointerRunes      = []rune("中国")
 	pointerInterNil   *AliasTypeInterface

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 )
 
 // Uint64 convert an interface to an uint64 type, with default value
@@ -318,15 +319,9 @@ func convUint64(val interface{}) (uint64, error) {
 		}
 		return 0, nil
 	case string:
-		vvv, err := strconv.ParseFloat(vv, 64)
-		if err == nil && vvv >= 0 && vvv <= math.MaxUint64 {
-			return uint64(math.Trunc(vvv)), nil
-		}
+		return str2uint64(vv)
 	case []byte:
-		vvv, err := strconv.ParseFloat(string(vv), 64)
-		if err == nil && vvv >= 0 && vvv <= math.MaxUint64 {
-			return uint64(math.Trunc(vvv)), nil
-		}
+		return str2uint64(string(vv))
 	}
 
 	// indirect type
@@ -340,15 +335,9 @@ func convUint64(val interface{}) (uint64, error) {
 		}
 		return 0, nil
 	case string:
-		vvv, err := strconv.ParseFloat(vv, 64)
-		if err == nil && vvv >= 0 && vvv <= math.MaxUint64 {
-			return uint64(math.Trunc(vvv)), nil
-		}
+		return str2uint64(vv)
 	case []byte:
-		vvv, err := strconv.ParseFloat(string(vv), 64)
-		if err == nil && vvv >= 0 && vvv <= math.MaxUint64 {
-			return uint64(math.Trunc(vvv)), nil
-		}
+		return str2uint64(string(vv))
 	case uint, uint8, uint16, uint32, uint64:
 		return rv.Uint(), nil
 	case int, int8, int16, int32, int64:
@@ -409,17 +398,9 @@ func convInt64(val interface{}) (int64, error) {
 		}
 		return 0, nil
 	case string:
-		vvv, err := strconv.ParseFloat(vv, 64)
-		if err == nil && vvv <= math.MaxInt64 {
-			return int64(math.Trunc(vvv)), nil
-		}
-		return 0, errConvFail
+		return str2int64(vv)
 	case []byte:
-		vvv, err := strconv.ParseFloat(string(vv), 64)
-		if err == nil && vvv <= math.MaxInt64 {
-			return int64(math.Trunc(vvv)), nil
-		}
-		return 0, errConvFail
+		return str2int64(string(vv))
 	}
 
 	// indirect type
@@ -433,15 +414,9 @@ func convInt64(val interface{}) (int64, error) {
 		}
 		return 0, nil
 	case string:
-		vvv, err := strconv.ParseFloat(vv, 64)
-		if err == nil && vvv <= math.MaxInt64 {
-			return int64(math.Trunc(vvv)), nil
-		}
+		return str2int64(vv)
 	case []byte:
-		vvv, err := strconv.ParseFloat(string(vv), 64)
-		if err == nil && vvv <= math.MaxInt64 {
-			return int64(math.Trunc(vvv)), nil
-		}
+		return str2int64(string(vv))
 	case uint, uint8, uint16, uint32, uint64, uintptr:
 		if rv.Uint() <= math.MaxInt64 {
 			return int64(rv.Uint()), nil
@@ -455,4 +430,42 @@ func convInt64(val interface{}) (int64, error) {
 	}
 
 	return 0, errConvFail
+}
+
+// convert an int or float string to int64
+//    "12" => 12
+//    "12.01" => 12
+//    "-12" => -12
+//    "-12.01" => -12
+func str2int64(s string) (i int64, err error) {
+	// ensure can be converted to float
+	_, err = strconv.ParseFloat(s, 64)
+	if err != nil {
+		return
+	}
+
+	// trim the decimal part
+	if i := strings.Index(s, "."); i >= 0 {
+		s = s[:i]
+	}
+	i, err = strconv.ParseInt(s, 10, 64)
+	return
+}
+
+// convert an int or float string to uint64
+//    "12" => 12
+//    "12.01" => 12
+func str2uint64(s string) (i uint64, err error) {
+	// ensure can be converted to float
+	_, err = strconv.ParseFloat(s, 64)
+	if err != nil {
+		return
+	}
+
+	// trim the decimal part
+	if i := strings.Index(s, "."); i >= 0 {
+		s = s[:i]
+	}
+	i, err = strconv.ParseUint(s, 10, 64)
+	return
 }
