@@ -99,30 +99,45 @@ cvt.BoolE([]int{1, 2})      // true,nil
 cvt.BoolE([]byte("true"))   // true,nil
 ```
 
+- BoolP
+```go
+cvt.BoolP("true")   // (*bool)(0x14000126180)(true)
+```
+
 > more case see [bool_test.go](bool_test.go)
 
 
 ### int
 - Int
 - IntE
+- IntP
 - Int8
 - Int8E
+- Int8P
 - Int16
 - Int16E
+- Int16P
 - Int32
 - Int32E
+- Int32P
 - Int64
 - Int64E
+- Int64P
 - Uint
 - UintE
+- UintP
 - Uint8
 - Uint8E
+- Uint8P
 - Uint16
 - Uint16E
+- Uint16P
 - Uint32
 - Uint32E
+- Uint32P
 - Uint64
 - Uint64E
+- Uint64P
 
 ```go
 cvt.Int(int8(8))            // 8
@@ -139,6 +154,8 @@ cvt.Int(OrderType(3))       // 3
 
 var po OrderType = 3
 cvt.Int(&po)                // 3
+
+cvt.IntP("12")  // (*int)(0x140000a4180)(12)
 ```
 
 > more case see [int_test.go](int_test.go)
@@ -147,6 +164,7 @@ cvt.Int(&po)                // 3
 ### string
 - String
 - StringE
+- StringP
 
 ```go
 cvt.String(uint(8))             // "8"
@@ -170,6 +188,8 @@ func (TestMarshalJSON) MarshalJSON() ([]byte, error) {
 }
 cvt.String(TestMarshalJSON{})   // "custom marshal"
 cvt.String(&TestMarshalJSON{})  // "custom marshal"
+
+cvt.StringP(8.31) // (*string)(0x14000110320)((len=3) "123")
 ```
 
 > more case see [string_test.go](string_test.go)
@@ -178,8 +198,10 @@ cvt.String(&TestMarshalJSON{})  // "custom marshal"
 ### float
 - Float32
 - Float32E
+- Float32P
 - Float64
 - Float64E
+- Float64P
 
 ```go
 cvt.Float64(int32(8))       // 8
@@ -195,6 +217,8 @@ type PointerTypeInt *AliasTypeInt
 cvt.Float64(AliasTypeInt(8))            // 8
 cvt.Float64((*AliasTypeInt)(nil))       // 0
 cvt.FLoat64((*PointerTypeInt)(nil))     // 0
+
+cvt.Float64P("12.3")    // (*float64)(0x14000126180)(12.3)
 ```
 
 > more case see [float_test.go](float_test.go)
