@@ -15,7 +15,20 @@ var formatOutOfLimitInt = "%w, out of max limit value(%d)"
 var formatOutOfLimitFloat = "%w, out of max limit value(%f)"
 var formatExtend = "%v, %w"
 
-// FieldE return the field value from map/struct, ignore the filed type
+// Field return the field value from map/struct, with default value
+func Field(v interface{}, field interface{}, def ...interface{}) interface{} {
+	if v, err := FieldE(v, field); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return nil
+}
+
+// FieldE return the field value from map/struct, ignore the field type
 func FieldE(val interface{}, field interface{}) (interface{}, error) {
 	if val == nil {
 		return nil, errUnsupportedTypeNil

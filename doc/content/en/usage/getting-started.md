@@ -5,6 +5,12 @@ weight: -20
 
 Simple, safe conversion of any type, including indirect/custom types.
 
+
+{{< hint type=warning >}}
+**Document statement**\
+`__()` and `__P()` are convenient method is based on `__E()`, so the method of use and the type of support please reference ` __E () ` document.
+{{< /hint >}}
+
 <!--more-->
 
 {{< toc >}}

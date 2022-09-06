@@ -112,6 +112,48 @@ func TestSliceE(t *testing.T) {
 	}
 }
 
+func TestSliceInt_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    []int
+		expect []int
+	}{
+		// supported value, def is not used, def != expect
+		{[]int{1, 2, 3}, []int{1, 2}, []int{1, 2, 3}},
+		{testing.T{}, []int{1, 2, 3}, nil},
+
+		// unsupported value, def == expect
+		{int(123), []int{1}, []int{1}},
+		{uint16(123), nil, nil},
+		{func() {}, []int{}, []int{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.SliceInt(tt.input, tt.def)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestSliceInt_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []int
+	}{
+		{int(123), nil},
+		{uint16(123), nil},
+		{func() {}, nil},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.SliceInt(tt.input)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
 func TestSliceIntE(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -159,6 +201,48 @@ func TestSliceIntE(t *testing.T) {
 
 		assertNoError(t, err, "[NoErr] "+msg)
 		assertEqual(t, tt.expect, v, "[WithE] "+msg)
+	}
+}
+
+func TestSliceInt64_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    []int64
+		expect []int64
+	}{
+		// supported value, def is not used, def != expect
+		{[]int{1, 2, 3}, []int64{1, 2}, []int64{1, 2, 3}},
+		{testing.T{}, []int64{1, 2, 3}, nil},
+
+		// unsupported value, def == expect
+		{int(123), []int64{1}, []int64{1}},
+		{uint16(123), nil, nil},
+		{func() {}, []int64{}, []int64{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.SliceInt64(tt.input, tt.def)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestSliceInt64_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []int64
+	}{
+		{int(123), nil},
+		{uint16(123), nil},
+		{func() {}, nil},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.SliceInt64(tt.input)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 
@@ -213,6 +297,48 @@ func TestSliceInt64E(t *testing.T) {
 	}
 }
 
+func TestSliceFloat64_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    []float64
+		expect []float64
+	}{
+		// supported value, def is not used, def != expect
+		{[]int{1, 2, 3}, []float64{1, 2}, []float64{1, 2, 3}},
+		{testing.T{}, []float64{1, 2, 3}, nil},
+
+		// unsupported value, def == expect
+		{int(123), []float64{1}, []float64{1}},
+		{uint16(123), nil, nil},
+		{func() {}, []float64{}, []float64{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.SliceFloat64(tt.input, tt.def)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestSliceFloat64_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []int
+	}{
+		{int(123), nil},
+		{uint16(123), nil},
+		{func() {}, nil},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.SliceInt(tt.input)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
 func TestSliceFloat64E(t *testing.T) {
 	tests := []struct {
 		input  interface{}
@@ -262,6 +388,48 @@ func TestSliceFloat64E(t *testing.T) {
 
 		assertNoError(t, err, "[NoErr] "+msg)
 		assertEqual(t, tt.expect, v, "[WithE] "+msg)
+	}
+}
+
+func TestSliceString_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		def    []string
+		expect []string
+	}{
+		// supported value, def is not used, def != expect
+		{[]int{1, 2, 3}, []string{"1", "2"}, []string{"1", "2", "3"}},
+		{testing.T{}, []string{"1", "2", "3"}, nil},
+
+		// unsupported value, def == expect
+		{int(123), []string{"1"}, []string{"1"}},
+		{uint16(123), nil, nil},
+		{func() {}, []string{}, []string{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.SliceString(tt.input, tt.def)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestSliceString_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect []string
+	}{
+		{int(123), nil},
+		{uint16(123), nil},
+		{func() {}, nil},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.SliceString(tt.input)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
 

@@ -35,25 +35,6 @@ cvt.ColumnsE(map[int]TestStructD{1: {11}, 2: {22}}, "D1")
 cvt.ColumnsE([]TestStructE{{D1: 1}, {D1: 2}}, "D1")
 ```
 
-## FieldE
-Return the field value from map/struct, `interface{}`.
-
-```go
-// map
-cvt.FieldE(map[int]interface{}{123: "112233"}, "123") // "112233"
-cvt.FieldE(map[string]interface{}{"123": "112233"}, "123") // "112233"
-
-// struct
-cvt.FieldE(struct{
-	  A string
-	  B int
-}{"Hello", 18}, "A") // "Hello"
-cvt.FieldE(struct{
-	  A string
-	  B int
-}{"Hello", 18}, "B") // 18
-```
-
 ## KeysE
 Return the keys of map, or fields of struct, `[]interface{}`.
 
@@ -83,7 +64,7 @@ cvt.KeysE(struct{
 
 
 ## Slice
-Convert an interface to a `[]interface{}` type.
+Reference method `SliceE`.
 
 ## SliceE
 Convert an interface to a `[]interface{}` type.
@@ -104,6 +85,9 @@ cvt.SliceE(TestStruct{18,"jhon"}) // []interface{}{18, "jhon"}
 ```
 
 
+## SliceInt
+Reference method `SliceIntE`.
+
 ## SliceIntE
 Convert an interface to a `[]int` type.
 
@@ -111,6 +95,9 @@ Convert an interface to a `[]int` type.
 cvt.SliceIntE([]string{"1", "2", "3"})              // []int{1, 2, 3}
 cvt.SliceIntE(map[int]string{2: "222", 1: "111"})   // []int{111, 222}
 ```
+
+## SliceInt64
+Reference method `SliceInt64E`.
 
 ## SliceInt64E
 Convert an interface to a `[]int64` type.
@@ -121,6 +108,9 @@ cvt.SliceInt64E(map[int]string{2: "222", 1: "111"})   // []int64{111, 222}
 ```
 
 
+## SliceFloat64
+Reference method `SliceFloat64E`.
+
 ## SliceFloat64E
 Convert an interface to a `[]float64` type.
 
@@ -128,6 +118,9 @@ Convert an interface to a `[]float64` type.
 cvt.SliceFloat64E([]string{"1", "2", "3"})              // []float64{1, 2, 3}
 cvt.SliceFloat64E(map[int]string{2: "222", 1: "111"})   // []float64{111, 222}
 ```
+
+## SliceString
+Reference method `SliceStringE`.
 
 ## SliceStringE
 Convert an interface to a `[]string` type.

@@ -38,25 +38,6 @@ cvt.ColumnsE(map[int]TestStructD{1: {11}, 2: {22}}, "D1")
 cvt.ColumnsE([]TestStructE{{D1: 1}, {D1: 2}}, "D1")
 ```
 
-## FieldE
-取 `map` 或 `struct` 的字段值，返回 `interface{}`。
-
-```go
-// map
-cvt.FieldE(map[int]interface{}{123: "112233"}, "123") // "112233"
-cvt.FieldE(map[string]interface{}{"123": "112233"}, "123") // "112233"
-
-// struct
-cvt.FieldE(struct{
-	  A string
-	  B int
-}{"Hello", 18}, "A") // "Hello"
-cvt.FieldE(struct{
-	  A string
-	  B int
-}{"Hello", 18}, "B") // 18
-```
-
 ## KeysE
 取 `map` 的键名，或结构体的字段名，返回 `[]interface{}`。
 
@@ -86,7 +67,7 @@ cvt.KeysE(struct{
 
 
 ## Slice
-`SliceE` 方法的默认值版本
+参考 `SliceE` 方法。
 
 ## SliceE
 转换成 `[]interface{}`
@@ -107,6 +88,9 @@ cvt.SliceE(TestStruct{18,"jhon"}) // []interface{}{18, "jhon"}
 ```
 
 
+## SliceInt
+参考 `SliceIntE` 方法。
+
 ## SliceIntE
 转换成 `[]int`
 
@@ -114,6 +98,9 @@ cvt.SliceE(TestStruct{18,"jhon"}) // []interface{}{18, "jhon"}
 cvt.SliceIntE([]string{"1", "2", "3"})              // []int{1, 2, 3}
 cvt.SliceIntE(map[int]string{2: "222", 1: "111"})   // []int{111, 222}
 ```
+
+## SliceInt64
+参考 `SliceInt64E` 方法。
 
 ## SliceInt64E
 转换成 `[]int64`
@@ -124,6 +111,9 @@ cvt.SliceInt64E(map[int]string{2: "222", 1: "111"})   // []int64{111, 222}
 ```
 
 
+## SliceFloat64
+参考 `SliceFloat64E` 方法。
+
 ## SliceFloat64E
 转换成 `[]float64`
 
@@ -131,6 +121,9 @@ cvt.SliceInt64E(map[int]string{2: "222", 1: "111"})   // []int64{111, 222}
 cvt.SliceFloat64E([]string{"1", "2", "3"})              // []float64{1, 2, 3}
 cvt.SliceFloat64E(map[int]string{2: "222", 1: "111"})   // []float64{111, 222}
 ```
+
+## SliceString
+参考 `SliceStringE` 方法。
 
 ## SliceStringE
 转换成 `[]string`

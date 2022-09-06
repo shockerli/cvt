@@ -21,7 +21,7 @@ func Slice(v interface{}, def ...[]interface{}) []interface{} {
 // SliceE convert an interface to a []interface{} type
 func SliceE(val interface{}) (sl []interface{}, err error) {
 	if val == nil {
-		return nil, errUnsupportedTypeNil
+		return sl, errUnsupportedTypeNil
 	}
 
 	_, rv := indirect(val)
@@ -47,7 +47,20 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 		return
 	}
 
-	return nil, newErr(val, "slice")
+	return sl, newErr(val, "slice")
+}
+
+// SliceInt convert an interface to a []int type, with default value
+func SliceInt(v interface{}, def ...[]int) []int {
+	if v, err := SliceIntE(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return nil
 }
 
 // SliceIntE convert an interface to a []int type
@@ -57,15 +70,29 @@ func SliceIntE(val interface{}) (sl []int, err error) {
 		return
 	}
 
+	var vv int
 	for _, v := range list {
-		vv, err := IntE(v)
+		vv, err = IntE(v)
 		if err != nil {
-			return nil, err
+			return
 		}
 		sl = append(sl, vv)
 	}
 
 	return
+}
+
+// SliceInt64 convert an interface to a []int64 type, with default value
+func SliceInt64(v interface{}, def ...[]int64) []int64 {
+	if v, err := SliceInt64E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return nil
 }
 
 // SliceInt64E convert an interface to a []int64 type
@@ -75,15 +102,29 @@ func SliceInt64E(val interface{}) (sl []int64, err error) {
 		return
 	}
 
+	var vv int64
 	for _, v := range list {
-		vv, err := Int64E(v)
+		vv, err = Int64E(v)
 		if err != nil {
-			return nil, err
+			return
 		}
 		sl = append(sl, vv)
 	}
 
 	return
+}
+
+// SliceFloat64 convert an interface to a []float64 type, with default value
+func SliceFloat64(v interface{}, def ...[]float64) []float64 {
+	if v, err := SliceFloat64E(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return nil
 }
 
 // SliceFloat64E convert an interface to a []float64 type
@@ -93,15 +134,29 @@ func SliceFloat64E(val interface{}) (sl []float64, err error) {
 		return
 	}
 
+	var vv float64
 	for _, v := range list {
-		vv, err := Float64E(v)
+		vv, err = Float64E(v)
 		if err != nil {
-			return nil, err
+			return
 		}
 		sl = append(sl, vv)
 	}
 
 	return
+}
+
+// SliceString convert an interface to a []string type, with default value
+func SliceString(v interface{}, def ...[]string) []string {
+	if v, err := SliceStringE(v); err == nil {
+		return v
+	}
+
+	if len(def) > 0 {
+		return def[0]
+	}
+
+	return nil
 }
 
 // SliceStringE convert an interface to a []string type
@@ -111,10 +166,11 @@ func SliceStringE(val interface{}) (sl []string, err error) {
 		return
 	}
 
+	var vv string
 	for _, v := range list {
-		vv, err := StringE(v)
+		vv, err = StringE(v)
 		if err != nil {
-			return nil, err
+			return
 		}
 		sl = append(sl, vv)
 	}
