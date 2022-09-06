@@ -1,8 +1,10 @@
 package cvt_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/shockerli/cvt"
 )
@@ -37,6 +39,8 @@ func TestBool_HasDefault(t *testing.T) {
 		{&aliasTypeString0, true, false},
 		{aliasTypeStringOff, true, false},
 		{&aliasTypeStringOff, true, false},
+		{json.Number("0"), true, false},
+		{time.Duration(0), true, false},
 
 		{[]int{}, true, false},
 		{[]string{}, true, false},
@@ -61,6 +65,8 @@ func TestBool_HasDefault(t *testing.T) {
 		{&aliasTypeString1, false, true},
 		{aliasTypeStringOn, false, true},
 		{&aliasTypeStringOn, false, true},
+		{json.Number("12.0"), false, true},
+		{time.Duration(12), false, true},
 
 		{[]int{1, 2, 3}, false, true},
 		{[]string{"a", "b", "c"}, false, true},
@@ -75,6 +81,7 @@ func TestBool_HasDefault(t *testing.T) {
 		{testing.T{}, false, false},
 		{&testing.T{}, true, true},
 		{&testing.T{}, false, false},
+		{json.Number("hello"), true, true},
 	}
 
 	for i, tt := range tests {
@@ -100,6 +107,10 @@ func TestBool_BaseLine(t *testing.T) {
 		{map[int]string{}, false},
 		{aliasTypeString8d15Minus, true},
 		{&aliasTypeString8d15Minus, true},
+		{time.Duration(0), false},
+		{time.Duration(1), true},
+		{json.Number("0"), false},
+		{json.Number("10"), true},
 	}
 
 	for i, tt := range tests {
@@ -160,12 +171,20 @@ func TestBoolE(t *testing.T) {
 		{[]byte("Off"), false, false},
 		{aliasTypeInt0, false, false},
 		{&aliasTypeInt0, false, false},
+		{aliasTypeUint0, false, false},
+		{&aliasTypeUint0, false, false},
+		{aliasTypeFloat0, false, false},
+		{&aliasTypeFloat0, false, false},
 		{aliasTypeString0, false, false},
 		{&aliasTypeString0, false, false},
 		{aliasTypeStringOff, false, false},
 		{&aliasTypeStringOff, false, false},
 		{aliasTypeBool4False, false, false},
 		{&aliasTypeBool4False, false, false},
+		{json.Number("0"), false, false},
+		{json.Number("1"), true, false},
+		{time.Duration(0), false, false},
+		{time.Duration(1), true, false},
 
 		// false/slice/array/map
 		{[]int{}, false, false},
@@ -190,6 +209,11 @@ func TestBoolE(t *testing.T) {
 		{[]byte("true"), true, false},
 		{aliasTypeInt1, true, false},
 		{&aliasTypeInt1, true, false},
+		{aliasTypeUint1, true, false},
+		{&aliasTypeUint1, true, false},
+		{aliasTypeFloat1, true, false},
+		{&aliasTypeFloat1, true, false},
+		{aliasTypeBytesTrue, true, false},
 		{aliasTypeString1, true, false},
 		{&aliasTypeString1, true, false},
 		{aliasTypeStringOn, true, false},
@@ -214,6 +238,8 @@ func TestBoolE(t *testing.T) {
 		{"hello", false, true},
 		{testing.T{}, false, true},
 		{&testing.T{}, false, true},
+		{json.Number("hello"), false, true},
+		{aliasTypeBytesNil, false, true},
 	}
 
 	for i, tt := range tests {

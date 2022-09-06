@@ -324,7 +324,7 @@ func TestSliceFloat64_HasDefault(t *testing.T) {
 func TestSliceFloat64_BaseLine(t *testing.T) {
 	tests := []struct {
 		input  interface{}
-		expect []int
+		expect []float64
 	}{
 		{int(123), nil},
 		{uint16(123), nil},
@@ -334,7 +334,7 @@ func TestSliceFloat64_BaseLine(t *testing.T) {
 	for i, tt := range tests {
 		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
 
-		v := cvt.SliceInt(tt.input)
+		v := cvt.SliceFloat64(tt.input)
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }

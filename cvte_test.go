@@ -45,6 +45,9 @@ var (
 	aliasTypeUint0 AliasTypeUint = 0
 	aliasTypeUint1 AliasTypeUint = 1
 
+	aliasTypeFloat0 AliasTypeFloat64 = 0
+	aliasTypeFloat1 AliasTypeFloat64 = 1
+
 	aliasTypeString0                    AliasTypeString = "0"
 	aliasTypeString1                    AliasTypeString = "1"
 	aliasTypeString8d15                 AliasTypeString = "8.15"
@@ -54,10 +57,11 @@ var (
 	aliasTypeStringLosePrecisionInt64   AliasTypeString = "7138826985640367621"
 	aliasTypeStringLosePrecisionFloat64 AliasTypeString = "7138826985640367621.18"
 
-	pointerRunes      = []rune("中国")
-	pointerInterNil   *AliasTypeInterface
-	pointerIntNil     *AliasTypeInt
-	AliasTypeBytesNil AliasTypeBytes
+	pointerRunes       = []rune("中国")
+	pointerInterNil    *AliasTypeInterface
+	pointerIntNil      *AliasTypeInt
+	aliasTypeBytesNil  AliasTypeBytes
+	aliasTypeBytesTrue AliasTypeBytes = []byte("true")
 )
 
 // custom type
@@ -111,6 +115,51 @@ func Benchmark(b *testing.B) {
 }
 
 // [function tests]
+
+func TestField_HasDefault(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		field  interface{}
+		def    interface{}
+		expect interface{}
+	}{
+		// supported value, def is not used, def != expect
+		{TestStructC{C1: "c1"}, "C1", "C2", "c1"},
+
+		// unsupported value, def == expect
+		{TestStructC{C1: "c1"}, "C2", "c3", "c3"},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], def[%+v], expect[%+v]", i, tt.input, tt.def, tt.expect)
+
+		v := cvt.Field(tt.input, tt.field, tt.def)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
+
+func TestField_BaseLine(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		field  interface{}
+		expect interface{}
+	}{
+		{struct {
+			*TestStructC
+		}{
+			&TestStructC{C1: "c1"},
+		}, "C1", "c1"},
+
+		{"hello", "NONE", nil},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf("i = %d, input[%+v], expect[%+v]", i, tt.input, tt.expect)
+
+		v := cvt.Field(tt.input, tt.field)
+		assertEqual(t, tt.expect, v, "[NonE] "+msg)
+	}
+}
 
 func TestFieldE(t *testing.T) {
 	tests := []struct {

@@ -1,9 +1,11 @@
 package cvt
 
 import (
+	"encoding/json"
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Bool convert an interface to a bool type, with default value
@@ -27,9 +29,39 @@ func BoolP(v interface{}, def ...bool) *bool {
 
 // BoolE convert an interface to a bool type
 func BoolE(val interface{}) (bool, error) {
+	// direct type(for improve performance)
+	switch vv := val.(type) {
+	case nil:
+		return false, nil
+	case bool:
+		return vv, nil
+	case
+		float32, float64:
+		return Float64(vv) != 0, nil
+	case
+		time.Duration,
+		int, int8, int16, int32, int64:
+		return Int64(vv) != 0, nil
+	case uint, uint8, uint16, uint32, uint64:
+		return Uint64(vv) != 0, nil
+	case []byte:
+		return str2bool(string(vv))
+	case string:
+		return str2bool(vv)
+	case json.Number:
+		vvv, err := vv.Float64()
+		if err != nil {
+			return false, newErr(val, "bool")
+		}
+		return vvv != 0, nil
+	}
+
+	// indirect type
 	v, rv := indirect(val)
 
 	switch vv := v.(type) {
+	case nil:
+		return false, nil
 	case bool:
 		return vv, nil
 	case int, int8, int16, int32, int64:
@@ -42,8 +74,6 @@ func BoolE(val interface{}) (bool, error) {
 		return str2bool(string(vv))
 	case string:
 		return str2bool(vv)
-	case nil:
-		return false, nil
 	}
 
 	switch rv.Kind() {

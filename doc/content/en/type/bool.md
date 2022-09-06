@@ -46,6 +46,32 @@ Convert and store in a new bool value, and returns a pointer to it.
 cvt.BoolP("true")   // (*bool)(0x14000126180)(true)
 ```
 
+
+## Conversion rule
+### nil
+Return `false`
+
+### Bool
+Return original value
+
+### Number
+> Integer, Float, and their derived type, such as `time.Duration` of `int64`
+
+If `val != 0`, then return `true`; otherwise return `false`.
+
+### String
+> `string`, `[]byte`, and their derived type
+
+### json.Number
+If value can convert to `float64`, then compare `val != 0`; if not a number string, report an error.
+
+### Array/Slice/Map
+If the number of elements (len) greater than `0`, the return `true`; Return to `false` otherwise.
+
+### Others
+Other types, report an error.
+
+
 ## More Examples
 More case see unit: `bool_test.go`
 
