@@ -187,7 +187,10 @@ func Indirect(a interface{}) (val interface{}, rv reflect.Value) {
 		}
 	default:
 		// time.Time
-		if ct := reflect.TypeOf(time.Time{}); rv.CanConvert(ct) {
+		// promise for support go >= 1.13
+		// rv.CanConvert(t) is added in go1.17
+		// rt.ConvertibleTo(t) is added in go1.1
+		if ct := reflect.TypeOf(time.Time{}); rv.Type().ConvertibleTo(ct) {
 			cv := rv.Convert(ct)
 			return cv.Interface(), cv
 		}
