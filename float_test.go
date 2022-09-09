@@ -1,9 +1,11 @@
 package cvt_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"testing"
+	"time"
 
 	"github.com/shockerli/cvt"
 )
@@ -278,6 +280,8 @@ func TestFloat64E(t *testing.T) {
 		{&aliasTypeInt0, 0, false},
 		{aliasTypeInt1, 1, false},
 		{&aliasTypeInt1, 1, false},
+		{aliasTypeUint1, 1, false},
+		{&aliasTypeUint0, 0, false},
 		{aliasTypeString0, 0, false},
 		{&aliasTypeString0, 0, false},
 		{aliasTypeString1, 1, false},
@@ -296,6 +300,13 @@ func TestFloat64E(t *testing.T) {
 		{&pointerIntNil, 0, false},
 		{(*AliasTypeInt)(nil), 0, false},
 		{(*PointerTypeInt)(nil), 0, false},
+		{json.Number("-.1"), -.1, false},
+		{json.Number("12"), 12, false},
+		{aliasTypeBytes8d15, 8.15, false},
+		{aliasTypeUint1, 1, false},
+		{aliasTypeFloat8d15, 8.15, false},
+		{&aliasTypeFloat8d15, 8.15, false},
+		{time.Duration(1), 1, false},
 
 		// errors
 		{"10a", 0, true},
@@ -303,6 +314,10 @@ func TestFloat64E(t *testing.T) {
 		{"8.01a", 0, true},
 		{"8.01 ", 0, true},
 		{"hello", 0, true},
+		{[]byte("hello"), 0, true},
+		{json.Number("hello"), 0, true},
+		{aliasTypeBytesTrue, 0, true},
+		{aliasTypeBytesNil, 0, true},
 		{testing.T{}, 0, true},
 		{&testing.T{}, 0, true},
 		{[]int{}, 0, true},
@@ -390,6 +405,7 @@ func TestFloat32E(t *testing.T) {
 		{&pointerIntNil, 0, false},
 		{(*AliasTypeInt)(nil), 0, false},
 		{(*PointerTypeInt)(nil), 0, false},
+		{AliasTypeFloat32(8.15), 8.15, false},
 
 		// errors
 		{"10a", 0, true},
@@ -404,6 +420,10 @@ func TestFloat32E(t *testing.T) {
 		{[]string{}, 0, true},
 		{[...]string{}, 0, true},
 		{map[int]string{}, 0, true},
+		{[]byte("hello"), 0, true},
+		{json.Number("hello"), 0, true},
+		{aliasTypeBytesTrue, 0, true},
+		{aliasTypeBytesNil, 0, true},
 	}
 
 	for i, tt := range tests {

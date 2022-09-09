@@ -1,9 +1,11 @@
 package cvt
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
 	"strconv"
+	"time"
 )
 
 // Float64 convert an interface to a float64 type, with default value
@@ -27,6 +29,59 @@ func Float64P(v interface{}, def ...float64) *float64 {
 
 // Float64E convert an interface to a float64 type
 func Float64E(val interface{}) (float64, error) {
+	v, e := convFloat64E(val)
+	if e := catch("float64", val, e); e != nil {
+		return 0, e
+	}
+	return v, nil
+}
+
+func convFloat64E(val interface{}) (float64, error) {
+	// direct type(for improve performance)
+	switch vv := val.(type) {
+	case nil:
+		return 0, nil
+	case bool:
+		if vv {
+			return 1, nil
+		}
+		return 0, nil
+	case string:
+		vvv, err := strconv.ParseFloat(vv, 64)
+		if err == nil {
+			return vvv, nil
+		}
+		return 0, errConvFail
+	case []byte:
+		vvv, err := strconv.ParseFloat(string(vv), 64)
+		if err == nil {
+			return vvv, nil
+		}
+		return 0, errConvFail
+	case uint, uint8, uint16, uint32, uint64, uintptr:
+		return float64(Uint64(vv)), nil
+	case int, int8, int16, int32, int64:
+		return float64(Int(vv)), nil
+	case float32:
+		// use fmt to fix float32 -> float64 precision loss
+		// eg: cvt.Float64E(float32(8.31))
+		vvv, err := strconv.ParseFloat(fmt.Sprintf("%f", vv), 64)
+		if err == nil {
+			return vvv, nil
+		}
+	case float64:
+		return vv, nil
+	case json.Number:
+		vvv, err := vv.Float64()
+		if err == nil {
+			return vvv, nil
+		}
+		return 0, errConvFail
+	case time.Duration:
+		return float64(vv), nil
+	}
+
+	// indirect type
 	v, rv := indirect(val)
 
 	switch vv := v.(type) {
@@ -86,7 +141,7 @@ func Float32P(v interface{}, def ...float32) *float32 {
 
 // Float32E convert an interface to a float32 type
 func Float32E(val interface{}) (float32, error) {
-	v, e := Float64E(val)
+	v, e := convFloat64E(val)
 	if e := catch("float32", val, e); e != nil {
 		return 0, e
 	}

@@ -45,8 +45,9 @@ var (
 	aliasTypeUint0 AliasTypeUint = 0
 	aliasTypeUint1 AliasTypeUint = 1
 
-	aliasTypeFloat0 AliasTypeFloat64 = 0
-	aliasTypeFloat1 AliasTypeFloat64 = 1
+	aliasTypeFloat0    AliasTypeFloat64 = 0
+	aliasTypeFloat1    AliasTypeFloat64 = 1
+	aliasTypeFloat8d15 AliasTypeFloat64 = 8.15
 
 	aliasTypeString0                    AliasTypeString = "0"
 	aliasTypeString1                    AliasTypeString = "1"
@@ -62,6 +63,7 @@ var (
 	pointerIntNil      *AliasTypeInt
 	aliasTypeBytesNil  AliasTypeBytes
 	aliasTypeBytesTrue AliasTypeBytes = []byte("true")
+	aliasTypeBytes8d15 AliasTypeBytes = []byte("8.15")
 )
 
 // custom type
