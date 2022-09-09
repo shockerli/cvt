@@ -1,6 +1,7 @@
 package cvt_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 	"time"
@@ -55,6 +56,7 @@ func TestTimeE(t *testing.T) {
 		expect time.Time
 		isErr  bool
 	}{
+		{nil, time.Time{}, false},
 		{"2009-11-10 23:00:00 +0000 UTC", time.Date(2009, 11, 10, 23, 0, 0, 0, loc), false},   // Time.String()
 		{"Tue Nov 10 23:00:00 2009", time.Date(2009, 11, 10, 23, 0, 0, 0, loc), false},        // ANSIC
 		{"Tue Nov 10 23:00:00 UTC 2009", time.Date(2009, 11, 10, 23, 0, 0, 0, loc), false},    // UnixDate
@@ -108,6 +110,15 @@ func TestTimeE(t *testing.T) {
 		{uint32(1234567890), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{time.Date(2009, 2, 13, 23, 31, 30, 0, loc), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{TestTimeStringer{time.Date(2010, 3, 7, 0, 0, 0, 0, loc)}, time.Date(2010, 3, 7, 0, 0, 0, 0, loc), false},
+		{pointerIntNil, time.Time{}, false},
+		{aliasTypeStringTime1, time.Date(2016, 3, 6, 15, 28, 1, 0, loc), false},
+		{&aliasTypeStringTime1, time.Date(2016, 3, 6, 15, 28, 1, 0, loc), false},
+		{aliasTypeIntTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{&aliasTypeIntTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{aliasTypeTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{&aliasTypeTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{json.Number("1234567890"), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{json.Number(aliasTypeStringTime1), time.Date(2016, 3, 6, 15, 28, 1, 0, loc), false},
 
 		// errors
 		{"2006", time.Time{}, true},

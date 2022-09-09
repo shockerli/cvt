@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 )
 
 var errConvFail = errors.New("convert failed")
@@ -35,7 +36,7 @@ func FieldE(val interface{}, field interface{}) (interface{}, error) {
 	}
 
 	sf := String(field) // match with the String of field, so field can be any type
-	_, rv := indirect(val)
+	_, rv := Indirect(val)
 
 	switch rv.Kind() {
 	case reflect.Map: // key of map
@@ -131,8 +132,8 @@ func ptrValue(rv reflect.Value) reflect.Value {
 	return rv
 }
 
-// returns the value with base type
-func indirect(a interface{}) (val interface{}, rv reflect.Value) {
+// Indirect returns the value with base type
+func Indirect(a interface{}) (val interface{}, rv reflect.Value) {
 	if a == nil {
 		return
 	}
@@ -150,7 +151,7 @@ func indirect(a interface{}) (val interface{}, rv reflect.Value) {
 			}
 			rv = rv.Elem()
 		}
-		return indirect(rv.Interface())
+		return Indirect(rv.Interface())
 	case reflect.Bool:
 		val = rv.Bool()
 	case reflect.Int:
@@ -183,6 +184,12 @@ func indirect(a interface{}) (val interface{}, rv reflect.Value) {
 		// []byte
 		if rv.Type().Elem().Kind() == reflect.Uint8 {
 			val = rv.Bytes()
+		}
+	default:
+		// time.Time
+		if ct := reflect.TypeOf(time.Time{}); rv.CanConvert(ct) {
+			cv := rv.Convert(ct)
+			return cv.Interface(), cv
 		}
 	}
 

@@ -28,7 +28,7 @@ func StringMapE(val interface{}) (m map[string]interface{}, err error) {
 	}
 
 	// indirect type
-	_, rv := indirect(val)
+	_, rv := Indirect(val)
 	switch rv.Kind() {
 	case reflect.Map:
 		for _, key := range rv.MapKeys() {
@@ -61,7 +61,7 @@ func struct2map(rv reflect.Value) map[string]interface{} {
 		vv := ptrValue(rv.Field(j))
 		if f.Anonymous && t.Kind() == reflect.Struct {
 			for k, v := range struct2map(vv) {
-				// anonymous sub-field has a low priority
+				// anonymous subfield has a low priority
 				if _, ok := m[k]; !ok {
 					m[k] = v
 				}

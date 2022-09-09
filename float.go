@@ -65,24 +65,17 @@ func convFloat64E(val interface{}) (float64, error) {
 	case float32:
 		// use fmt to fix float32 -> float64 precision loss
 		// eg: cvt.Float64E(float32(8.31))
-		vvv, err := strconv.ParseFloat(fmt.Sprintf("%f", vv), 64)
-		if err == nil {
-			return vvv, nil
-		}
+		return strconv.ParseFloat(fmt.Sprintf("%f", vv), 64)
 	case float64:
 		return vv, nil
 	case json.Number:
-		vvv, err := vv.Float64()
-		if err == nil {
-			return vvv, nil
-		}
-		return 0, errConvFail
+		return vv.Float64()
 	case time.Duration:
 		return float64(vv), nil
 	}
 
 	// indirect type
-	v, rv := indirect(val)
+	v, rv := Indirect(val)
 
 	switch vv := v.(type) {
 	case nil:
@@ -93,15 +86,9 @@ func convFloat64E(val interface{}) (float64, error) {
 		}
 		return 0, nil
 	case string:
-		vvv, err := strconv.ParseFloat(vv, 64)
-		if err == nil {
-			return vvv, nil
-		}
+		return strconv.ParseFloat(vv, 64)
 	case []byte:
-		vvv, err := strconv.ParseFloat(string(vv), 64)
-		if err == nil {
-			return vvv, nil
-		}
+		return strconv.ParseFloat(string(vv), 64)
 	case uint, uint8, uint16, uint32, uint64, uintptr:
 		return float64(rv.Uint()), nil
 	case int, int8, int16, int32, int64:
@@ -109,10 +96,7 @@ func convFloat64E(val interface{}) (float64, error) {
 	case float32:
 		// use fmt to fix float32 -> float64 precision loss
 		// eg: cvt.Float64E(float32(8.31))
-		vvv, err := strconv.ParseFloat(fmt.Sprintf("%f", vv), 64)
-		if err == nil {
-			return vvv, nil
-		}
+		return strconv.ParseFloat(fmt.Sprintf("%f", vv), 64)
 	case float64:
 		return vv, nil
 	}

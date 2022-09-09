@@ -1,6 +1,7 @@
 package cvt
 
 import (
+	"encoding/json"
 	"fmt"
 	"time"
 )
@@ -20,15 +21,38 @@ func Time(v interface{}, def ...time.Time) time.Time {
 
 // TimeE convert an interface to a time.Time type
 func TimeE(val interface{}) (t time.Time, err error) {
-	v, _ := indirect(val)
-
-	// source type
-	switch vv := v.(type) {
+	// direct type(for improve performance)
+	switch vv := val.(type) {
+	case nil:
+		return
 	case time.Time:
 		return vv, nil
 	case string:
 		return parseDate(vv)
-	case int, int32, int64, uint, uint32, uint64:
+	case time.Duration,
+		int, int32, int64, uint, uint32, uint64:
+		return time.Unix(Int64(vv), 0), nil
+	case json.Number:
+		// timestamp
+		vvv, err := vv.Int64()
+		if err == nil {
+			return time.Unix(Int64(vvv), 0), nil
+		}
+		// time string
+		return parseDate(vv.String())
+	}
+
+	// indirect type
+	v, _ := Indirect(val)
+	switch vv := v.(type) {
+	case nil:
+		return
+	case time.Time:
+		return vv, nil
+	case string:
+		return parseDate(vv)
+	case time.Duration,
+		int, int32, int64, uint, uint32, uint64:
 		return time.Unix(Int64(vv), 0), nil
 	}
 
@@ -38,7 +62,7 @@ func TimeE(val interface{}) (t time.Time, err error) {
 		return parseDate(vv.String())
 	}
 
-	return time.Time{}, newErr(val, "time.Time")
+	return t, newErr(val, "time.Time")
 }
 
 func parseDate(s string) (t time.Time, err error) {

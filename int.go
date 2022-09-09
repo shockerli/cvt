@@ -385,7 +385,7 @@ func convUint64(val interface{}) (uint64, error) {
 	}
 
 	// indirect type
-	v, rv := indirect(val)
+	v, rv := Indirect(val)
 	switch vv := v.(type) {
 	case nil:
 		return 0, nil
@@ -464,7 +464,7 @@ func convInt64(val interface{}) (int64, error) {
 	}
 
 	// indirect type
-	v, rv := indirect(val)
+	v, rv := Indirect(val)
 	switch vv := v.(type) {
 	case nil:
 		return 0, nil
@@ -493,10 +493,11 @@ func convInt64(val interface{}) (int64, error) {
 }
 
 // convert an int or float string to int64
-//    "12" => 12
-//    "12.01" => 12
-//    "-12" => -12
-//    "-12.01" => -12
+//
+//	"12" => 12
+//	"12.01" => 12
+//	"-12" => -12
+//	"-12.01" => -12
 func str2int64(s string) (i int64, err error) {
 	// ensure can be converted to float
 	_, err = strconv.ParseFloat(s, 64)
@@ -513,8 +514,9 @@ func str2int64(s string) (i int64, err error) {
 }
 
 // convert an int or float string to uint64
-//    "12" => 12
-//    "12.01" => 12
+//
+//	"12" => 12
+//	"12.01" => 12
 func str2uint64(s string) (i uint64, err error) {
 	// ensure can be converted to float
 	_, err = strconv.ParseFloat(s, 64)

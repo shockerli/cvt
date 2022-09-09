@@ -33,14 +33,16 @@ type (
 	AliasTypeString    string
 	AliasTypeBytes     []byte
 	AliasTypeInterface interface{}
+	AliasTypeTime      time.Time
 )
 
 var (
 	aliasTypeBool4True  AliasTypeBool = true
 	aliasTypeBool4False AliasTypeBool = false
 
-	aliasTypeInt0 AliasTypeInt = 0
-	aliasTypeInt1 AliasTypeInt = 1
+	aliasTypeInt0     AliasTypeInt = 0
+	aliasTypeInt1     AliasTypeInt = 1
+	aliasTypeIntTime1 AliasTypeInt = 1234567890
 
 	aliasTypeUint0 AliasTypeUint = 0
 	aliasTypeUint1 AliasTypeUint = 1
@@ -57,6 +59,7 @@ var (
 	aliasTypeStringOff                  AliasTypeString = "off"
 	aliasTypeStringLosePrecisionInt64   AliasTypeString = "7138826985640367621"
 	aliasTypeStringLosePrecisionFloat64 AliasTypeString = "7138826985640367621.18"
+	aliasTypeStringTime1                AliasTypeString = "2016-03-06 15:28:01"
 
 	pointerRunes       = []rune("中国")
 	pointerInterNil    *AliasTypeInterface
@@ -64,6 +67,8 @@ var (
 	aliasTypeBytesNil  AliasTypeBytes
 	aliasTypeBytesTrue AliasTypeBytes = []byte("true")
 	aliasTypeBytes8d15 AliasTypeBytes = []byte("8.15")
+
+	aliasTypeTime1 = AliasTypeTime(time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC))
 )
 
 // custom type
@@ -231,6 +236,39 @@ func TestFieldE(t *testing.T) {
 
 		assertNoError(t, err, "[NoErr] "+msg)
 		assertEqual(t, tt.expect, v, "[WithE] "+msg)
+	}
+}
+
+func TestIndirect(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect interface{}
+	}{
+		{nil, nil},
+		{12, 12},
+		{12.01, 12.01},
+		{"hello", "hello"},
+		{aliasTypeInt1, 1},
+		{&aliasTypeInt1, 1},
+		{aliasTypeStringOff, "off"},
+		{&aliasTypeStringOff, "off"},
+		{pointerIntNil, nil},
+		{&pointerIntNil, nil},
+		{pointerRunes, []rune("中国")},
+		{&pointerRunes, []rune("中国")},
+		{aliasTypeTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC)},
+		{&aliasTypeTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC)},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf(
+			"i = %d, input[%+v], expect[%+v]",
+			i, tt.input, tt.expect,
+		)
+
+		val, _ := cvt.Indirect(tt.input)
+
+		assertEqual(t, tt.expect, val, "[WithE] "+msg)
 	}
 }
 

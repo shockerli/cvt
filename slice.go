@@ -24,7 +24,7 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 		return sl, errUnsupportedTypeNil
 	}
 
-	_, rv := indirect(val)
+	_, rv := Indirect(val)
 
 	switch rv.Kind() {
 	case reflect.String:
@@ -184,7 +184,7 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rv := indirect(val)
+	_, rv := Indirect(val)
 
 	switch rv.Kind() {
 	case reflect.Slice, reflect.Array:
@@ -217,7 +217,7 @@ func KeysE(val interface{}) (sl []interface{}, err error) {
 		return nil, errUnsupportedTypeNil
 	}
 
-	_, rv := indirect(val)
+	_, rv := Indirect(val)
 
 	switch rv.Kind() {
 	case reflect.Map:
