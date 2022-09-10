@@ -9,7 +9,13 @@
 
 > Simple, safe conversion of any type, including indirect/custom types.
 
+
+## Documents
+https://cvt.shockerli.net
+
+
 ## Install
+> Go >= 1.13
 
 ```go
 go get -u github.com/shockerli/cvt
@@ -64,11 +70,6 @@ cvt.Float("hello", 12.34)   // 12.34
 ### more
 
 > 1000+ unit test cases, for more examples, see `*_test.go`
-
-
-## Documents
-
-https://cvt.shockerli.net
 
 
 ## License

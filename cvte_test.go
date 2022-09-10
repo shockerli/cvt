@@ -33,7 +33,6 @@ type (
 	AliasTypeString    string
 	AliasTypeBytes     []byte
 	AliasTypeInterface interface{}
-	AliasTypeTime      time.Time
 )
 
 var (
@@ -68,7 +67,7 @@ var (
 	aliasTypeBytesTrue AliasTypeBytes = []byte("true")
 	aliasTypeBytes8d15 AliasTypeBytes = []byte("8.15")
 
-	aliasTypeTime1 = AliasTypeTime(time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC))
+	time1 = time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC)
 )
 
 // custom type
@@ -256,8 +255,6 @@ func TestIndirect(t *testing.T) {
 		{&pointerIntNil, nil},
 		{pointerRunes, []rune("中国")},
 		{&pointerRunes, []rune("中国")},
-		{aliasTypeTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC)},
-		{&aliasTypeTime1, time.Date(2009, 2, 13, 23, 31, 30, 0, time.UTC)},
 	}
 
 	for i, tt := range tests {

@@ -28,6 +28,12 @@ cvt.FieldE(struct{
 }{"Hello", 18}, "B") // 18
 ```
 
+Combine with other methods:
 
-> 更多示例请看单元测试：`cvte_test.go`
+```go
+cvt.Int(cvt.Field(map[int]interface{}{123: "112233"}, 123)) // 112233
+```
+
+
+> More case see unit: `cvte_test.go`
 

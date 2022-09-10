@@ -9,7 +9,13 @@
 
 > 一个简单、安全、高效的转换任意数据类型的 Go 语言工具包，支持自定义类型、提取结构体字段和值
 
+
+## 帮助文档
+https://cvt.shockerli.net
+
+
 ## 安装
+> Go >= 1.13
 
 ```go
 go get -u github.com/shockerli/cvt
@@ -64,11 +70,6 @@ cvt.Float("hello", 12.34)       // 12.34
 ### 更多示例
 
 > 上千个单元测试用例，覆盖率近100%，所有示例可通过单元测试了解：`*_test.go`
-
-
-## 帮助文档
-
-https://cvt.shockerli.net
 
 
 ## 开源协议

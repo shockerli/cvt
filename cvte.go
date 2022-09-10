@@ -6,7 +6,6 @@ import (
 	"reflect"
 	"sort"
 	"strings"
-	"time"
 )
 
 var errConvFail = errors.New("convert failed")
@@ -184,15 +183,6 @@ func Indirect(a interface{}) (val interface{}, rv reflect.Value) {
 		// []byte
 		if rv.Type().Elem().Kind() == reflect.Uint8 {
 			val = rv.Bytes()
-		}
-	default:
-		// time.Time
-		// promise for support go >= 1.13
-		// rv.CanConvert(t) is added in go1.17
-		// rt.ConvertibleTo(t) is added in go1.1
-		if ct := reflect.TypeOf(time.Time{}); rv.Type().ConvertibleTo(ct) {
-			cv := rv.Convert(ct)
-			return cv.Interface(), cv
 		}
 	}
 
