@@ -29,8 +29,9 @@ func TimeE(val interface{}) (t time.Time, err error) {
 		return vv, nil
 	case string:
 		return parseDate(vv)
-	case time.Duration,
-		int, int32, int64, uint, uint32, uint64:
+	case time.Duration:
+		return time.Unix(int64(vv)/1e9, int64(vv)%1e9), nil
+	case int, int32, int64, uint, uint32, uint64:
 		return time.Unix(Int64(vv), 0), nil
 	case json.Number:
 		// timestamp
@@ -51,8 +52,7 @@ func TimeE(val interface{}) (t time.Time, err error) {
 		return vv, nil
 	case string:
 		return parseDate(vv)
-	case time.Duration,
-		int, int32, int64, uint, uint32, uint64:
+	case int, int32, int64, uint, uint32, uint64:
 		return time.Unix(Int64(vv), 0), nil
 	}
 

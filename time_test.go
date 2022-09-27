@@ -108,6 +108,7 @@ func TestTimeE(t *testing.T) {
 		{uint(1234567890), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{uint64(1234567890), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{uint32(1234567890), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
+		{time.Duration(1234567890*1e9 + 1), time.Date(2009, 2, 13, 23, 31, 30, 1, loc), false},
 		{time.Date(2009, 2, 13, 23, 31, 30, 0, loc), time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{time1, time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
 		{&time1, time.Date(2009, 2, 13, 23, 31, 30, 0, loc), false},
