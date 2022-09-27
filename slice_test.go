@@ -484,9 +484,10 @@ func TestColumnsE(t *testing.T) {
 	tests := []struct {
 		input  interface{}
 		field  interface{}
-		expect interface{}
+		expect []interface{}
 		isErr  bool
 	}{
+		{[]interface{}{}, "empty", nil, false},
 		{[]interface{}{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}}, "D1", []interface{}{1}, false},
 		{[]TestStructE{{D1: 1}, {D1: 2}}, "D1", []interface{}{1, 2}, false},
 		{[]TestStructE{{DD: &TestStructD{}}, {D1: 2}}, "DD", []interface{}{&TestStructD{}, (*TestStructD)(nil)}, false},
@@ -496,6 +497,7 @@ func TestColumnsE(t *testing.T) {
 		{map[int]TestStructD{1: {11}, 2: {22}}, "D1", []interface{}{11, 22}, false},
 
 		// errors
+		{[]int{1, 2, 3}, 888, nil, true},
 		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "", nil, true},
 		{TestStructE{D1: 1, DD: &TestStructD{D1: 2}}, "Age", nil, true},
 		{int(123), "Name", nil, true},
@@ -537,6 +539,7 @@ func TestKeysE(t *testing.T) {
 		isErr  bool
 	}{
 		// map
+		{map[string]int{}, nil, false},
 		{map[int]map[string]interface{}{1: {"1": 111, "DDD": 12.3}, -2: {"2": 222, "DDD": "321"}, 3: {"DDD": nil}}, []interface{}{-2, 1, 3}, false},
 		{map[string]interface{}{"A": 1, "2": 2}, []interface{}{"2", "A"}, false},
 		{map[float64]float64{0.1: -0.1, -1.2: 1.2}, []interface{}{-1.2, 0.1}, false},
@@ -544,6 +547,7 @@ func TestKeysE(t *testing.T) {
 		{map[interface{}]interface{}{1: 1, 2.2: 2.22, "A": "A"}, []interface{}{1, 2.2, "A"}, false},
 
 		// struct
+		{struct{}{}, nil, false},
 		{TestStructA{}, []interface{}{"A1", "C1", "B1", "A2", "DD"}, false},
 		{&TestStructB{}, []interface{}{"C1", "B1"}, false},
 		{struct {

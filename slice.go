@@ -28,26 +28,35 @@ func SliceE(val interface{}) (sl []interface{}, err error) {
 
 	switch rv.Kind() {
 	case reflect.String:
-		for _, vvv := range rv.String() {
-			sl = append(sl, vvv)
+		var length = rv.Len()
+		if length > 0 {
+			sl = make([]interface{}, length)
+			for j, vvv := range rv.String() {
+				sl[j] = vvv
+			}
 		}
-		return
 	case reflect.Slice, reflect.Array:
-		for j := 0; j < rv.Len(); j++ {
-			sl = append(sl, rv.Index(j).Interface())
+		var length = rv.Len()
+		if length > 0 {
+			sl = make([]interface{}, length)
+			for j := 0; j < length; j++ {
+				sl[j] = rv.Index(j).Interface()
+			}
 		}
-		return
 	case reflect.Map:
-		for _, key := range sortedMapKeys(rv) {
-			sl = append(sl, rv.MapIndex(key).Interface())
+		var length = rv.Len()
+		if length > 0 {
+			sl = make([]interface{}, length)
+			for j, key := range sortedMapKeys(rv) {
+				sl[j] = rv.MapIndex(key).Interface()
+			}
 		}
-		return
 	case reflect.Struct:
 		sl = deepStructValues(rv)
-		return
+	default:
+		err = newErr(val, "slice")
 	}
-
-	return sl, newErr(val, "slice")
+	return
 }
 
 // SliceInt convert an interface to a []int type, with default value
@@ -70,13 +79,16 @@ func SliceIntE(val interface{}) (sl []int, err error) {
 		return
 	}
 
-	var vv int
-	for _, v := range list {
-		vv, err = IntE(v)
-		if err != nil {
-			return
+	if len(list) > 0 {
+		var vv int
+		sl = make([]int, len(list))
+		for j, v := range list {
+			vv, err = IntE(v)
+			if err != nil {
+				return
+			}
+			sl[j] = vv
 		}
-		sl = append(sl, vv)
 	}
 
 	return
@@ -102,13 +114,16 @@ func SliceInt64E(val interface{}) (sl []int64, err error) {
 		return
 	}
 
-	var vv int64
-	for _, v := range list {
-		vv, err = Int64E(v)
-		if err != nil {
-			return
+	if len(list) > 0 {
+		var vv int64
+		sl = make([]int64, len(list))
+		for j, v := range list {
+			vv, err = Int64E(v)
+			if err != nil {
+				return
+			}
+			sl[j] = vv
 		}
-		sl = append(sl, vv)
 	}
 
 	return
@@ -134,13 +149,16 @@ func SliceFloat64E(val interface{}) (sl []float64, err error) {
 		return
 	}
 
-	var vv float64
-	for _, v := range list {
-		vv, err = Float64E(v)
-		if err != nil {
-			return
+	if len(list) > 0 {
+		var vv float64
+		sl = make([]float64, len(list))
+		for j, v := range list {
+			vv, err = Float64E(v)
+			if err != nil {
+				return
+			}
+			sl[j] = vv
 		}
-		sl = append(sl, vv)
 	}
 
 	return
@@ -166,13 +184,16 @@ func SliceStringE(val interface{}) (sl []string, err error) {
 		return
 	}
 
-	var vv string
-	for _, v := range list {
-		vv, err = StringE(v)
-		if err != nil {
-			return
+	if len(list) > 0 {
+		var vv string
+		sl = make([]string, len(list))
+		for j, v := range list {
+			vv, err = StringE(v)
+			if err != nil {
+				return
+			}
+			sl[j] = vv
 		}
-		sl = append(sl, vv)
 	}
 
 	return
@@ -188,27 +209,28 @@ func ColumnsE(val interface{}, field interface{}) (sl []interface{}, err error) 
 
 	switch rv.Kind() {
 	case reflect.Slice, reflect.Array:
+		var vv interface{}
 		for j := 0; j < rv.Len(); j++ {
-			vv, e := FieldE(rv.Index(j).Interface(), field)
-			if e == nil {
-				sl = append(sl, vv)
+			vv, err = FieldE(rv.Index(j).Interface(), field)
+			if err != nil {
+				return nil, fmt.Errorf("unsupported type: %s", rv.Type().String())
 			}
+			sl = append(sl, vv)
 		}
 	case reflect.Map:
+		var vv interface{}
 		for _, key := range sortedMapKeys(rv) {
-			vv, e := FieldE(rv.MapIndex(key).Interface(), field)
-			if e == nil {
-				sl = append(sl, vv)
+			vv, err = FieldE(rv.MapIndex(key).Interface(), field)
+			if err != nil {
+				return nil, fmt.Errorf("unsupported type: %s", rv.Type().String())
 			}
+			sl = append(sl, vv)
 		}
+	default:
+		return nil, fmt.Errorf("unsupported type: %s", rv.Type().String())
 	}
 
-	// non valid field value, means error
-	if len(sl) > 0 {
-		return
-	}
-
-	return nil, fmt.Errorf("unsupported type: %s", rv.Type().Name())
+	return
 }
 
 // KeysE return the keys of map, sorted by asc; or fields of struct
@@ -221,16 +243,24 @@ func KeysE(val interface{}) (sl []interface{}, err error) {
 
 	switch rv.Kind() {
 	case reflect.Map:
-		for _, key := range sortedMapKeys(rv) {
-			sl = append(sl, key.Interface())
+		var length = rv.Len()
+		if length > 0 {
+			sl = make([]interface{}, length)
+			for j, key := range sortedMapKeys(rv) {
+				sl[j] = key.Interface()
+			}
 		}
-		return
 	case reflect.Struct:
-		for _, v := range deepStructFields(rv.Type()) {
-			sl = append(sl, v)
+		fs := deepStructFields(rv.Type())
+		if len(fs) > 0 {
+			sl = make([]interface{}, len(fs))
+			for j, v := range fs {
+				sl[j] = v
+			}
 		}
-		return
+	default:
+		err = fmt.Errorf("unsupported type: %s", rv.Type().Name())
 	}
 
-	return nil, fmt.Errorf("unsupported type: %s", rv.Type().Name())
+	return
 }
