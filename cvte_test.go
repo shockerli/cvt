@@ -58,7 +58,7 @@ var (
 	aliasTypeStringOff                  AliasTypeString = "off"
 	aliasTypeStringLosePrecisionInt64   AliasTypeString = "7138826985640367621"
 	aliasTypeStringLosePrecisionFloat64 AliasTypeString = "7138826985640367621.18"
-	aliasTypeStringTime1                AliasTypeString = "2016-03-06 15:28:01"
+	aliasTypeStringTime1                AliasTypeString = "2009-02-13 23:31:30"
 
 	pointerRunes       = []rune("中国")
 	pointerInterNil    *AliasTypeInterface
@@ -298,6 +298,16 @@ func assertEqual(t *testing.T, expected, actual interface{}, msgAndArgs ...inter
 	}
 
 	if !objectsAreEqual(expected, actual) {
+		fail(t, fmt.Sprintf("Not equal: \n"+
+			"expected: %s\n"+
+			"actual  : %s", expected, actual), msgAndArgs...)
+		return
+	}
+}
+
+// assert equal time
+func assertEqualTime(t *testing.T, expected, actual time.Time, msgAndArgs ...interface{}) {
+	if !expected.Equal(actual) {
 		fail(t, fmt.Sprintf("Not equal: \n"+
 			"expected: %s\n"+
 			"actual  : %s", expected, actual), msgAndArgs...)
