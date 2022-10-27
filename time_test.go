@@ -168,6 +168,8 @@ func TestTimeE(t *testing.T) {
 		{"2016-03-06 15:28:01-00:00", time.Date(2016, 3, 6, 15, 28, 1, 0, cvt.TimeLocation), false},        // RFC3339 without T
 		{"2016-03-06 15:28:01-0000", time.Date(2016, 3, 6, 15, 28, 1, 0, cvt.TimeLocation), false},         // RFC3339 without T or timezone hh:mm colon
 
+		{"20090213", time.Date(2009, 2, 13, 0, 0, 0, 0, cvt.TimeLocation), false},
+		{"20090213233130", time.Date(2009, 2, 13, 23, 31, 30, 0, cvt.TimeLocation), false},
 		{"Fri Sep 25 13:58:21 2016 -0400", time.Date(2016, 9, 25, 17, 58, 21, 0, cvt.TimeLocation), false},
 		{"13 Feb 2009", expect2, false},
 		{"2009-02-13", expect2, false},
