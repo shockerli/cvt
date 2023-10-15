@@ -6,12 +6,10 @@ weight: 50
 
 {{< toc >}}
 
+## Time
 
-## 方法
-- Time
-- TimeE
+## TimeE
 
-## 示例
 ```go
 cvt.Time("2009-11-10 23:00:00 +0000 UTC")
 cvt.Time("2018-10-21T23:21:29+0200")
@@ -33,6 +31,13 @@ cvt.Time(time.Date(2009, 2, 13, 23, 31, 30, 0, time.Local))
 cvt.Time(json.Number("1234567890"))
 cvt.Time(json.Number("2016-03-06 15:28:01"))
 ```
+
+## TimeInLocation
+cvt.TimeInLocation("2009-02-13 23:31:30", time.FixedZone("UTC", 8*3600))
+
+## TimeInLocationE
+cvt.TimeInLocationE("2009-02-13 23:31:30", time.FixedZone("UTC", 8*3600))
+
 
 > 更多示例请看单元测试：`time_test.go`
 

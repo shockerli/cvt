@@ -58,6 +58,10 @@ func TestTimeInLocation_BaseLine(t *testing.T) {
 }
 
 func TestTimeInLocationE(t *testing.T) {
+	var (
+		locUTC8 = time.FixedZone("UTC", 8*3600)
+	)
+
 	tests := []struct {
 		input  interface{}
 		loc    *time.Location
@@ -65,6 +69,9 @@ func TestTimeInLocationE(t *testing.T) {
 		isErr  bool
 	}{
 		{nil, nil, time.Time{}, false},
+		{"2009-11-10 23:00:00 +0800", nil, time.Date(2009, 11, 10, 23, 0, 0, 0, locUTC8), false}, // Time.String()
+		{"2009-02-13 23:31:30", locUTC8, time.Date(2009, 2, 13, 23, 31, 30, 0, locUTC8), false},
+		{"2009-02-13 23:31:30", locUTC8, time.Date(2009, 2, 13, 23, 31, 30, 0, locUTC8), false},
 
 		// errors
 		{"2006", nil, time.Time{}, true},

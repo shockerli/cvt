@@ -2,8 +2,9 @@ package cvt_test
 
 import (
 	"fmt"
-	"github.com/shockerli/cvt"
 	"testing"
+
+	"github.com/shockerli/cvt"
 )
 
 func TestStringMapE(t *testing.T) {
@@ -80,6 +81,50 @@ func TestStringMapE(t *testing.T) {
 		)
 
 		v, err := cvt.StringMapE(tt.input)
+		if tt.isErr {
+			assertError(t, err, "[HasErr] "+msg)
+			continue
+		}
+
+		assertNoError(t, err, "[NoErr] "+msg)
+		assertEqual(t, tt.expect, v, "[WithE] "+msg)
+	}
+}
+
+func TestIntMapE(t *testing.T) {
+	tests := []struct {
+		input  interface{}
+		expect map[int]interface{}
+		isErr  bool
+	}{
+		// JSON
+		{`{"1":"cvt","2":3.21}`, map[int]interface{}{1: "cvt", 2: 3.21}, false},
+		{`{"1":"cvt","2":"convert"}`, map[int]interface{}{1: "cvt", 2: "convert"}, false},
+		{`{"1":"cvt","2":true}`, map[int]interface{}{1: "cvt", 2: true}, false},
+		{[]byte(`{"1":"cvt","2":true}`), map[int]interface{}{1: "cvt", 2: true}, false},
+		{AliasTypeString(`{"1":"cvt","2":true}`), map[int]interface{}{1: "cvt", 2: true}, false},
+		{AliasTypeBytes(`{"1":"cvt","2":true}`), map[int]interface{}{1: "cvt", 2: true}, false},
+
+		// Map
+		{map[int]interface{}{}, map[int]interface{}{}, false},
+		{map[int]interface{}{1: "cvt", 2: 3.21}, map[int]interface{}{1: "cvt", 2: 3.21}, false},
+		{map[interface{}]interface{}{1: "cvt", 2: 3.21}, map[int]interface{}{1: "cvt", 2: 3.21}, false},
+		{map[interface{}]interface{}{"1": "cvt", "2": 3.21}, map[int]interface{}{1: "cvt", 2: 3.21}, false},
+
+		// errors
+		{nil, nil, true},
+		{map[interface{}]interface{}{"name": "cvt", 3.21: 3.21}, map[int]interface{}{1: "cvt", 2: 3.21}, true},
+		{"", nil, true},
+		{"hello", nil, true},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf(
+			"i = %d, input[%+v], expect[%+v], isErr[%v]",
+			i, tt.input, tt.expect, tt.isErr,
+		)
+
+		v, err := cvt.IntMapE(tt.input)
 		if tt.isErr {
 			assertError(t, err, "[HasErr] "+msg)
 			continue

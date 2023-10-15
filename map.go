@@ -5,6 +5,48 @@ import (
 	"reflect"
 )
 
+// IntMapE convert an interface to `map[int]interface{}`
+// * Support JSON string of map
+// * Support any `map` type
+func IntMapE(val interface{}) (m map[int]interface{}, err error) {
+	m = make(map[int]interface{})
+	if val == nil {
+		return nil, errUnsupportedTypeNil
+	}
+
+	// direct type(for improve performance)
+	switch v := val.(type) {
+	case map[int]interface{}:
+		return v, nil
+	}
+
+	// indirect type
+	_, rv := Indirect(val)
+	switch rv.Kind() {
+	case reflect.Map:
+		var idx int
+		for _, key := range rv.MapKeys() {
+			idx, err = IntE(key.Interface())
+			if err != nil {
+				return
+			}
+			m[idx] = rv.MapIndex(key).Interface()
+		}
+	case reflect.Slice:
+		// []byte
+		// Example: []byte(`{1:"bob",2:18}`)
+		if rv.Type().Elem().Kind() == reflect.Uint8 {
+			err = json.Unmarshal(rv.Bytes(), &m)
+		}
+	case reflect.String:
+		// JSON string of map
+		// Example: `{1:"bob",2:18}`
+		err = json.Unmarshal([]byte(rv.String()), &m)
+	}
+
+	return
+}
+
 // StringMapE convert an interface to `map[string]interface{}`
 // * Support JSON string of map
 // * Support any `map` type
@@ -37,12 +79,14 @@ func StringMapE(val interface{}) (m map[string]interface{}, err error) {
 	case reflect.Struct:
 		m = struct2map(rv)
 	case reflect.Slice:
-		// []byte
+		// []byte, JSON
+		// Example: []byte(`{"name":"bob","age":18}`)
 		if rv.Type().Elem().Kind() == reflect.Uint8 {
 			err = json.Unmarshal(rv.Bytes(), &m)
 		}
 	case reflect.String:
 		// JSON string of map
+		// Example: `{"name":"bob","age":18}`
 		err = json.Unmarshal([]byte(rv.String()), &m)
 	}
 
