@@ -15,6 +15,62 @@ var formatOutOfLimitInt = "%w, out of max limit value(%d)"
 var formatOutOfLimitFloat = "%w, out of max limit value(%f)"
 var formatExtend = "%v, %w"
 
+// Len return size of string, slice, array or map
+func Len(v interface{}) int {
+	if v == nil {
+		return 0
+	}
+
+	switch vv := v.(type) {
+	case string:
+		return len(vv)
+	case []bool:
+		return len(vv)
+	case []byte:
+		return len(vv)
+	case []rune:
+		return len(vv)
+	case []string:
+		return len(vv)
+	case []int:
+		return len(vv)
+	case []int8:
+		return len(vv)
+	case []int16:
+		return len(vv)
+	case []int64:
+		return len(vv)
+	case []uint:
+		return len(vv)
+	case []uint16:
+		return len(vv)
+	case []uint32:
+		return len(vv)
+	case []uint64:
+		return len(vv)
+	case []float32:
+		return len(vv)
+	case []float64:
+		return len(vv)
+	case []interface{}:
+		return len(vv)
+	case map[string]interface{}:
+		return len(vv)
+	case map[string]string:
+		return len(vv)
+	case map[string]int:
+		return len(vv)
+	}
+
+	_, rv := Indirect(v)
+	switch rv.Kind() {
+	case reflect.Slice, reflect.Array, reflect.Map:
+		return rv.Len()
+	}
+
+	return -1
+}
+
 // Field return the field value from map/struct, with default value
 func Field(v interface{}, field interface{}, def ...interface{}) interface{} {
 	if v, err := FieldE(v, field); err == nil {

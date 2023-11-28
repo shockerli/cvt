@@ -269,6 +269,67 @@ func TestIndirect(t *testing.T) {
 	}
 }
 
+func TestLen(t *testing.T) {
+	tests := []struct {
+		expect int
+		input  interface{}
+	}{
+		// supported type
+		{0, nil},
+		{0, ""},
+		{3, "123"},
+		{3, []interface{}{1, "2", 3.0}},
+		{2, []bool{true, false}},
+		{2, []rune("中国")},
+		{3, []byte("123")},
+		{0, []int(nil)},
+		{2, [2]int{1, 2}},
+		{2, []int{1, 2}},
+		{2, []int8{1, 2}},
+		{2, []int16{1, 2}},
+		{2, []int32{1, 2}},
+		{2, []int64{1, 2}},
+		{2, []uint{1, 2}},
+		{2, []uint8{1, 2}},
+		{2, []uint16{1, 2}},
+		{2, []uint32{1, 2}},
+		{2, []uint64{1, 2}},
+		{2, [2]string{"1", "2"}},
+		{2, []string{"1", "2"}},
+		{2, []float32{1.1, 2.2}},
+		{2, []float64{1.1, 2.2}},
+		{2, &[]float64{1.1, 2.2}},
+		{2, AliasTypeBytes{1, 2}},
+		{2, &AliasTypeBytes{1, 2}},
+		{2, []AliasTypeInt{1, 2}},
+		{2, []AliasTypeString{"1", "2"}},
+		{0, map[int]interface{}(nil)},
+		{2, map[int]interface{}{1: 1, 2: 2}},
+		{2, map[string]interface{}{"1": 1, "2": 2}},
+		{2, map[string]string{"1": "1", "2": "2"}},
+		{2, map[string]int{"1": 1, "2": 2}},
+		{2, map[AliasTypeString]interface{}{"1": 1, "2": 2}},
+		{2, map[AliasTypeString]AliasTypeInt{"1": 1, "2": 2}},
+
+		// unsupported type
+		{-1, 123},
+		{-1, 123.0},
+		{-1, true},
+		{-1, struct{}{}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf(
+			"i = %d, input[%+v], expect[%+v]",
+			i, tt.input, tt.expect,
+		)
+
+		val := cvt.Len(tt.input)
+
+		assertEqual(t, tt.expect, val, "[NoErr] "+msg)
+	}
+}
+
 /* ------------------------------------------------------------------------------ */
 
 // [testing assert functions]
