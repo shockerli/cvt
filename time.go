@@ -94,7 +94,9 @@ func TimeInLocationE(val interface{}, loc *time.Location) (t time.Time, err erro
 	return t, newErr(val, "time.Time")
 }
 
-var timeFormats = []string{
+// TimeFormats all supported time formats
+// you can add your custom time format
+var TimeFormats = []string{
 	time.RFC3339,
 	time.RFC1123Z,
 	time.RFC1123,
@@ -144,7 +146,7 @@ var timeFormats = []string{
 }
 
 func parseDate(s string, loc *time.Location) (t time.Time, err error) {
-	for _, dateType := range timeFormats {
+	for _, dateType := range TimeFormats {
 		if t, err = time.ParseInLocation(dateType, s, loc); err == nil {
 			return
 		}
