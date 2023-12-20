@@ -71,6 +71,75 @@ func Len(v interface{}) int {
 	return -1
 }
 
+// IsEmpty checks value for empty state
+func IsEmpty(v interface{}) bool {
+	switch vv := v.(type) {
+	case nil:
+		return true
+	case bool:
+		return !vv
+	case int:
+		return vv == 0
+	case int8:
+		return vv == 0
+	case int16:
+		return vv == 0
+	case int32:
+		return vv == 0
+	case int64:
+		return vv == 0
+	case uint:
+		return vv == 0
+	case uint8:
+		return vv == 0
+	case uint16:
+		return vv == 0
+	case uint32:
+		return vv == 0
+	case uint64:
+		return vv == 0
+	case float32:
+		return vv == 0
+	case float64:
+		return vv == 0
+	case string:
+		return vv == ""
+	case []int:
+		return len(vv) == 0
+	case []int8:
+		return len(vv) == 0
+	case []int16:
+		return len(vv) == 0
+	case []int32:
+		return len(vv) == 0
+	case []int64:
+		return len(vv) == 0
+	case []uint:
+		return len(vv) == 0
+	case []uint8:
+		return len(vv) == 0
+	case []uint16:
+		return len(vv) == 0
+	case []uint32:
+		return len(vv) == 0
+	case []uint64:
+		return len(vv) == 0
+	case []float32:
+		return len(vv) == 0
+	case []float64:
+		return len(vv) == 0
+	case []bool:
+		return len(vv) == 0
+	case []interface{}:
+		return len(vv) == 0
+	case []string:
+		return len(vv) == 0
+	}
+
+	_, rv := Indirect(v)
+	return rv.IsZero()
+}
+
 // Field return the field value from map/struct, with default value
 func Field(v interface{}, field interface{}, def ...interface{}) interface{} {
 	if v, err := FieldE(v, field); err == nil {

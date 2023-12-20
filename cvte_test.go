@@ -330,6 +330,95 @@ func TestLen(t *testing.T) {
 	}
 }
 
+func TestIsEmpty(t *testing.T) {
+	tests := []struct {
+		expect bool
+		input  interface{}
+	}{
+		// supported type
+		{true, nil},
+		{true, false},
+		{false, true},
+		{true, 0},
+		{false, 1},
+		{true, int8(0)},
+		{false, int8(1)},
+		{true, int16(0)},
+		{false, int16(1)},
+		{true, int32(0)},
+		{false, int32(1)},
+		{true, int64(0)},
+		{false, int64(1)},
+		{true, uint(0)},
+		{false, uint(1)},
+		{true, uint8(0)},
+		{false, uint8(1)},
+		{true, uint16(0)},
+		{false, uint16(1)},
+		{true, uint32(0)},
+		{false, uint32(1)},
+		{true, uint64(0)},
+		{false, uint64(1)},
+		{false, 1.23},
+		{false, float32(1.23)},
+		{true, 0x0},
+		{false, 0x1},
+		{true, ""},
+		{false, "123"},
+		{false, interface{}(true)},
+		{false, uintptr(1)},
+		{true, uintptr(0)},
+		{false, []interface{}{1, "2", 3.0}},
+		{true, []bool{}},
+		{false, []bool{true, false}},
+		{false, []rune("中国")},
+		{false, []byte("123")},
+		{true, []int(nil)},
+		{false, [2]int{1, 2}},
+		{false, []int{1, 2}},
+		{false, []int8{1, 2}},
+		{false, []int16{1, 2}},
+		{false, []int32{1, 2}},
+		{false, []int64{1, 2}},
+		{false, []uint{1, 2}},
+		{false, []uint8{1, 2}},
+		{false, []uint16{1, 2}},
+		{false, []uint32{1, 2}},
+		{false, []uint64{1, 2}},
+		{false, [2]string{"1", "2"}},
+		{false, []string{"1", "2"}},
+		{false, []float32{1.1, 2.2}},
+		{false, []float64{1.1, 2.2}},
+		{false, &[]float64{1.1, 2.2}},
+		{false, AliasTypeBytes{1, 2}},
+		{false, AliasTypeBool(true)},
+		{false, AliasTypeInt(1)},
+		{false, AliasTypeUint(1)},
+		{false, AliasTypeFloat64(1.01)},
+		{false, &AliasTypeBytes{1, 2}},
+		{false, []AliasTypeInt{1, 2}},
+		{false, []AliasTypeString{"1", "2"}},
+		{true, map[int]interface{}(nil)},
+		{false, map[int]interface{}{1: 1, 2: 2}},
+		{false, map[string]interface{}{"1": 1, "2": 2}},
+		{false, map[string]string{"1": "1", "2": "2"}},
+		{false, map[string]int{"1": 1, "2": 2}},
+		{false, map[AliasTypeString]interface{}{"1": 1, "2": 2}},
+		{false, map[AliasTypeString]AliasTypeInt{"1": 1, "2": 2}},
+	}
+
+	for i, tt := range tests {
+		msg := fmt.Sprintf(
+			"i = %d, input[%+v], expect[%+v]",
+			i, tt.input, tt.expect,
+		)
+
+		val := cvt.IsEmpty(tt.input)
+
+		assertEqual(t, tt.expect, val, "[NoErr] "+msg)
+	}
+}
+
 /* ------------------------------------------------------------------------------ */
 
 // [testing assert functions]
