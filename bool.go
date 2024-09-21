@@ -94,9 +94,9 @@ func str2bool(str string) (bool, error) {
 	}
 
 	switch strings.ToLower(strings.TrimSpace(str)) {
-	case "on":
+	case "on", "yes", "y":
 		return true, nil
-	case "off":
+	case "off", "no", "n":
 		return false, nil
 	default:
 		return false, newErr(str, "bool")

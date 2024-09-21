@@ -158,6 +158,10 @@ func TestBoolE(t *testing.T) {
 		{uint8(0.00), false, false},
 		{nil, false, false},
 		{false, false, false},
+		{"NO", false, false},
+		{"no", false, false},
+		{"N", false, false},
+		{"n", false, false},
 		{"false", false, false},
 		{"FALSE", false, false},
 		{"False", false, false},
@@ -195,6 +199,10 @@ func TestBoolE(t *testing.T) {
 
 		// true/scale
 		{true, true, false},
+		{"YES", true, false},
+		{"yes", true, false},
+		{"Y", true, false},
+		{"y", true, false},
 		{"true", true, false},
 		{"TRUE", true, false},
 		{"True", true, false},
