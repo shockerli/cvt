@@ -114,12 +114,6 @@ func (t TestTimeStringer) String() string {
 	return t.time.String()
 }
 
-func Benchmark(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		cvt.Bool(aliasTypeString0, true)
-	}
-}
-
 // [function tests]
 
 func TestField_HasDefault(t *testing.T) {

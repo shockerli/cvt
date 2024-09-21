@@ -2354,3 +2354,10 @@ func TestIntE(t *testing.T) {
 		assertEqual(t, tt.expect, v, "[NonE] "+msg)
 	}
 }
+
+func BenchmarkToUint(b *testing.B) {
+	values := []interface{}{120, int64(122), "123", "120.0", "120.", []byte("125."), true, false}
+	for n := 0; n < b.N; n++ {
+		_ = cvt.Uint(values[n%len(values)])
+	}
+}

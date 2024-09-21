@@ -179,6 +179,11 @@ func FieldE(val interface{}, field interface{}) (interface{}, error) {
 	return nil, fmt.Errorf("%w(%s)", errFieldNotFound, sf)
 }
 
+// Typeof returns a string containing the name of the type of `val`.
+func Typeof(val interface{}) string {
+	return fmt.Sprintf("%T", val)
+}
+
 // return the values of struct fields, and deep find the embedded fields
 func deepStructValues(rv reflect.Value) (sl []interface{}) {
 	for j := 0; j < rv.NumField(); j++ {
