@@ -9,6 +9,7 @@ weight: 70
 ## StringMapE
 
 - Map
+
 ```go
 // expect: map[string]interface{}{"111": "cvt", "222": 3.21}
 cvt.StringMapE(map[interface{}]interface{}{111: "cvt", "222": 3.21})
@@ -25,11 +26,27 @@ cvt.StringMapE(struct {
 ```
 
 - JSON
+
 ```go
 // expect: map[string]interface{}{"name": "cvt", "age": 3.21}
 cvt.StringMapE(`{"name":"cvt","age":3.21}`)
 ```
 
+## IntMapE
+
+- Map
+
+```go
+// expect: map[int]interface{}{111: "cvt", 222: 3.21}
+cvt.IntMapE(map[interface{}]interface{}{111: "cvt", "222": 3.21})
+```
+
+- JSON
+
+```go
+// expect: map[int]interface{}{1: "cvt", 2: 3.21}
+cvt.IntMapE(`{"1":"cvt","2":3.21}`)
+```
 
 > More case see unit: `map_test.go`
 
